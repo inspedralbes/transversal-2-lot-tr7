@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>League of Trivia</title>
+    <title>League of Trivial</title>
 
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
@@ -25,12 +25,25 @@
 </head>
 
 <body>
-    <header></header>
-    <article>
-        <div id="app">
-            <startdemo></startdemo>
-        </div>
-    </article>
+    <div id="app">
+        <header>
+            <div class="header">
+                <a href=""><img src="img/logo.png" alt="logo"></a>
+                <div class="nav">
+                    <a href="">Ranking</a>
+                    <a href="">Login / Register</a>
+                </div>
+            </div>
+        </header>
+        <article>
+            <questions></questions>
+        </article>
+        <footer>
+            <div class="footer">
+                <p>© 2022 League of Trivial</p>
+            </div>
+        </footer>
+    </div>
 
     <script src="js/script.js"></script>
 </body>
