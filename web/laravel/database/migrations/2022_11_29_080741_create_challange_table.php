@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('challange', function (Blueprint $table) {
             $table->id();
-            $table->integer('idSender');
-            $table->integer('idSender');
-            $table->integer('idGame');
-            $table->integer('idWinner');
+            $table->unsignedBigInteger('idSender');
+            $table->unsignedBigInteger('idReceiver');
+            $table->unsignedBigInteger('idGame');
+            $table->unsignedBigInteger('idWinner');
             $table->string('data');
             $table->timestamps();
-            //$table->foreign('idSender')->references('id')->on('user');
-            //$table->foreign('idSender')->references('id')->on('user');
-            //$table->foreign('idGame')->references('id')->on('game');
-            //$table->foreign('idWinner')->references('id')->on('user');
+            $table->foreign('idSender')->references('id')->on('user');
+            $table->foreign('idReceiver')->references('id')->on('user');
+            $table->foreign('idGame')->references('id')->on('game');
+            $table->foreign('idWinner')->references('id')->on('user');
         });
     }
 
