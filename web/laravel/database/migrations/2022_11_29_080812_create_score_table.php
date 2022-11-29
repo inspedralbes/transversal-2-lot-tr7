@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('score', function (Blueprint $table) {
             $table->id();
+            $table->integer('idUser');
+            $table->integer('idGame');
             $table->integer('points');
             $table->integer('time');
             $table->boolean('completed');
             $table->timestamps();
-            $table->foreign('idUser')->references('id')->on('user');
-            $table->foreign('idGame')->references('id')->on('game');
+            //$table->foreign('idUser')->references('id')->on('user');
+            //$table->foreign('idGame')->references('id')->on('game');
         });
     }
 
