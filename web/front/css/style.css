@@ -28,9 +28,18 @@ header {
   font-weight: bold;
   font-size: 24px;
 }
+.header .nav {
+  justify-content: flex-end;
+}
 .header .nav a {
   margin-left: 30px;
   text-decoration: none;
+}
+article {
+  margin: 30px auto;
+  padding: 10px 0;
+  width: 80%;
+  max-width: 1920px;
 }
 footer {
   bottom: 0;
