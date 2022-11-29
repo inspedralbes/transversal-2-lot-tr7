@@ -74,16 +74,14 @@ Vue.component('questions', {
     };
   },
   template: `
-    <div>
+    <div class="questions">
       <h1>League of Trivial</h1>
-      <b-button @click="getQuestions" block variant="primary">Start Demo</b-button>
-      <b-row>
-        <b-col md="3" v-for="question in result">
-          <b-card class="mySlides">
+      <b-button @click="getQuestions">Start Demo</b-button>
+        <div v-for="question in result">
+          <b-card>
             <quiz :game=question></quiz>
           </b-card>
-        </b-col>
-      </b-row>
+        </div>
     </div>`,
   methods: {
     getQuestions: function () {
