@@ -1,4 +1,4 @@
-const index = Vue.component('startdemo', {
+Vue.component('startdemo', {
   data: function () {
     return {};
   },
@@ -26,7 +26,7 @@ Vue.component('quiz', {
     },
   },
 });
-const questionsDemo = Vue.component('questions', {
+Vue.component('questions', {
   data: function () {
     return {
       result: [],
@@ -58,20 +58,7 @@ const questionsDemo = Vue.component('questions', {
   },
 });
 
-const routes = [
-  {
-    path: '/',
-    component: index,
-  },
-  { path: '/jugarDemo', component: questionsDemo },
-];
-
-const router = new VueRouter({
-  routes,
-});
-
 let app = new Vue({
   el: '#app',
-  router,
   data: {},
 });
