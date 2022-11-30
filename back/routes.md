@@ -82,3 +82,24 @@ GET: {
 }
 
 ---
+
+### Route: /api/get-daily-game
+
+- Token required
+
+POST:
+
+GET: {
+"game": {
+"id": 5,
+"jsonGame": "[{'category':'Music','id':'622a1c397cc59eab6f950c1b','correctAnswer':'Red Hot Chili Peppers','incorrectAnswers':['The Monkees','Black Flag','Journey'],'question':'Which American rock band released the song 'Under the Bridge'?','tags':['rock_music','music'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Film & TV','id':'622a1c3c7cc59eab6f9517ba','correctAnswer':'Hellraiser','incorrectAnswers':['Evil Dead','Saw','Halloween'],'question':'Which film first featured a character later named Pinhead?','tags':['film','film_and_tv','horror'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Food & Drink','id':'622a1c3b7cc59eab6f9515d2','correctAnswer':'Sauerkraut ','incorrectAnswers':['Currywurst','Pumpernickel','Schnitzel'],'question':'What name is given to a German dish of chopped fermented cabbage?','tags':['germany','food','food_and_drink'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Film & TV','id':'622a1c377cc59eab6f950670','correctAnswer':'Hugo Weaving','incorrectAnswers':['Tobey Maguire','Timothy Spall','Elijah Wood'],'question':'Which actor has featued in films including The Lord of the Rings and Captain America: The First Avenger?','tags':['acting','film','film_and_tv'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'General Knowledge','id':'6239f845a72e7a347ac879db','correctAnswer':'Zulu','incorrectAnswers':['Zebra','Zoological','Zipper'],'question':'What word is used in the NATO Phonetic Alphabet for the letter Z?','tags':['general_knowledge'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Sport & Leisure','id':'622a1c347cc59eab6f94f859','correctAnswer':'Football','incorrectAnswers':['Table tennis','Ice Hockey','Baseball'],'question':'With which sport is Jose Mourinho associated?','tags':['people','sport'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Food & Drink','id':'622a1c367cc59eab6f95027f','correctAnswer':'Spiciness','incorrectAnswers':['Calories','Dairy Content','Alcohol Content'],'question':'What Does The Scoville Scale Measure?','tags':['words','food_and_drink'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Science','id':'6244379e746187c5e7be9364','correctAnswer':'Silicon dioxide','incorrectAnswers':['Potassium hydroxide','Calcium magnesium carbonate','Potassium nitrate'],'question':'What chemical has the formula SiO2?','tags':['science'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'History','id':'622a1c3c7cc59eab6f95187e','correctAnswer':'1789','incorrectAnswers':['1943','1215','1533'],'question':'When Did The Storming Of The Bastille Take Place?','tags':['revolutions','france','history'],'type':'Multiple Choice','difficulty':'medium','regions':[]},{'category':'Geography','id':'622a1c387cc59eab6f950a9d','correctAnswer':'Germany','incorrectAnswers':['Hungary','Austria','Slovenia'],'question':'Which of these countries borders Poland?','tags':['europe','geography'],'type':'Multiple Choice','difficulty':'medium','regions':[]}]",
+"date": "2022-11-30",
+"difficulty": "medium",
+"category": "all",
+"type": "daily",
+"created_at": "2022-11-30T10:54:41.000000Z",
+"updated_at": "2022-11-30T10:54:41.000000Z"
+}
+}
+
+---
