@@ -36,7 +36,7 @@ header {
   text-decoration: none;
 }
 article {
-  margin: 30px auto;
+  margin: 20px auto 80px;
   padding: 10px 0;
   width: 80%;
   max-width: 1920px;
@@ -57,7 +57,31 @@ footer {
 .footer p {
   margin: 0;
 }
+.questions {
+  text-align: center;
+}
+.questions h1 {
+  margin: 0 0 20px;
+  font-size: 80px;
+  font-weight: bold;
+}
+.questions button {
+  background-color: #f4ac45;
+  border: 0;
+  color: black;
+  font-size: 24px;
+  padding: 10px 40px;
+  font-weight: bold;
+}
+.questions button:hover {
+  background-color: #77878b;
+  color: white;
+}
 
-/* .mySlides {
-    display:none;
-} */
+.mySlides{
+  display: none;
+}
+
+.carusel{
+  color: black;
+}

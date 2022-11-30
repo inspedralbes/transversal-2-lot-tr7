@@ -1,44 +1,3 @@
-Vue.component('carrousel', {
-    data: function() {
-        return {
-            slideIndex: 1,
-            numQuestions: 10
-        }
-    },
-    template: `<div>
-    <h2 class="w3-center">Manual Slideshow</h2>
-
-    <div class="w3-content w3-display-container">
-      <questions></questions>
-    
-      <button class="w3-button w3-black w3-display-left" @click="plusDivs(-1)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" @click="plusDivs(1)">&#10095;</button>
-    </div>
-    </div>`,
-    
-    mounted(){
-        this.showDivs(this.slideIndex);
-    },
-
-    methods: {
-        plusDivs: function(n) {
-            this.showDivs(this.slideIndex += n);
-        },
-
-        showDivs: function(n) {
-            var questions = document.getElementsByClassName("mySlides");
-            if (n > questions.length) {this.slideIndex = 1}
-            if (n < 1) {this.slideIndex = questions.length}
-            for (i = 0; i < questions.length; i++) {
-                questions[i].style.display = "none";  
-            }
-            questions[this.slideIndex-1].style.display = "block";  
-        },
-
-        
-    } 
-});
-
 Vue.component('startdemo', {
   data: function () {
     return {};
@@ -55,10 +14,10 @@ Vue.component('quiz', {
   {{randomNumber()}}
 
   <li v-for="incAns in game.incorrectAnswers">
-      {{ incAns }}
+      <button class="quiz_incorrectButton" @click="$emit('evtAnswer', 'false')">{{ incAns }}</button>
   </li>
   <li>
-    {{game.correctAnswer}}
+    <button id="quiz_correctButton" @click="$emit('evtAnswer', 'true')">{{game.correctAnswer}}</button>
   </li>
   </div>`,
   methods: {
@@ -71,18 +30,25 @@ Vue.component('questions', {
   data: function () {
     return {
       result: [],
+      slideIndex: 1,
+      arrQuestions: [],
+      quizResults: []
     };
   },
   template: `
     <div class="questions">
-      <h1>League of Trivial</h1>
-      <b-button @click="getQuestions">Start Demo</b-button>
+      <h1 class="index_title">League of Trivial</h1>
+      <b-button @click="handler">Start Demo</b-button>
+
+      <div class="carusel">
         <div v-for="question in result">
-          <b-card>
-            <quiz :game=question></quiz>
+          <b-card class="mySlides">
+            <quiz @evtAnswer='checkAnswer' :game=question></quiz>
           </b-card>
         </div>
-    </div>`,
+    </div>
+        
+  </div>`,
   methods: {
     getQuestions: function () {
       fetch(
@@ -94,7 +60,43 @@ Vue.component('questions', {
           this.result = data;
         });
     },
+
+    nextQuestion: function(n) {
+      this.showCurrentQuestion(this.slideIndex += n);
+    },
+
+  showCurrentQuestion: function(n) {
+        this.arrQuestions = document.getElementsByClassName("mySlides");
+      if (n > this.arrQuestions.length) {this.slideIndex = 1}
+      if (n < 1) {this.slideIndex = this.arrQuestions.length}
+      for (i = 0; i < this.arrQuestions.length; i++) {
+        this.arrQuestions[i].style.display = "none";  
+      }
+      this.arrQuestions[this.slideIndex-1].style.display = "block";  
   },
+
+  handler: function(){
+    this.getQuestions();
+    
+    setTimeout(() => this.showCurrentQuestion(this.slideIndex), 500);
+
+  },
+
+  checkAnswer: function(isCorrect){
+    console.log(isCorrect);
+
+    // buttonsQuiz = document.getElementsByClassName("quiz_incorrectButton");
+    
+    // for (i = 0; i < buttonsQuiz.length; i++){
+    //   buttonsQuiz[i].style.backgroundColor = 'red';
+    // }
+    // document.getElementById("quiz_correctButton").style.backgroundColor = 'green';
+    
+    setTimeout(() => this.nextQuestion(1), 1000); 
+  },
+
+  },
+
 });
 
 let app = new Vue({
