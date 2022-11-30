@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Game;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -36,6 +37,13 @@ class GameController extends Controller
     public function getGame(Request $request)
     {
         $game = Game::find($request->id);
+        return response()->json(["game" => $game], Response::HTTP_OK);
+    }
+
+    public function getDailyGame()
+    {
+        $id = DB::table('game')->where('type', 'daily')->where('date', date("Y-m-d"))->value('id');
+        $game = Game::find($id);
         return response()->json(["game" => $game], Response::HTTP_OK);
     }
 }
