@@ -77,3 +77,11 @@ footer {
   background-color: #77878b;
   color: white;
 }
+
+.mySlides{
+  display: none;
+}
+
+.carusel{
+  color: black;
+}
