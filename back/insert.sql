@@ -1,0 +1,3 @@
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `level`, `created_at`, `updated_at`) VALUES
+(1, 'ausias', 'ausias@inspedralbes.cat', '$2y$10$03osroqfKG8vj0LkrYl6K.ylUWwQuG/xehq7CjFKFsS8FUHX/UIIC', 0, '2022-11-30 07:07:18', '2022-11-30 07:07:18'),
+(2, 'pedra', 'pedra@inspedralbes.cat', '$2y$10$0PaNMb7syQEUiEA0njeBke8PGqiBb3nH93c/iCg70r7JPQCgR1hoy', 0, '2022-11-30 07:07:53', '2022-11-30 07:07:53');
