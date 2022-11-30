@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('date');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
             $table->string('category');
-            $table->enum('type', ['demo', 'daily', 'standard']);
+            $table->enum('type', ['daily', 'standard']);
             $table->timestamps();
         });
     }

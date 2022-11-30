@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idReceiver');
             $table->unsignedBigInteger('idGame');
             $table->unsignedBigInteger('idWinner');
-            $table->string('data');
+            $table->string('date');
             $table->timestamps();
             $table->foreign('idSender')->references('id')->on('user');
             $table->foreign('idReceiver')->references('id')->on('user');
