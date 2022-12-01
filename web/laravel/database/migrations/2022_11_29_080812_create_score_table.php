@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idUser');
             $table->unsignedBigInteger('idGame');
-            $table->integer('points');
-            $table->integer('time');
-            $table->boolean('completed');
+            $table->integer('points')->nullable();
+            $table->integer('time')->nullable();
+            $table->boolean('completed')->nullable();
             $table->timestamps();
             $table->foreign('idUser')->references('id')->on('user');
             $table->foreign('idGame')->references('id')->on('game');
