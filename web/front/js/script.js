@@ -45,7 +45,9 @@ Vue.component('quiz', {
   props: ['game'],
   data: function () {
     return {
-      shuffledAnswers: []
+      answers: [],
+      shuffledAnswers: [],
+      aux: 0
       
     };
   },
@@ -54,27 +56,33 @@ Vue.component('quiz', {
   template: `
   <div>
   {{game.question}}
-  {{randomNumber()}}
   {{shuffle()}}
-
-  <li v-for="incAns in game.incorrectAnswers">
-      <button class="quiz_incorrectButton" @click="$emit('evtAnswer', '0')">{{ incAns }}</button>
-  </li>
-  <li>
-    <button id="quiz_correctButton" @click="$emit('evtAnswer', '1')">{{game.correctAnswer}}</button>
-  </li>
+    
+  <li v-for="ans in shuffledAnswers">
+      <button class="quiz_incorrectButton" @click="$emit('evtAnswer', ans.index)">{{ ans.string }}</button>
+    </li>
   </div>`,
   
-
   methods: {
-    randomNumber: function () {
-      return Math.floor(Math.random() * 4);
-    },
-
+    
     shuffle: function(){ 
-      this.shuffledAnswers = JSON.parse(JSON.stringify(this.game.incorrectAnswers));
-      console.log("bbbbb", this.game.incorrectAnswers);
-      console.log("ccccc", this.shuffledAnswers);
+      if (this.aux < 1){
+
+
+        for (i = 0; i < 3; i++){
+          this.answers.push({"string": JSON.parse(JSON.stringify(this.game.incorrectAnswers[i])), "index": 0})
+        }
+        
+        this.answers.push({"string": JSON.parse(JSON.stringify(this.game.correctAnswer)), "index": 1});
+        
+        this.shuffledAnswers = this.answers
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+
+        this.aux++;
+      }
+      
     }
   },
 });
@@ -90,7 +98,7 @@ Vue.component('questions', {
       },
 
       showResults: false,
-      showCarusel: false
+      showCarusel: false,
     };
   },
   template: `
@@ -120,6 +128,7 @@ Vue.component('questions', {
         .then((data) => {
           console.log({ data });
           this.result = data;
+          
         });
     },
 
@@ -146,7 +155,7 @@ Vue.component('questions', {
     this.showCarusel = true;
     this.getQuestions();
 
-    setTimeout(() => this.showCurrentQuestion(this.slideIndex), 500);
+    setTimeout(() => this.showCurrentQuestion(this.slideIndex), 700);
 
   },
 
@@ -155,20 +164,15 @@ Vue.component('questions', {
 
     if (isCorrect == 1){
       this.quizResults.correctAnswers += 1;
+      console.log("correct");
     }
 
     else{
       this.quizResults.incorrectAnswers += 1;
+      console.log("incorrect");
     }
 
-    // buttonsQuiz = document.getElementsByClassName("quiz_incorrectButton");
-    
-    // for (i = 0; i < buttonsQuiz.length; i++){
-    //   buttonsQuiz[i].style.backgroundColor = 'red';
-    // }
-    // document.getElementById("quiz_correctButton").style.backgroundColor = 'green';
-    
-    setTimeout(() => this.nextQuestion(1), 1000); 
+    this.nextQuestion(1); 
   },
 
   },
