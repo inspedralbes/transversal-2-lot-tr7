@@ -97,43 +97,41 @@ Vue.component('questions', {
   template: `
     <div class="questions">
       <h1 class="index_title">League of Trivial</h1>
-      <div class="selectOptions">
-      <input type="radio" id="easy" value="easy" v-model="options.difficulty">
-      <label for="easy">Easy</label><br>
-      <input type="radio" id="medium" value="medium" v-model="options.difficulty">
-      <label for="medium">Medium</label><br>
-      <input type="radio" id="hard" value="hard" v-model="options.difficulty">
-      <label for="hard">Hard</label>
 
-      <label for="category">Choose a category</label>
-      <select id="category" v-model="options.category">
-      <option disabled value="">Select one category</option>
-        <option value="arts_and_literature">Arts & Literature</option>
-        <option value="film_and_tv">Film & TV</option>
-        <option value="food_and_drink">Food & Drink</option>
-        <option value="general_knowledge">General Knowledge</option>
-        <option value="geography">Geography</option>
-        <option value="history">History</option>
-        <option value="music">Music</option>
-        <option value="science">Science</option>
-        <option value="society_and_culture">Society & Culture</option>
-        <option value="sport_and_leisure">Sport & Leisure</option>
-      </select>
-      <b-button @click="handler" variant="primary">Start Game</b-button>
-  </div>
+      <div class="selectOptions">
+        <b-form-checkbox id="easy" value="easy" v-model="options.difficulty">Easy</b-form-checkbox>
+        <b-form-checkbox id="medium" value="medium" v-model="options.difficulty">Medium</b-form-checkbox>
+        <b-form-checkbox id="hard" value="hard" v-model="options.difficulty">Hard</b-form-checkbox>
+
+        <label for="category">Choose a category</label>
+        <b-form-select id="category" v-model="options.category">
+          <option value="arts_and_literature">Arts & Literature</option>
+          <option value="film_and_tv">Film & TV</option>
+          <option value="food_and_drink">Food & Drink</option>
+          <option value="general_knowledge">General Knowledge</option>
+          <option value="geography">Geography</option>
+          <option value="history">History</option>
+          <option value="music">Music</option>
+          <option value="science">Science</option>
+          <option value="society_and_culture">Society & Culture</option>
+          <option value="sport_and_leisure">Sport & Leisure</option>
+        </b-form-select>
+        <b-button @click="handler" variant="primary">Start Game</b-button>
+      </div>
+
       <div class="carousel" v-if="showCarousel">
         <div v-for="question in result">
           <b-card class="mySlides">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
           </b-card>
         </div>
-    </div>
+      </div>
 
-    <div v-if="showResults">
-      <finalResults :results=quizResults :display=showResults></finalResults>
-      <button @click="showResults = false" >Return</button>
-     </div>
-  </div>`,
+      <div v-if="showResults">
+        <finalResults :results=quizResults :display=showResults></finalResults>
+        <button @click="showResults = false" >Return</button>
+      </div>
+    </div>`,
   methods: {
     getQuestions: function () {
       fetch(
@@ -168,6 +166,8 @@ Vue.component('questions', {
     },
 
     handler: function () {
+      this.quizResults.correctAnswers = 0;
+      this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
       this.getQuestions();
 
