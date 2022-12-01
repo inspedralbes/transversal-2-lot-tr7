@@ -91,7 +91,7 @@ Vue.component('questions', {
       },
 
       showResults: false,
-      showCarusel: false,
+      showCarousel: false,
     };
   },
   template: `
@@ -121,7 +121,7 @@ Vue.component('questions', {
       </select>
       <b-button @click="handler" variant="primary">Start Game</b-button>
   </div>
-      <div class="carusel" v-if="showCarusel">
+      <div class="carousel" v-if="showCarousel">
         <div v-for="question in result">
           <b-card class="mySlides">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
@@ -155,7 +155,7 @@ Vue.component('questions', {
       if (n > this.arrQuestions.length) {
         this.slideIndex = 1;
         this.showResults = true;
-        this.showCarusel = false;
+        this.showCarousel = false;
       }
 
       if (n < 1) {
@@ -168,7 +168,7 @@ Vue.component('questions', {
     },
 
     handler: function () {
-      this.showCarusel = true;
+      this.showCarousel = true;
       this.getQuestions();
 
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 700);
