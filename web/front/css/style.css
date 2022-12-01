@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url("Beaufort.ttf");
+  src: url('Beaufort.ttf');
 }
 body {
   font-family: Beaufort;
@@ -78,10 +78,10 @@ footer {
   color: white;
 }
 
-.mySlides{
+.mySlides {
   display: none;
 }
 
-.carusel{
+.carousel {
   color: black;
 }
