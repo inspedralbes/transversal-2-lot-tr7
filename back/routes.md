@@ -103,3 +103,29 @@ GET: {
 }
 
 ---
+
+### Route: /api/create-score
+
+- Token required
+
+POST: {
+"idGame": 4
+}
+
+GET: true
+
+---
+
+### Route: /api/update-score
+
+- Token required
+
+POST: {
+"idGame": 4,
+"points": 90,
+"time": 170
+}
+
+GET: true
+
+---

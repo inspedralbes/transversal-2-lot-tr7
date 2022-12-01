@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GameController;
+use App\Http\Controllers\Api\ScoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
@@ -12,4 +13,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('create-game', [GameController::class, 'createGame']);
     Route::get('get-game', [GameController::class, 'getGame']);
     Route::get('get-daily-game', [GameController::class, 'getDailyGame']);
+    Route::post('create-score', [ScoreController::class, 'createScore']);
+    Route::post('update-score', [ScoreController::class, 'updateScore']);
 });
