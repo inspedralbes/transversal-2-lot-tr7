@@ -38,7 +38,6 @@ class ScoreController extends Controller
 
         $id = DB::table('score')->where('idUser', auth()->user()->id)->where('idGame', $request->idGame)->value('id');
         $score = Score::find($id);
-        // Score::where('id', $id)->update(['title' => 'Updated title']);
         $score->points = $request->points;
         $score->time = $request->time;
         $score->completed = true;
