@@ -22,7 +22,7 @@ Vue.component('chronometer', {
       }
 
       if (this.timeStopped !== null) {
-        this.stoppedDuration += (new Date() - this.timeStopped);
+        this.stoppedDuration += new Date() - this.timeStopped;
       }
 
       this.started = setInterval(this.clockRunning, 10);
@@ -41,7 +41,7 @@ Vue.component('chronometer', {
       this.stoppedDuration = 0;
       this.timeBegan = null;
       this.timeStopped = null;
-      this.time = "00:00.000";
+      this.time = '00:00.000';
     },
     zeroPrefix: function (num, digit) {
       var zero = '';
@@ -52,23 +52,26 @@ Vue.component('chronometer', {
     },
 
     clockRunning: function () {
-      var currentTime = new Date()
-        , timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
-        , hour = timeElapsed.getUTCHours()
-        , min = timeElapsed.getUTCMinutes()
-        , sec = timeElapsed.getUTCSeconds()
-        , ms = timeElapsed.getUTCMilliseconds();
+      var currentTime = new Date(),
+        timeElapsed = new Date(
+          currentTime - this.timeBegan - this.stoppedDuration
+        ),
+        hour = timeElapsed.getUTCHours(),
+        min = timeElapsed.getUTCMinutes(),
+        sec = timeElapsed.getUTCSeconds(),
+        ms = timeElapsed.getUTCMilliseconds();
 
       this.time =
-        this.zeroPrefix(min, 2) + ":" +
-        this.zeroPrefix(sec, 2) + "." +
+        this.zeroPrefix(min, 2) +
+        ':' +
+        this.zeroPrefix(sec, 2) +
+        '.' +
         this.zeroPrefix(ms, 3);
-    }
+    },
   },
-  getTime: function() {
-    this.currentTime = document.getElementById("clock").textContent;
-  } 
-
+  getTime: function () {
+    this.currentTime = document.getElementById('clock').textContent;
+  },
 });
 
 Vue.component('finalResults', {
@@ -100,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -160,6 +163,8 @@ Vue.component('questions', {
         incorrectAnswers: 0,
       },
 
+      checkDifficulty: false,
+      checkCategory: false,
       showResults: false,
       showCarousel: false,
       showIndex: true,
@@ -193,6 +198,9 @@ Vue.component('questions', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
+
+        <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
+        <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
       </div>
     </div>
 
@@ -200,7 +208,7 @@ Vue.component('questions', {
         <div class="game__carousel--mySlides" v-for="question in result">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
         </div>
-        <chronometer></chronometer>   
+        <chronometer></chronometer>
       </div>
 
       <div class="game__results" v-if="showResults">
@@ -244,14 +252,24 @@ Vue.component('questions', {
     },
 
     handler: function () {
-      this.quizResults.correctAnswers = 0;
-      this.quizResults.incorrectAnswers = 0;
-      this.showCarousel = true;
-      this.showIndex = false;
-
-      this.getQuestions();
-
-      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
+      if (this.options.difficulty == '') {
+        this.checkDifficulty = true;
+        this.checkCategory = false;
+        console.log('dif');
+      } else if (this.options.category == '') {
+        this.checkCategory = true;
+        this.checkDifficulty = false;
+        console.log('cat');
+      } else {
+        this.quizResults.correctAnswers = 0;
+        this.quizResults.incorrectAnswers = 0;
+        this.showCarousel = true;
+        this.showIndex = false;
+        this.checkCategory = false;
+        this.checkDifficulty = false;
+        this.getQuestions();
+        setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
+      }
     },
 
     checkAnswer: function (isCorrect) {
