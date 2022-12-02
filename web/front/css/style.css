@@ -134,7 +134,7 @@ footer {
 }
 .game__selectOptions--categories {
   display: grid;
-  width: 50%;
-  margin: 0 auto 20px;
+  width: 30%;
+  margin: 0 auto 30px;
   font-size: 22px;
 }
