@@ -1,7 +1,7 @@
 Vue.component('chronometer', {
   data: function () {
     return {
-      time: '00:00:00.000',
+      time: '',
       timeBegan: null,
       timeStopped: null,
       stoppedDuration: 0,
@@ -10,13 +10,7 @@ Vue.component('chronometer', {
     };
   },
 
-  template: `
-  <div>
-  {{start()}}
-  
-      <span id="clock" class="time">{{ time }}</span>
-  </div>`,
-
+  template: `<span id="clock" class="time">  {{start()}}{{ time }}</span>`,
 
   methods: {
     start: function () {
@@ -47,7 +41,7 @@ Vue.component('chronometer', {
       this.stoppedDuration = 0;
       this.timeBegan = null;
       this.timeStopped = null;
-      this.time = "00:00:00.000";
+      this.time = "00:00.000";
     },
     zeroPrefix: function (num, digit) {
       var zero = '';
@@ -66,7 +60,6 @@ Vue.component('chronometer', {
         , ms = timeElapsed.getUTCMilliseconds();
 
       this.time =
-        this.zeroPrefix(hour, 2) + ":" +
         this.zeroPrefix(min, 2) + ":" +
         this.zeroPrefix(sec, 2) + "." +
         this.zeroPrefix(ms, 3);
@@ -197,10 +190,10 @@ Vue.component('questions', {
     </div>
 
       <div class="game__carousel" v-if="showCarousel">
-      <chronometer></chronometer>   
         <div class="game__carousel--mySlides" v-for="question in result">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
         </div>
+        <chronometer></chronometer>   
       </div>
 
       <div class="game__results" v-if="showResults">

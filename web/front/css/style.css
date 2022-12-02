@@ -87,7 +87,7 @@ footer {
   height: 100%;
   animation: fadeInAnimation ease 2s;
 }
-.game__carousel div {
+.game__carousel--mySlides div {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -98,7 +98,7 @@ footer {
   grid-template-columns: 1fr 1fr;
   grid-gap: 15px;
 }
-.game__carousel h2 {
+.game__carousel--mySlides h2 {
   margin: 0 0 20px;
   font-size: 60px;
   font-weight: bold;
