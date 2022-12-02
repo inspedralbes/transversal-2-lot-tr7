@@ -1,80 +1,78 @@
 Vue.component('chronometer', {
   data: function () {
     return {
-      output: document.getElementById('stopwatch'),
-      // ms: 0,
-      // sec: 0,
-      // min: 0,
-      // x: null,
+      time: '00:00:00.000',
+      timeBegan: null,
+      timeStopped: null,
+      stoppedDuration: 0,
+      started: null,
+      running: false,
     };
   },
 
-  template: `<div>
-  <h1>
-        <span id="hour">00</span> :
-        <span id="min">00</span> :
-        <span id="sec">00</span> :
-        <span id="milisec">00</span>
-    </h1>
-
-    {{ start() }}
+  template: `
+  <div>
+  {{start()}}
+  
+      <span id="clock" class="time">{{ time }}</span>
   </div>`,
 
+
   methods: {
-    timer: function () {
-      console.log('start timer');
-      var milisec = 0;
-      var sec = 0; /* holds incrementing value */
-      var min = 0;
-      var hour = 0;
-
-      /* Contains and outputs returned value of  function checkTime */
-
-      var miliSecOut = 0;
-      var secOut = 0;
-      var minOut = 0;
-      var hourOut = 0;
-
-      miliSecOut = this.checkTime(milisec);
-      secOut = this.checkTime(sec);
-      minOut = this.checkTime(min);
-      hourOut = this.checkTime(hour);
-
-      milisec = ++milisec;
-
-      if (milisec === 100) {
-        milisec = 0;
-        this.sec = ++this.sec;
-      }
-
-      if (this.sec == 60) {
-        this.min = ++this.min;
-        this.sec = 0;
-      }
-
-      if (this.min == 60) {
-        this.min = 0;
-        hour = ++hour;
-      }
-
-      document.getElementById('milisec').innerHTML = miliSecOut;
-      document.getElementById('sec').innerHTML = secOut;
-      document.getElementById('min').innerHTML = minOut;
-      document.getElementById('hour').innerHTML = hourOut;
-    },
-
-    checkTime: function (i) {
-      if (i < 10) {
-        i = '0' + i;
-      }
-      return i;
-    },
-
     start: function () {
-      this.x = setInterval(this.timer, 10);
-      console.log('start');
+      if (this.running) return;
+
+      if (this.timeBegan === null) {
+        this.reset();
+        this.timeBegan = new Date();
+      }
+
+      if (this.timeStopped !== null) {
+        this.stoppedDuration += (new Date() - this.timeStopped);
+      }
+
+      this.started = setInterval(this.clockRunning, 10);
+      this.running = true;
     },
+
+    stop: function () { 
+      this.running = false;
+      this.timeStopped = new Date();
+      clearInterval(this.started);
+    },
+
+    reset: function () {
+      this.running = false;
+      clearInterval(this.started);
+      this.stoppedDuration = 0;
+      this.timeBegan = null;
+      this.timeStopped = null;
+      this.time = "00:00:00.000";
+    },
+    zeroPrefix: function(num, digit){
+      var zero = '';
+      for(var i = 0; i < digit; i++) {
+      zero += '0';
+    }
+      return (zero + num).slice(-digit);
+    },
+
+    clockRunning: function(){
+      var currentTime = new Date()
+  , timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
+  , hour = timeElapsed.getUTCHours()
+  , min = timeElapsed.getUTCMinutes()
+  , sec = timeElapsed.getUTCSeconds()
+  , ms = timeElapsed.getUTCMilliseconds();
+
+  this.time = 
+    this.zeroPrefix(hour, 2) + ":" + 
+    this.zeroPrefix(min, 2) + ":" + 
+    this.zeroPrefix(sec, 2) + "." + 
+    this.zeroPrefix(ms, 3);
+    }
   },
+
 });
 
 Vue.component('finalResults', {
@@ -106,7 +104,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -201,6 +199,7 @@ Vue.component('questions', {
     </div>
 
       <div class="game__carousel" v-if="showCarousel">
+      <chronometer></chronometer>   
         <div class="game__carousel--mySlides" v-for="question in result">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
         </div>
@@ -253,7 +252,7 @@ Vue.component('questions', {
       this.showIndex = false;
 
       this.getQuestions();
-      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 500);
+      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
 
     checkAnswer: function (isCorrect) {
