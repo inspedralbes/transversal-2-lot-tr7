@@ -61,7 +61,7 @@ footer {
   text-align: center;
 }
 .game h1 {
-  margin: 0 0 20px;
+  margin: 0 0 30px;
   font-size: 80px;
   font-weight: bold;
 }
@@ -118,7 +118,23 @@ footer {
 }
 #clock {
   font-size: 24px;
-  background-color: #77878b;
+  background-color: black;
   padding: 20px 40px;
   display: block;
+}
+.game__selectOptions--difficulty {
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+  margin: 0 auto 20px;
+  font-size: 22px;
+}
+.game__selectOptions--difficulty label {
+  margin-left: 10px;
+}
+.game__selectOptions--categories {
+  display: grid;
+  width: 50%;
+  margin: 0 auto 20px;
+  font-size: 22px;
 }
