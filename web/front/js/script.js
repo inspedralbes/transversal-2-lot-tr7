@@ -6,7 +6,6 @@ Vue.component('chronometer', {
       // sec: 0,
       // min: 0,
       // x: null,
-      
     };
   },
 
@@ -22,63 +21,61 @@ Vue.component('chronometer', {
   </div>`,
 
   methods: {
-    timer: function(){
-      console.log("start timer"); 
-        var milisec = 0;
-        var sec = 0; /* holds incrementing value */
-        var min = 0;
-        var hour = 0;
+    timer: function () {
+      console.log('start timer');
+      var milisec = 0;
+      var sec = 0; /* holds incrementing value */
+      var min = 0;
+      var hour = 0;
 
-        /* Contains and outputs returned value of  function checkTime */
+      /* Contains and outputs returned value of  function checkTime */
 
-        var miliSecOut = 0;
-        var secOut = 0;
-        var minOut = 0;
-        var hourOut = 0;
-      
-            miliSecOut = this.checkTime(milisec);
-            secOut = this.checkTime(sec);
-            minOut = this.checkTime(min);
-            hourOut = this.checkTime(hour);
+      var miliSecOut = 0;
+      var secOut = 0;
+      var minOut = 0;
+      var hourOut = 0;
 
-            milisec = ++milisec;
+      miliSecOut = this.checkTime(milisec);
+      secOut = this.checkTime(sec);
+      minOut = this.checkTime(min);
+      hourOut = this.checkTime(hour);
 
-            if (milisec === 100) {
-                milisec = 0;
-                this.sec = ++this.sec;
-            }
+      milisec = ++milisec;
 
-            if (this.sec == 60) {
-                this.min = ++this.min;
-                this.sec = 0;
-            }
+      if (milisec === 100) {
+        milisec = 0;
+        this.sec = ++this.sec;
+      }
 
-            if (this.min == 60) {
-                this.min = 0;
-                hour = ++hour;
+      if (this.sec == 60) {
+        this.min = ++this.min;
+        this.sec = 0;
+      }
 
-            }
+      if (this.min == 60) {
+        this.min = 0;
+        hour = ++hour;
+      }
 
-
-            document.getElementById("milisec").innerHTML = miliSecOut;
-            document.getElementById("sec").innerHTML = secOut;
-            document.getElementById("min").innerHTML = minOut;
-            document.getElementById("hour").innerHTML = hourOut;
+      document.getElementById('milisec').innerHTML = miliSecOut;
+      document.getElementById('sec').innerHTML = secOut;
+      document.getElementById('min').innerHTML = minOut;
+      document.getElementById('hour').innerHTML = hourOut;
     },
 
-    checkTime: function(i){
+    checkTime: function (i) {
       if (i < 10) {
-        i = "0" + i;
-      } 
+        i = '0' + i;
+      }
       return i;
     },
 
-    start: function(){
+    start: function () {
       this.x = setInterval(this.timer, 10);
-      console.log("start");
-    }
-  }
-})
+      console.log('start');
+    },
+  },
+});
 
 Vue.component('finalResults', {
   props: ['results', 'display'],
@@ -124,12 +121,11 @@ Vue.component('quiz', {
 
   template: `
   <div>
-  {{game.question}}
-  {{shuffle()}}
 
-  <li v-for="ans in shuffledAnswers">
-      <button class="quiz_incorrectButton" @click="$emit('evtAnswer', ans.index)">{{ ans.string }}</button>
-    </li>
+    {{game.question}}
+    {{shuffle()}}
+      <button v-for="ans in shuffledAnswers" @click="$emit('evtAnswer', ans.index)">{{ ans.string }}</button>
+
   </div>`,
 
   methods: {
@@ -174,15 +170,15 @@ Vue.component('questions', {
 
       showResults: false,
       showCarousel: false,
-      showIndex: true
+      showIndex: true,
     };
   },
   template: `
-    <div class="questions">
+    <div class="game">
     <div v-show="showIndex">
       <h1 class="index_title">League of Trivial</h1>
 
-      <div class="selectOptions">
+      <div class="game__selectOptions">
         <b-form-checkbox id="easy" value="easy" v-model="options.difficulty">Easy</b-form-checkbox>
         <b-form-checkbox id="medium" value="medium" v-model="options.difficulty">Medium</b-form-checkbox>
         <b-form-checkbox id="hard" value="hard" v-model="options.difficulty">Hard</b-form-checkbox>
@@ -204,16 +200,13 @@ Vue.component('questions', {
       </div>
     </div>
 
-      <div class="carousel" v-if="showCarousel">
-        <chronometer></chronometer>
-        <div v-for="question in result">
-          <b-card class="mySlides">
+      <div class="game__carousel" v-if="showCarousel">
+        <div class="game__carousel--mySlides" v-for="question in result">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
-          </b-card>
         </div>
       </div>
 
-      <div v-if="showResults">
+      <div class="game__results" v-if="showResults">
         <finalResults :results=quizResults :display=showResults></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
@@ -235,7 +228,9 @@ Vue.component('questions', {
     },
 
     showCurrentQuestion: function (n) {
-      this.arrQuestions = document.getElementsByClassName('mySlides');
+      this.arrQuestions = document.getElementsByClassName(
+        'game__carousel--mySlides'
+      );
       if (n > this.arrQuestions.length) {
         this.slideIndex = 1;
         this.showResults = true;
@@ -259,7 +254,6 @@ Vue.component('questions', {
 
       this.getQuestions();
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 500);
-
     },
 
     checkAnswer: function (isCorrect) {
@@ -276,10 +270,10 @@ Vue.component('questions', {
       this.nextQuestion(1);
     },
 
-    endDemo: function(){
+    endDemo: function () {
       this.showIndex = true;
       this.showResults = false;
-    }
+    },
   },
 });
 

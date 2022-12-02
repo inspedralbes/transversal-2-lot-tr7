@@ -57,15 +57,15 @@ footer {
 .footer p {
   margin: 0;
 }
-.questions {
+.game {
   text-align: center;
 }
-.questions h1 {
+.game h1 {
   margin: 0 0 20px;
   font-size: 80px;
   font-weight: bold;
 }
-.questions button {
+.game button {
   background-color: #f4ac45;
   border: 0;
   color: black;
@@ -73,15 +73,21 @@ footer {
   padding: 10px 40px;
   font-weight: bold;
 }
-.questions button:hover {
+.game button:hover {
   background-color: #77878b;
   color: white;
 }
 
-.mySlides {
+.game__selectOptions {
+}
+
+.game__carousel {
+  color: black;
+}
+
+.game__carousel--mySlides {
   display: none;
 }
 
-.carousel {
-  color: black;
+.game__results {
 }
