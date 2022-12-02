@@ -119,11 +119,9 @@ Vue.component('quiz', {
 
   template: `
   <div>
-
-    {{game.question}}
+    <h2>{{game.question}}</h2>
     {{shuffle()}}
       <button v-for="ans in shuffledAnswers" @click="$emit('evtAnswer', ans.index)">{{ ans.string }}</button>
-
   </div>`,
 
   methods: {
