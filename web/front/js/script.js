@@ -65,6 +65,9 @@ Vue.component('chronometer', {
         this.zeroPrefix(ms, 3);
     }
   },
+  getTime: function() {
+    this.currentTime = document.getElementById("clock").textContent;
+  } 
 
 });
 
@@ -248,9 +251,6 @@ Vue.component('questions', {
 
       this.getQuestions();
 
-      // if (typeof obj.foo !== 'undefined') {
-      //   this.showCurrentQuestion(this.slideIndex);
-      //       }
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
 
