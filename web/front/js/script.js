@@ -1,3 +1,85 @@
+Vue.component('chronometer', {
+  data: function () {
+    return {
+      output: document.getElementById('stopwatch'),
+      // ms: 0,
+      // sec: 0,
+      // min: 0,
+      // x: null,
+      
+    };
+  },
+
+  template: `<div>
+  <h1>
+        <span id="hour">00</span> :
+        <span id="min">00</span> :
+        <span id="sec">00</span> :
+        <span id="milisec">00</span>
+    </h1>
+
+    {{ start() }}
+  </div>`,
+
+  methods: {
+    timer: function(){
+      console.log("start timer"); 
+        var milisec = 0;
+        var sec = 0; /* holds incrementing value */
+        var min = 0;
+        var hour = 0;
+
+        /* Contains and outputs returned value of  function checkTime */
+
+        var miliSecOut = 0;
+        var secOut = 0;
+        var minOut = 0;
+        var hourOut = 0;
+      
+            miliSecOut = this.checkTime(milisec);
+            secOut = this.checkTime(sec);
+            minOut = this.checkTime(min);
+            hourOut = this.checkTime(hour);
+
+            milisec = ++milisec;
+
+            if (milisec === 100) {
+                milisec = 0;
+                this.sec = ++this.sec;
+            }
+
+            if (this.sec == 60) {
+                this.min = ++this.min;
+                this.sec = 0;
+            }
+
+            if (this.min == 60) {
+                this.min = 0;
+                hour = ++hour;
+
+            }
+
+
+            document.getElementById("milisec").innerHTML = miliSecOut;
+            document.getElementById("sec").innerHTML = secOut;
+            document.getElementById("min").innerHTML = minOut;
+            document.getElementById("hour").innerHTML = hourOut;
+    },
+
+    checkTime: function(i){
+      if (i < 10) {
+        i = "0" + i;
+      } 
+      return i;
+    },
+
+    start: function(){
+      this.x = setInterval(this.timer, 10);
+      console.log("start");
+    }
+  }
+})
+
 Vue.component('finalResults', {
   props: ['results', 'display'],
 
@@ -5,7 +87,7 @@ Vue.component('finalResults', {
     return {
       numAnswers: 0,
       points: 0,
-      dificulty: {
+      difficulty: {
         easy: 1.5,
         medium: 2,
         hard: 4,
@@ -23,7 +105,7 @@ Vue.component('finalResults', {
   mounted() {
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
-    this.points = this.results.correctAnswers * this.dificulty.hard;
+    this.points = this.results.correctAnswers * this.difficulty.hard;
   },
 
   methods: {
@@ -92,10 +174,12 @@ Vue.component('questions', {
 
       showResults: false,
       showCarousel: false,
+      showIndex: true
     };
   },
   template: `
     <div class="questions">
+    <div v-show="showIndex">
       <h1 class="index_title">League of Trivial</h1>
 
       <div class="selectOptions">
@@ -118,8 +202,10 @@ Vue.component('questions', {
         </b-form-select>
         <b-button @click="handler" variant="primary">Start Game</b-button>
       </div>
+    </div>
 
       <div class="carousel" v-if="showCarousel">
+        <chronometer></chronometer>
         <div v-for="question in result">
           <b-card class="mySlides">
             <quiz @evtAnswer='checkAnswer' :game=question></quiz>
@@ -129,7 +215,7 @@ Vue.component('questions', {
 
       <div v-if="showResults">
         <finalResults :results=quizResults :display=showResults></finalResults>
-        <button @click="showResults = false" >Return</button>
+        <button @click="endDemo" >Return</button>
       </div>
     </div>`,
   methods: {
@@ -169,9 +255,11 @@ Vue.component('questions', {
       this.quizResults.correctAnswers = 0;
       this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
-      this.getQuestions();
+      this.showIndex = false;
 
-      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 700);
+      this.getQuestions();
+      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 500);
+
     },
 
     checkAnswer: function (isCorrect) {
@@ -187,6 +275,11 @@ Vue.component('questions', {
 
       this.nextQuestion(1);
     },
+
+    endDemo: function(){
+      this.showIndex = true;
+      this.showResults = false;
+    }
   },
 });
 
