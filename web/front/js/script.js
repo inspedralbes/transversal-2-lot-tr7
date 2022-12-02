@@ -35,7 +35,7 @@ Vue.component('chronometer', {
       this.running = true;
     },
 
-    stop: function () { 
+    stop: function () {
       this.running = false;
       this.timeStopped = new Date();
       clearInterval(this.started);
@@ -49,27 +49,27 @@ Vue.component('chronometer', {
       this.timeStopped = null;
       this.time = "00:00:00.000";
     },
-    zeroPrefix: function(num, digit){
+    zeroPrefix: function (num, digit) {
       var zero = '';
-      for(var i = 0; i < digit; i++) {
-      zero += '0';
-    }
+      for (var i = 0; i < digit; i++) {
+        zero += '0';
+      }
       return (zero + num).slice(-digit);
     },
 
-    clockRunning: function(){
+    clockRunning: function () {
       var currentTime = new Date()
-  , timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
-  , hour = timeElapsed.getUTCHours()
-  , min = timeElapsed.getUTCMinutes()
-  , sec = timeElapsed.getUTCSeconds()
-  , ms = timeElapsed.getUTCMilliseconds();
+        , timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
+        , hour = timeElapsed.getUTCHours()
+        , min = timeElapsed.getUTCMinutes()
+        , sec = timeElapsed.getUTCSeconds()
+        , ms = timeElapsed.getUTCMilliseconds();
 
-  this.time = 
-    this.zeroPrefix(hour, 2) + ":" + 
-    this.zeroPrefix(min, 2) + ":" + 
-    this.zeroPrefix(sec, 2) + "." + 
-    this.zeroPrefix(ms, 3);
+      this.time =
+        this.zeroPrefix(hour, 2) + ":" +
+        this.zeroPrefix(min, 2) + ":" +
+        this.zeroPrefix(sec, 2) + "." +
+        this.zeroPrefix(ms, 3);
     }
   },
 
