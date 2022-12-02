@@ -250,6 +250,10 @@ Vue.component('questions', {
       this.showIndex = false;
 
       this.getQuestions();
+
+      // if (typeof obj.foo !== 'undefined') {
+      //   this.showCurrentQuestion(this.slideIndex);
+      //       }
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
 
