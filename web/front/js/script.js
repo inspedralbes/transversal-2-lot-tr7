@@ -168,10 +168,13 @@ Vue.component('questions', {
       <h1 class="index_title">League of Trivial</h1>
 
       <div class="game__selectOptions">
+      <div class="game__selectOptions--difficulty">
         <b-form-checkbox id="easy" value="easy" v-model="options.difficulty">Easy</b-form-checkbox>
         <b-form-checkbox id="medium" value="medium" v-model="options.difficulty">Medium</b-form-checkbox>
         <b-form-checkbox id="hard" value="hard" v-model="options.difficulty">Hard</b-form-checkbox>
+      </div>
 
+      <div class="game__selectOptions--categories">
         <label for="category">Choose a category</label>
         <b-form-select id="category" v-model="options.category">
           <option value="arts_and_literature">Arts & Literature</option>
@@ -185,7 +188,8 @@ Vue.component('questions', {
           <option value="society_and_culture">Society & Culture</option>
           <option value="sport_and_leisure">Sport & Leisure</option>
         </b-form-select>
-        <b-button @click="handler" variant="primary">Start Game</b-button>
+        </div>
+        <b-button @click="handler">Start Game</b-button>
       </div>
     </div>
 
