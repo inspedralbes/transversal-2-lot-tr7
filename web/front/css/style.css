@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url('Beaufort.ttf');
+  src: url("Beaufort.ttf");
 }
 body {
   font-family: Beaufort;
@@ -70,24 +70,41 @@ footer {
   border: 0;
   color: black;
   font-size: 24px;
-  padding: 10px 40px;
+  padding: 20px;
   font-weight: bold;
 }
 .game button:hover {
   background-color: #77878b;
   color: white;
 }
-
-.game__selectOptions {
-}
-
 .game__carousel {
-  color: black;
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  background-color: #2a2a2a;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
 }
-
+.game__carousel div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
+}
+.game__carousel h2 {
+  margin: 0 0 20px;
+  font-size: 60px;
+  font-weight: bold;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
 .game__carousel--mySlides {
   display: none;
-}
-
-.game__results {
 }
