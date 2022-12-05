@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url("Beaufort.ttf");
+  src: url('Beaufort.ttf');
 }
 body {
   font-family: Beaufort;
@@ -155,5 +155,5 @@ footer:not(.modal-footer) {
   background-color: black;
 }
 .modal-body {
-  background-color: #2a2a2a;
+  background-color: #3c3c3c;
 }
