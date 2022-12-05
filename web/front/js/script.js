@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -304,27 +304,31 @@ Vue.component('vue-header', {
     <b-modal id="login-register" title="Login / Register">
     <div class="form__login">
     <h2>Login</h2>
-      <input placeholder="Username" />
-      <input placeholder="Password" />
-      <b-button>Login</b-button>
+      <input v-model="login.username" placeholder="Username" />
+      <input v-model="login.password" placeholder="Password" />
+      <b-button @click="login">Login</b-button>
     </div>
     <div class="form__register">
     <h2>Register</h2>
-      <input v-model="form.username" placeholder="Username" />
-      <input v-model="form.email" placeholder="Email" />
-      <input v-model="form.password" placeholder="Password" />
-      <input v-model="form.repeatPassword" placeholder="Confirm password" />
+      <input v-model="register.username" placeholder="Username" />
+      <input v-model="register.email" placeholder="Email" />
+      <input v-model="register.password" placeholder="Password" />
+      <input v-model="register.repeatPassword" placeholder="Confirm password" />
       <b-button @click="register">Register</b-button>
     </div>
     </b-modal>
   </div>`,
   data: function () {
     return {
-      form: {
+      register: {
         username: '',
         email: '',
         password: '',
         repeatPassword: '',
+      },
+      login: {
+        username: '',
+        password: '',
       },
     };
   },
@@ -334,24 +338,47 @@ Vue.component('vue-header', {
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/register`,
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           method: 'post',
           body: JSON.stringify({
-            username: this.form.username,
-            email: this.form.email,
-            password: this.form.password,
-            password_confirmation: this.form.repeatPassword,
-          })
+            username: this.register.username,
+            email: this.register.email,
+            password: this.register.password,
+            password_confirmation: this.register.repeatPassword,
+          }),
         }
       )
         .then((response) => response.json())
         .then((data) => {
-          if (data = true) {
-            this.form.username = "";
-            this.form.email = "";
-            this.form.password = "";
-            this.form.repeatPassword = "";
+          if ((data = true)) {
+            this.register.username = '';
+            this.register.email = '';
+            this.register.password = '';
+            this.register.repeatPassword = '';
+          }
+        });
+    },
+    login: function () {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/login`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'post',
+          body: JSON.stringify({
+            username: this.login.username,
+            password: this.login.password,
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if ((data.login = true)) {
+            this.login.username = '';
+            this.login.password = '';
           }
         });
     },
