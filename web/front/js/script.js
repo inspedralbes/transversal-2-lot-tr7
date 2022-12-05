@@ -302,7 +302,14 @@ Vue.component('vue-header', {
       <a v-b-modal.modal-1>Login / Register</a>
     </div>
     <b-modal id="modal-1" title="Login / Register">
-    <div><h1>HOLA</h1></div>
+    <div class="register">
+      <input v-model="username" placeholder="Username" />
+      <input v-model="email" placeholder="Email" />
+      <input v-model="password" placeholder="Password" />
+      <input v-model="confirmPWD" placeholder="Confirm password" />
+
+      <b-button>Register</b-button>
+    </div>
     </b-modal>
   </div>`,
 });
