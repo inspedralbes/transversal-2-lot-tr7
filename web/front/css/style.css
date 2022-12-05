@@ -198,3 +198,8 @@ footer:not(.modal-footer) {
 #login-register .modal-body input {
   padding: 5px 10px;
 }
+#profile .modal-body {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+}

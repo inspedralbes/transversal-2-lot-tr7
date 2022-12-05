@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -178,7 +178,7 @@ Vue.component('daily-game', {
       }
       return false;
     },
-    dailyGame: function () {},
+    dailyGame: function () { },
   },
 });
 Vue.component('game', {
@@ -328,13 +328,6 @@ Vue.component('game', {
 });
 
 Vue.component('vue-header', {
-  data: function () {
-    return {
-      username: '',
-      email: '',
-      level: '',
-    };
-  },
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
@@ -346,9 +339,11 @@ Vue.component('vue-header', {
 
     <b-modal id="profile" title="Profile">
       <img src="img/foto.png" alt="logo" />
-      <h3>Username: </h3>
-      <h3>Email: </h3>
-      <h3>Level: </h3>
+      <div>
+      <h3>Username: {{profile.username}}</h3>
+      <h3>Email: {{profile.email}}</h3>
+      <h3>Level: {{profile.level}}</h3>
+      </div>
     </b-modal>
 
     <b-modal id="login-register" title="Login / Register">
@@ -380,6 +375,11 @@ Vue.component('vue-header', {
         username: '',
         password: '',
       },
+      profile: {
+        username: '',
+        email: '',
+        level: '',
+      }
     };
   },
   methods: {
@@ -397,7 +397,9 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
+          this.profile.username = data.userData.username;
+          this.profile.email = data.userData.email;
+          this.profile.level = data.userData.level;
         });
     },
     registerFunction: function () {
