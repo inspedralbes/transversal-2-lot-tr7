@@ -293,6 +293,17 @@ Vue.component('questions', {
   },
 });
 
+Vue.component('vue-header', {
+  template: `
+  <div class="header">
+    <a href=""><img src="img/logo.png" alt="logo" /></a>
+    <div class="nav">
+      <a href="">Ranking</a>
+      <a href="">Login / Register</a>
+    </div>
+  </div>`,
+});
+
 let app = new Vue({
   el: '#app',
   data: {},
