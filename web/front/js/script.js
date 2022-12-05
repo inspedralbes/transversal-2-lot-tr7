@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -303,10 +303,10 @@ Vue.component('vue-header', {
     </div>
     <b-modal id="modal-1" title="Login / Register">
     <div class="register">
-      <input v-model="username" placeholder="Username" />
-      <input v-model="email" placeholder="Email" />
-      <input v-model="password" placeholder="Password" />
-      <input v-model="confirmPWD" placeholder="Confirm password" />
+      <input placeholder="Username" />
+      <input placeholder="Email" />
+      <input placeholder="Password" />
+      <input placeholder="Confirm password" />
 
       <b-button>Register</b-button>
     </div>
