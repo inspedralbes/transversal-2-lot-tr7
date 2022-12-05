@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -148,7 +148,41 @@ Vue.component('quiz', {
     },
   },
 });
-Vue.component('questions', {
+Vue.component('daily-game', {
+  template: `<div>
+  <b-button @click="getDailyGame()" v-show="userIsLogged()">Daily Game</b-button>
+
+  </div>`,
+  methods: {
+    getDailyGame: function () {
+      const store = userStore();
+
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-daily-game`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.token,
+          },
+          method: 'get',
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({ data });
+        });
+    },
+    userIsLogged: function () {
+      const store = userStore();
+      if (store.logged == true) {
+        return true;
+      }
+      return false;
+    },
+    dailyGame: function () {},
+  },
+});
+Vue.component('game', {
   data: function () {
     return {
       options: {
@@ -198,6 +232,7 @@ Vue.component('questions', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
+        <daily-game></daily-game>
 
         <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
         <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
@@ -299,7 +334,8 @@ Vue.component('vue-header', {
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a href="">Ranking</a>
-      <a v-b-modal.login-register>Login / Register</a>
+      <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
+      <a v-show="userIsLogged()">Profile</a>
     </div>
     <b-modal id="login-register" title="Login / Register">
     <div class="form__login">
@@ -375,7 +411,7 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
-          if ((data.login = true)) {
+          if (data.login == true) {
             this.login.username = '';
             this.login.password = '';
             const store = userStore();
@@ -386,6 +422,13 @@ Vue.component('vue-header', {
             this.$bvModal.hide('login-register');
           }
         });
+    },
+    userIsLogged: function () {
+      const store = userStore();
+      if (store.logged == true) {
+        return true;
+      }
+      return false;
     },
   },
 });
@@ -398,19 +441,19 @@ const userStore = Pinia.defineStore('user', {
         username: '',
         id: '',
         token: '',
-      }
-    }
+      },
+    };
   },
-})
+});
 
-Vue.use(Pinia.PiniaVuePlugin)
-const pinia = Pinia.createPinia()
+Vue.use(Pinia.PiniaVuePlugin);
+const pinia = Pinia.createPinia();
 
 let app = new Vue({
   el: '#app',
   data: {},
   pinia,
   computed: {
-    ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
+    ...Pinia.mapState(userStore, ['loginInfo', 'logged']),
   },
 });
