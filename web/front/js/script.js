@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -332,11 +332,27 @@ Vue.component('vue-header', {
     register: function () {
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/register`,
-        {}
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: 'post',
+          body: JSON.stringify({
+            username: this.form.username,
+            email: this.form.email,
+            password: this.form.password,
+            password_confirmation: this.form.repeatPassword,
+          })
+        }
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
+          if (data = true) {
+            this.form.username = "";
+            this.form.email = "";
+            this.form.password = "";
+            this.form.repeatPassword = "";
+          }
         });
     },
   },
