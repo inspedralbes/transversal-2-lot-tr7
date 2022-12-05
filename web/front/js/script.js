@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -306,7 +306,7 @@ Vue.component('vue-header', {
     <h2>Login</h2>
       <input v-model="login.username" placeholder="Username" />
       <input v-model="login.password" placeholder="Password" />
-      <b-button @click="login">Login</b-button>
+      <b-button @click="loginFunction">Login</b-button>
     </div>
     <div class="form__register">
     <h2>Register</h2>
@@ -314,7 +314,7 @@ Vue.component('vue-header', {
       <input v-model="register.email" placeholder="Email" />
       <input v-model="register.password" placeholder="Password" />
       <input v-model="register.repeatPassword" placeholder="Confirm password" />
-      <b-button @click="register">Register</b-button>
+      <b-button @click="registerFunction">Register</b-button>
     </div>
     </b-modal>
   </div>`,
@@ -333,7 +333,7 @@ Vue.component('vue-header', {
     };
   },
   methods: {
-    register: function () {
+    registerFunction: function () {
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/register`,
         {
@@ -359,7 +359,7 @@ Vue.component('vue-header', {
           }
         });
     },
-    login: function () {
+    loginFunction: function () {
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/login`,
         {
