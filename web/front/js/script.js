@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -379,6 +379,7 @@ Vue.component('vue-header', {
           if ((data.login = true)) {
             this.login.username = '';
             this.login.password = '';
+            this.$bvModal.hide('login-register');
           }
         });
     },
