@@ -149,8 +149,13 @@ Vue.component('quiz', {
   },
 });
 Vue.component('daily-game', {
+  data: function () {
+    return {
+      result: [],
+    };
+  },
   template: `<div>
-  <b-button @click="getDailyGame()" v-show="userIsLogged()">Daily Game</b-button>
+  <b-button @click="[getDailyGame(), $emit('evtDailyGame', result)]" v-show="userIsLogged()">Daily Game</b-button>
 
   </div>`,
   methods: {
@@ -231,7 +236,7 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
-        <daily-game></daily-game>
+        <daily-game @evtDailyGame="loadDailyGame"></daily-game>
 
         <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
         <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
@@ -324,6 +329,17 @@ Vue.component('game', {
       this.showIndex = true;
       this.showResults = false;
     },
+    loadDailyGame: function(dat){
+  
+       this.result = dat;
+       console.log("aaa", {dat});
+       this.quizResults.correctAnswers = 0;
+       this.quizResults.incorrectAnswers = 0;
+       this.showCarousel = true;
+       this.showIndex = false;
+       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 1000);
+
+    }
   },
 });
 
