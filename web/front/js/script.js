@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -161,7 +161,7 @@ Vue.component('daily-game', {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + store.loginInfo.token,
+            Authorization: 'Bearer ' + store.loginInfo.token,
           },
           method: 'get',
         }
@@ -178,7 +178,7 @@ Vue.component('daily-game', {
       }
       return false;
     },
-    dailyGame: function () { },
+    dailyGame: function () {},
   },
 });
 Vue.component('game', {
@@ -328,14 +328,29 @@ Vue.component('game', {
 });
 
 Vue.component('vue-header', {
+  data: function () {
+    return {
+      username: '',
+      email: '',
+      level: '',
+    };
+  },
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a href="">Ranking</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
-      <a v-show="userIsLogged()">Profile</a>
+      <a v-b-modal.profile v-show="userIsLogged()" @click="getUser()">Profile</a>
     </div>
+
+    <b-modal id="profile" title="Profile">
+      <img src="img/foto.png" alt="logo" />
+      <h3>Username: </h3>
+      <h3>Email: </h3>
+      <h3>Level: </h3>
+    </b-modal>
+
     <b-modal id="login-register" title="Login / Register">
     <div class="form__login">
     <h2>Login</h2>
@@ -368,6 +383,23 @@ Vue.component('vue-header', {
     };
   },
   methods: {
+    getUser: function () {
+      const store = userStore();
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'get',
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({ data });
+        });
+    },
     registerFunction: function () {
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/register`,
