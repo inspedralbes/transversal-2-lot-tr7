@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -386,7 +386,24 @@ Vue.component('vue-header', {
   },
 });
 
+const userStore = Pinia.defineStore('user', {
+  state() {
+    return {
+      logged: false,
+      loginInfo: {
+        username: '',
+        id: '',
+        token: '',
+      }
+    }
+  },
+})
+
+Vue.use(Pinia.PiniaVuePlugin)
+const pinia = Pinia.createPinia()
+
 let app = new Vue({
   el: '#app',
   data: {},
+  pinia,
 });
