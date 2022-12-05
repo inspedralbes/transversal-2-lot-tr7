@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -295,8 +295,9 @@ Vue.component('questions', {
 
 Vue.component('login-register', {
   template: `
-  <div>
-  </div>`,
+  <b-modal id="modal-1" :title="infoDetallada.titol">
+<p class="my-4"></p>
+</b-modal>`,
 });
 
 Vue.component('vue-header', {
