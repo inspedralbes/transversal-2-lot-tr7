@@ -293,21 +293,17 @@ Vue.component('questions', {
   },
 });
 
-Vue.component('login-register', {
-  template: `
-  <b-modal id="modal-1" :title="infoDetallada.titol">
-<p class="my-4"></p>
-</b-modal>`,
-});
-
 Vue.component('vue-header', {
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a href="">Ranking</a>
-      <a href="">Login / Register</a>
+      <a v-b-modal.modal-1>Login / Register</a>
     </div>
+    <b-modal id="modal-1" title="Login / Register">
+    <div><h1>HOLA</h1></div>
+    </b-modal>
   </div>`,
 });
 

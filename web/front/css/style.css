@@ -8,7 +8,7 @@ body {
   color: white;
   font-size: 18px;
 }
-header {
+header:not(.modal-header) {
   background-color: black;
 }
 .header {
@@ -41,7 +41,7 @@ article {
   width: 80%;
   max-width: 1920px;
 }
-footer {
+footer:not(.modal-footer) {
   bottom: 0;
   position: fixed;
   width: 100%;
@@ -137,4 +137,23 @@ footer {
   width: 30%;
   margin: 0 auto 30px;
   font-size: 22px;
+}
+.modal-footer {
+  display: none !important;
+}
+.modal-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  width: 80%;
+  height: fit-content;
+  margin: 0 !important;
+  max-width: none;
+}
+.modal-header {
+  background-color: black;
+}
+.modal-body {
+  background-color: #2a2a2a;
 }
