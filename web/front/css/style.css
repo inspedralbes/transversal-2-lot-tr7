@@ -175,7 +175,8 @@ footer:not(.modal-footer) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 20px;
-  padding: 50px;
+  padding: 30px;
+  align-items: center;
 }
 #login-register .modal-body div {
   display: grid;
