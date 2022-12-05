@@ -375,10 +375,14 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if ((data.login = true)) {
             this.login.username = '';
             this.login.password = '';
+            const store = userStore();
+            store.logged = data.login;
+            store.loginInfo.username = data.user.username;
+            store.loginInfo.id = data.user.id;
+            store.loginInfo.token = data.token;
             this.$bvModal.hide('login-register');
           }
         });
@@ -406,4 +410,7 @@ let app = new Vue({
   el: '#app',
   data: {},
   pinia,
+  computed: {
+    ...Pinia.mapState(userStore, ['loginInfo', 'logged'])
+  },
 });
