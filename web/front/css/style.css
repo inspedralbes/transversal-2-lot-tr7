@@ -151,9 +151,23 @@ footer:not(.modal-footer) {
   margin: 0 !important;
   max-width: none;
 }
+.modal-content {
+  border: 0 !important;
+  border-radius: 0;
+  background: none;
+}
 .modal-header {
   background-color: black;
 }
 .modal-body {
-  background-color: #2a2a2a;
+  background-color: #3c3c3c;
+}
+.modal-header .modal-title {
+  font-size: 24px;
+}
+.modal-header .close {
+  background-color: black;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
 }
