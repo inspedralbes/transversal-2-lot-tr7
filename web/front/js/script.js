@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () { },
+    returnIndex: function () {},
   },
 });
 Vue.component('quiz', {
@@ -310,14 +310,36 @@ Vue.component('vue-header', {
     </div>
     <div class="form__register">
     <h2>Register</h2>
-      <input placeholder="Username" />
-      <input placeholder="Email" />
-      <input placeholder="Password" />
-      <input placeholder="Confirm password" />
-      <b-button>Register</b-button>
+      <input v-model="form.username" placeholder="Username" />
+      <input v-model="form.email" placeholder="Email" />
+      <input v-model="form.password" placeholder="Password" />
+      <input v-model="form.repeatPassword" placeholder="Confirm password" />
+      <b-button @click="register">Register</b-button>
     </div>
     </b-modal>
   </div>`,
+  data: function () {
+    return {
+      form: {
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: '',
+      },
+    };
+  },
+  methods: {
+    register: function () {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/register`,
+        {}
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({ data });
+        });
+    },
+  },
 });
 
 let app = new Vue({
