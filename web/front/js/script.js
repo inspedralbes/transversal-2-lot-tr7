@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -299,27 +299,23 @@ Vue.component('vue-header', {
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a href="">Ranking</a>
-      <a v-b-modal.modal-1>Login / Register</a>
+      <a v-b-modal.login-register>Login / Register</a>
     </div>
-    <b-modal id="modal-1" title="Login / Register">
+    <b-modal id="login-register" title="Login / Register">
+    <div class="form__login">
+    <h2>Login</h2>
+      <input placeholder="Username" />
+      <input placeholder="Password" />
+      <b-button>Login</b-button>
+    </div>
     <div class="form__register">
+    <h2>Register</h2>
       <input placeholder="Username" />
       <input placeholder="Email" />
       <input placeholder="Password" />
       <input placeholder="Confirm password" />
-
       <b-button>Register</b-button>
     </div>
-
-    <div class="form__login">
-      <input placeholder="Username" />
-      <input placeholder="Password" />
-
-      <b-button>Login</b-button>
-    </div>
-
-
-
     </b-modal>
   </div>`,
 });
