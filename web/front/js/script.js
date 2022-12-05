@@ -103,7 +103,7 @@ Vue.component('finalResults', {
   },
 
   methods: {
-    returnIndex: function () {},
+    returnIndex: function () { },
   },
 });
 Vue.component('quiz', {
@@ -156,13 +156,12 @@ Vue.component('daily-game', {
   methods: {
     getDailyGame: function () {
       const store = userStore();
-
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-daily-game`,
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.token,
+            'Authorization': 'Bearer ' + store.loginInfo.token,
           },
           method: 'get',
         }
@@ -179,7 +178,7 @@ Vue.component('daily-game', {
       }
       return false;
     },
-    dailyGame: function () {},
+    dailyGame: function () { },
   },
 });
 Vue.component('game', {
