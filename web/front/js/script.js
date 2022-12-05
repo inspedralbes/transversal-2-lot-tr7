@@ -293,6 +293,12 @@ Vue.component('questions', {
   },
 });
 
+Vue.component('login-register', {
+  template: `
+  <div>
+  </div>`,
+});
+
 Vue.component('vue-header', {
   template: `
   <div class="header">
