@@ -223,7 +223,7 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
-        <b-button @click="handlerDay" v-show="userIsLogged() && !getCookie()">Daily Game</b-button>
+        <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="getCookie()">Daily Game</b-button>
 
         <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
         <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
@@ -244,7 +244,7 @@ Vue.component('game', {
     </div>`,
   methods: {
     getCookie: function () {
-      let name = "dailyGame=";
+      let name = 'dailyGame=';
       let decodedCookie = decodeURIComponent(document.cookie);
       let ca = decodedCookie.split(';');
       for (let i = 0; i < ca.length; i++) {
@@ -365,7 +365,7 @@ Vue.component('game', {
       this.checkDifficulty = false;
       let data = new Date();
       data.setUTCHours(23, 59, 59, 999);
-      document.cookie = "dailyGame=true;" + data.toUTCString();
+      document.cookie = 'dailyGame=true;' + data.toUTCString();
       this.loadDailyGame();
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
