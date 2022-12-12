@@ -74,7 +74,7 @@ POST: {
 "type": "standard"
 }
 
-GET: true
+GET: 11
 
 ---
 
