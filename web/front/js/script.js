@@ -98,6 +98,25 @@ Vue.component('finalResults', {
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
     this.points = this.results.correctAnswers * this.selectDifficulty - seconds;
+
+    const store = userStore();
+    if (store.logged) {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-score`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'post',
+          body: JSON.stringify({
+            idGame: 11,
+            points: this.points,
+            time: seconds,
+          }),
+        }
+      );
+    }
   },
   methods: {
     getTime: function () {
@@ -163,7 +182,6 @@ Vue.component('game', {
       quizResults: {
         correctAnswers: 0,
         incorrectAnswers: 0,
-        time: '',
       },
       checkDifficulty: false,
       checkCategory: false,
@@ -226,7 +244,6 @@ Vue.component('game', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
           this.result = data;
         });
     },
@@ -258,11 +275,9 @@ Vue.component('game', {
       if (this.options.difficulty == '') {
         this.checkDifficulty = true;
         this.checkCategory = false;
-        console.log('dif');
       } else if (this.options.category == '') {
         this.checkCategory = true;
         this.checkDifficulty = false;
-        console.log('cat');
       } else {
         this.quizResults.correctAnswers = 0;
         this.quizResults.incorrectAnswers = 0;
@@ -276,14 +291,10 @@ Vue.component('game', {
     },
 
     checkAnswer: function (isCorrect) {
-      console.log(isCorrect);
-
       if (isCorrect == 1) {
         this.quizResults.correctAnswers += 1;
-        console.log('correct');
       } else {
         this.quizResults.incorrectAnswers += 1;
-        console.log('incorrect');
       }
 
       this.nextQuestion(1);
@@ -307,7 +318,19 @@ Vue.component('game', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.game.jsonGame);
+          fetch(
+            `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-score`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + store.loginInfo.token,
+              },
+              method: 'post',
+              body: JSON.stringify({
+                idGame: data.game.id,
+              }),
+            }
+          );
           this.result = JSON.parse(data.game.jsonGame);
         });
     },
