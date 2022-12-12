@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -53,5 +54,11 @@ class AuthController extends Controller
     public function userProfile()
     {
         return response()->json(["userData" => auth()->user()], Response::HTTP_OK);
+    }
+
+    public function usersList()
+    {
+        $usersList = DB::table('user')->pluck('username', 'id');
+        return response()->json(["usersList" => $usersList], Response::HTTP_OK);
     }
 }
