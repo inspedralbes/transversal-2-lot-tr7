@@ -41,7 +41,7 @@ Vue.component('chronometer', {
       this.stoppedDuration = 0;
       this.timeBegan = null;
       this.timeStopped = null;
-      this.time = '00:00.000';
+      this.time = '00:00';
     },
     zeroPrefix: function (num, digit) {
       var zero = '';
@@ -56,17 +56,10 @@ Vue.component('chronometer', {
         timeElapsed = new Date(
           currentTime - this.timeBegan - this.stoppedDuration
         ),
-        hour = timeElapsed.getUTCHours(),
         min = timeElapsed.getUTCMinutes(),
-        sec = timeElapsed.getUTCSeconds(),
-        ms = timeElapsed.getUTCMilliseconds();
+        sec = timeElapsed.getUTCSeconds();
 
-      this.time =
-        this.zeroPrefix(min, 2) +
-        ':' +
-        this.zeroPrefix(sec, 2) +
-        '.' +
-        this.zeroPrefix(ms, 3);
+      this.time = this.zeroPrefix(min, 2) + ':' + this.zeroPrefix(sec, 2);
     },
   },
   getTime: function () {
@@ -75,35 +68,35 @@ Vue.component('chronometer', {
 });
 
 Vue.component('finalResults', {
-  props: ['results', 'display'],
+  props: ['results', 'display', 'opt'],
 
   data: function () {
     return {
       numAnswers: 0,
       points: 0,
-      difficulty: {
-        easy: 1.5,
-        medium: 2,
-        hard: 4,
-      },
+      selectDifficulty: 0,
     };
   },
 
   template: `<div>
-    Resultat final:
-
-    {{results.correctAnswers}}/{{numAnswers}}
-    Puntos:{{points}}
+    Final results: {{results.correctAnswers}}/{{numAnswers}}
+    Points: {{points}}
+    Time: {{results.time}}
   </div>`,
-
   mounted() {
+    if (this.opt.difficulty == 'hard') {
+      this.selectDifficulty = 3;
+      console.log('hard');
+    } else if (this.opt.difficulty == 'medium') {
+      this.selectDifficulty = 2;
+      console.log('medium');
+    } else if (this.opt.difficulty == 'easy') {
+      this.selectDifficulty = 1;
+      console.log('easy');
+    }
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
-    this.points = this.results.correctAnswers * this.difficulty.hard;
-  },
-
-  methods: {
-    returnIndex: function () { },
+    this.points = this.results.correctAnswers * this.selectDifficulty;
   },
 });
 Vue.component('quiz', {
@@ -178,7 +171,7 @@ Vue.component('daily-game', {
       }
       return false;
     },
-    dailyGame: function () { },
+    dailyGame: function () {},
   },
 });
 Vue.component('game', {
@@ -194,8 +187,8 @@ Vue.component('game', {
       quizResults: {
         correctAnswers: 0,
         incorrectAnswers: 0,
+        time: '',
       },
-
       checkDifficulty: false,
       checkCategory: false,
       showResults: false,
@@ -246,7 +239,7 @@ Vue.component('game', {
       </div>
 
       <div class="game__results" v-if="showResults">
-        <finalResults :results=quizResults :display=showResults></finalResults>
+        <finalResults :opt=options :results=quizResults :display=showResults></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
     </div>`,
@@ -379,7 +372,7 @@ Vue.component('vue-header', {
         username: '',
         email: '',
         level: '',
-      }
+      },
     };
   },
   methods: {
