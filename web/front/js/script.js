@@ -62,9 +62,6 @@ Vue.component('chronometer', {
       this.time = this.zeroPrefix(min, 2) + ':' + this.zeroPrefix(sec, 2);
     },
   },
-  getTime: function () {
-    this.currentTime = document.getElementById('clock').textContent;
-  },
 });
 
 Vue.component('finalResults', {
@@ -81,7 +78,9 @@ Vue.component('finalResults', {
   template: `<div>
     Final results: {{results.correctAnswers}}/{{numAnswers}}
     Points: {{points}}
-    Time: {{results.time}}
+    {{getTime()}}
+    Time: {{currentTime}}
+
   </div>`,
   mounted() {
     if (this.opt.difficulty == 'hard') {
@@ -97,6 +96,14 @@ Vue.component('finalResults', {
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
     this.points = this.results.correctAnswers * this.selectDifficulty;
+  },
+  methods: {
+    getTime: function () {
+      if (document.getElementById('clock')) {
+        this.currentTime = document.getElementById('clock').textContent;
+        console.log(this.currentTime);
+      }
+    },
   },
 });
 Vue.component('quiz', {
@@ -285,8 +292,7 @@ Vue.component('game', {
       this.showIndex = true;
       this.showResults = false;
     },
-    loadDailyGame: function(){
-        
+    loadDailyGame: function () {
       const store = userStore();
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-daily-game`,
@@ -300,21 +306,20 @@ Vue.component('game', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log( data.game.jsonGame );
-          this.result = JSON.parse(data.game.jsonGame); 
+          console.log(data.game.jsonGame);
+          this.result = JSON.parse(data.game.jsonGame);
         });
     },
 
-    handlerDay: function(){
-        this.quizResults.correctAnswers = 0;
-        this.quizResults.incorrectAnswers = 0;
-        this.showCarousel = true;
-        this.showIndex = false;
-        this.checkCategory = false;
-        this.checkDifficulty = false;
-        this.loadDailyGame();
-        setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
-
+    handlerDay: function () {
+      this.quizResults.correctAnswers = 0;
+      this.quizResults.incorrectAnswers = 0;
+      this.showCarousel = true;
+      this.showIndex = false;
+      this.checkCategory = false;
+      this.checkDifficulty = false;
+      this.loadDailyGame();
+      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
 
     userIsLogged: function () {
