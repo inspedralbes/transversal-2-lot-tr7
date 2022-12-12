@@ -83,12 +83,16 @@ Vue.component('finalResults', {
 
   </div>`,
   mounted() {
-    if (this.opt.difficulty == 'hard') {
-      this.selectDifficulty = 300;
-    } else if (this.opt.difficulty == 'medium') {
+    if (this.idGame == 0) {
+      if (this.opt.difficulty == 'hard') {
+        this.selectDifficulty = 300;
+      } else if (this.opt.difficulty == 'medium') {
+        this.selectDifficulty = 200;
+      } else if (this.opt.difficulty == 'easy') {
+        this.selectDifficulty = 100;
+      }
+    } else {
       this.selectDifficulty = 200;
-    } else if (this.opt.difficulty == 'easy') {
-      this.selectDifficulty = 100;
     }
     this.getTime();
 
@@ -239,6 +243,7 @@ Vue.component('game', {
       </div>
     </div>`,
   methods: {
+    getCookie: function () {},
     getQuestions: function () {
       fetch(
         `https://the-trivia-api.com/api/questions?categories=${this.options.category}&limit=10&difficulty=${this.options.difficulty}`
@@ -273,6 +278,7 @@ Vue.component('game', {
     },
 
     handler: function () {
+      this.dailyGameID = 0;
       if (this.options.difficulty == '') {
         this.checkDifficulty = true;
         this.checkCategory = false;
