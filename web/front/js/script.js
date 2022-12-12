@@ -65,7 +65,7 @@ Vue.component('chronometer', {
 });
 
 Vue.component('finalResults', {
-  props: ['results', 'display', 'opt', 'idGame'],
+  props: ['results', 'display', 'opt', 'idGame', 'daily'],
 
   data: function () {
     return {
@@ -83,7 +83,7 @@ Vue.component('finalResults', {
 
   </div>`,
   mounted() {
-    if (this.idGame == 0) {
+    if (!this.daily) {
       if (this.opt.difficulty == 'hard') {
         this.selectDifficulty = 300;
       } else if (this.opt.difficulty == 'medium') {
@@ -193,6 +193,7 @@ Vue.component('game', {
       showCarousel: false,
       showIndex: true,
       gameId: 0,
+      dailyGame: false,
     };
   },
   template: `
@@ -238,7 +239,7 @@ Vue.component('game', {
       </div>
 
       <div class="game__results" v-if="showResults">
-        <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId></finalResults>
+        <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
     </div>`,
@@ -331,7 +332,7 @@ Vue.component('game', {
     },
 
     handler: function () {
-      this.gameId = 0;
+      this.dailyGame = false;
       if (this.options.difficulty == '') {
         this.checkDifficulty = true;
         this.checkCategory = false;
@@ -393,6 +394,7 @@ Vue.component('game', {
           );
           this.result = JSON.parse(data.game.jsonGame);
           this.gameId = data.game.id;
+          this.dailyGame = true;
         });
     },
 
