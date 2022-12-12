@@ -46,6 +46,22 @@ GET: {
 
 ---
 
+### Route: /api/users-list
+
+- Token required
+
+POST: 8|3IL0WiG6KB8c3pXW7pXK2D3kir0qNpyNKsSOX65r
+
+GET: {
+"usersList": {
+"1": "ausias",
+"2": "pedra",
+"3": "arnau"
+}
+}
+
+---
+
 ### Route: /api/create-game
 
 - Token required
@@ -64,9 +80,9 @@ GET: true
 
 ### Route: /api/create-daily-game
 
-POST: 
+POST:
 
-GET: 
+GET:
 
 ---
 
