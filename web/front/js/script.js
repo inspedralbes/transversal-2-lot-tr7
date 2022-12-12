@@ -243,7 +243,20 @@ Vue.component('game', {
       </div>
     </div>`,
   methods: {
-    getCookie: function () {},
+    getCookie: function () {
+      let name = "dailyGame=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+    },
     getQuestions: function () {
       fetch(
         `https://the-trivia-api.com/api/questions?categories=${this.options.category}&limit=10&difficulty=${this.options.difficulty}`
@@ -350,6 +363,9 @@ Vue.component('game', {
       this.showIndex = false;
       this.checkCategory = false;
       this.checkDifficulty = false;
+      let data = new Date();
+      data.setUTCHours(23, 59, 59, 999);
+      document.cookie = "dailyGame=true;" + data.toUTCString();
       this.loadDailyGame();
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
