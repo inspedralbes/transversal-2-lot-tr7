@@ -65,7 +65,7 @@ Vue.component('chronometer', {
 });
 
 Vue.component('finalResults', {
-  props: ['results', 'display', 'opt'],
+  props: ['results', 'display', 'opt', 'idGame'],
 
   data: function () {
     return {
@@ -110,7 +110,7 @@ Vue.component('finalResults', {
           },
           method: 'post',
           body: JSON.stringify({
-            idGame: 11,
+            idGame: this.idGame,
             points: this.points,
             time: seconds,
           }),
@@ -188,6 +188,7 @@ Vue.component('game', {
       showResults: false,
       showCarousel: false,
       showIndex: true,
+      dailyGameID: 0,
     };
   },
   template: `
@@ -233,7 +234,7 @@ Vue.component('game', {
       </div>
 
       <div class="game__results" v-if="showResults">
-        <finalResults :opt=options :results=quizResults :display=showResults></finalResults>
+        <finalResults :opt=options :results=quizResults :display=showResults :idGame=dailyGameID></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
     </div>`,
@@ -332,6 +333,7 @@ Vue.component('game', {
             }
           );
           this.result = JSON.parse(data.game.jsonGame);
+          this.dailyGameID = data.game.id;
         });
     },
 
