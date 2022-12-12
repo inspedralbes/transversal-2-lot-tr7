@@ -62,6 +62,14 @@ GET: true
 
 ---
 
+### Route: /api/create-daily-game
+
+POST: 
+
+GET: 
+
+---
+
 ### Route: /api/get-game
 
 - Token required
