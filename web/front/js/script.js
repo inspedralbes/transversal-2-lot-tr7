@@ -84,24 +84,25 @@ Vue.component('finalResults', {
   </div>`,
   mounted() {
     if (this.opt.difficulty == 'hard') {
-      this.selectDifficulty = 3;
-      console.log('hard');
+      this.selectDifficulty = 300;
     } else if (this.opt.difficulty == 'medium') {
-      this.selectDifficulty = 2;
-      console.log('medium');
+      this.selectDifficulty = 200;
     } else if (this.opt.difficulty == 'easy') {
-      this.selectDifficulty = 1;
-      console.log('easy');
+      this.selectDifficulty = 100;
     }
+    this.getTime();
+
+    let a = this.currentTime.split(':');
+    let seconds = parseInt(+a[0] * 60 + a[1]);
+
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
-    this.points = this.results.correctAnswers * this.selectDifficulty;
+    this.points = this.results.correctAnswers * this.selectDifficulty - seconds;
   },
   methods: {
     getTime: function () {
       if (document.getElementById('clock')) {
         this.currentTime = document.getElementById('clock').textContent;
-        console.log(this.currentTime);
       }
     },
   },
