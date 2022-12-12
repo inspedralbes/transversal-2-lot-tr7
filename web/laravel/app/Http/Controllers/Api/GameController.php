@@ -28,7 +28,7 @@ class GameController extends Controller
         $game->type = $request->type;
 
         if ($game->save()) {
-            return response()->json(true, Response::HTTP_CREATED);
+            return response()->json($game->id, Response::HTTP_CREATED);
         } else {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
         }
