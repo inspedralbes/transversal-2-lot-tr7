@@ -141,44 +141,7 @@ Vue.component('quiz', {
     },
   },
 });
-Vue.component('daily-game', {
-  data: function () {
-    return {
-      result: [],
-    };
-  },
-  template: `<div>
-  <b-button @click="[getDailyGame(), $emit('evtDailyGame', result)]" v-show="userIsLogged()">Daily Game</b-button>
 
-  </div>`,
-  methods: {
-    getDailyGame: function () {
-      const store = userStore();
-      fetch(
-        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-daily-game`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.loginInfo.token,
-          },
-          method: 'get',
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log({ data });
-        });
-    },
-    userIsLogged: function () {
-      const store = userStore();
-      if (store.logged == true) {
-        return true;
-      }
-      return false;
-    },
-    dailyGame: function () {},
-  },
-});
 Vue.component('game', {
   data: function () {
     return {
@@ -229,7 +192,7 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
-        <daily-game @evtDailyGame="loadDailyGame"></daily-game>
+        <b-button @click="handlerDay" v-show="userIsLogged()">Daily Game</b-button>
 
         <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
         <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
@@ -322,17 +285,45 @@ Vue.component('game', {
       this.showIndex = true;
       this.showResults = false;
     },
-    loadDailyGame: function(dat){
-  
-       this.result = dat;
-       console.log("aaa", {dat});
-       this.quizResults.correctAnswers = 0;
-       this.quizResults.incorrectAnswers = 0;
-       this.showCarousel = true;
-       this.showIndex = false;
-       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 1000);
+    loadDailyGame: function(){
+        
+      const store = userStore();
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-daily-game`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'get',
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log( data.game.jsonGame );
+          this.result = JSON.parse(data.game.jsonGame); 
+        });
+    },
 
-    }
+    handlerDay: function(){
+        this.quizResults.correctAnswers = 0;
+        this.quizResults.incorrectAnswers = 0;
+        this.showCarousel = true;
+        this.showIndex = false;
+        this.checkCategory = false;
+        this.checkDifficulty = false;
+        this.loadDailyGame();
+        setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
+
+    },
+
+    userIsLogged: function () {
+      const store = userStore();
+      if (store.logged == true) {
+        return true;
+      }
+      return false;
+    },
   },
 });
 
