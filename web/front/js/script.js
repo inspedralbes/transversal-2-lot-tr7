@@ -223,7 +223,7 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
-        <b-button @click="handlerDay" v-show="userIsLogged()">Daily Game</b-button>
+        <b-button @click="handlerDay" v-show="userIsLogged() && !getCookie()">Daily Game</b-button>
 
         <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
         <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
