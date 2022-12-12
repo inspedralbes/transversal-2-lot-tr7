@@ -192,7 +192,7 @@ Vue.component('game', {
       showResults: false,
       showCarousel: false,
       showIndex: true,
-      dailyGameID: 0,
+      gameId: 0,
     };
   },
   template: `
@@ -238,7 +238,7 @@ Vue.component('game', {
       </div>
 
       <div class="game__results" v-if="showResults">
-        <finalResults :opt=options :results=quizResults :display=showResults :idGame=dailyGameID></finalResults>
+        <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
     </div>`,
@@ -253,7 +253,7 @@ Vue.component('game', {
           c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
+          return Boolean(c.substring(name.length, c.length));
         }
       }
     },
@@ -264,6 +264,46 @@ Vue.component('game', {
         .then((response) => response.json())
         .then((data) => {
           this.result = data;
+          if (this.userIsLogged()) {
+            const store = userStore();
+            const date = new Date();
+
+            fetch(
+              `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-game`,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Bearer ' + store.loginInfo.token,
+                },
+                method: 'post',
+                body: JSON.stringify({
+                  jsonGame: JSON.stringify(this.result),
+                  date: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+                  difficulty: this.options.difficulty,
+                  category: this.options.category,
+                  type: 'standard',
+                }),
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                console.log({ data });
+                fetch(
+                  `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-score`,
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: 'Bearer ' + store.loginInfo.token,
+                    },
+                    method: 'post',
+                    body: JSON.stringify({
+                      idGame: data,
+                    }),
+                  }
+                );
+                this.gameId = data;
+              });
+          }
         });
     },
 
@@ -291,7 +331,7 @@ Vue.component('game', {
     },
 
     handler: function () {
-      this.dailyGameID = 0;
+      this.gameId = 0;
       if (this.options.difficulty == '') {
         this.checkDifficulty = true;
         this.checkCategory = false;
@@ -352,7 +392,7 @@ Vue.component('game', {
             }
           );
           this.result = JSON.parse(data.game.jsonGame);
-          this.dailyGameID = data.game.id;
+          this.gameId = data.game.id;
         });
     },
 
