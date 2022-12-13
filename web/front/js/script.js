@@ -192,6 +192,7 @@ Vue.component('game', {
       showResults: false,
       showCarousel: false,
       showIndex: true,
+      showRankigs: false,
       gameId: 0,
       dailyGame: false,
     };
@@ -242,7 +243,15 @@ Vue.component('game', {
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
+
+      <ranking v-show="showRankigs"></ranking>
+
     </div>`,
+
+    created() {
+      this.$root.$refs.game = this;
+  },
+
   methods: {
     getCookie: function () {
       let name = 'dailyGame=';
@@ -419,15 +428,28 @@ Vue.component('game', {
       }
       return false;
     },
+    ranking: function() {
+      this.showRankigs = !this.showRankigs;
+      this.showIndex = !this.showIndex;
+  }
+
+  
   },
 });
+
+Vue.component('ranking', {
+  template: `
+  <div>
+      <h2>Ranking</h2>
+  </div>`
+});  
 
 Vue.component('vue-header', {
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
-      <a href="">Ranking</a>
+      <a href="#" @click="ranking()">Ranking</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
       <a v-b-modal.profile v-show="userIsLogged()" @click="getUser()">Profile</a>
     </div>
@@ -558,6 +580,11 @@ Vue.component('vue-header', {
       }
       return false;
     },
+
+    ranking: function() {
+      this.$root.$refs.game.ranking();  
+    }
+    
   },
 });
 
