@@ -192,7 +192,6 @@ Vue.component('game', {
       showResults: false,
       showCarousel: false,
       showIndex: true,
-      showRankigs: false,
       gameId: 0,
       dailyGame: false,
     };
@@ -243,15 +242,7 @@ Vue.component('game', {
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
       </div>
-
-      <ranking v-show="showRankigs"></ranking>
-
     </div>`,
-
-    created() {
-      this.$root.$refs.game = this;
-  },
-
   methods: {
     getCookie: function () {
       let name = 'dailyGame=';
@@ -428,56 +419,54 @@ Vue.component('game', {
       }
       return false;
     },
-    ranking: function() {
-      this.showRankigs = !this.showRankigs;
-      this.showIndex = !this.showIndex;
-  }
-
-  
   },
 });
-
-Vue.component('ranking', {
-  template: `
-  <div>
-      <h2>Ranking</h2>
-  </div>`
-});  
 
 Vue.component('vue-header', {
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
-      <a href="#" @click="ranking()">Ranking</a>
+      <a href="">Ranking</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
-      <a v-b-modal.profile v-show="userIsLogged()" @click="getUser()">Profile</a>
+      <a v-b-modal.profile v-show="userIsLogged()" @click="getUser_getRanking()">Profile</a>
     </div>
 
     <b-modal id="profile" title="Profile">
       <img src="img/foto.png" alt="logo" />
+      <div class="editProfile" v-show="!profile.inProcessToEdit">
+        <h3>Username: {{profile.username}}</h3>
+        <h3>Email: {{profile.email}}</h3>
+        <h3>Level: {{profile.level}}</h3>
+        <b-button @click="editProfile">Edit Profile</b-button>
+      </div>
+      <div class="editProfile" v-show="profile.inProcessToEdit">
+        <h3>Username: </h3> <b-form-input v-model="profile.username"/>
+        <h3>Email: </h3> <b-form-input v-model="profile.email"/>
+        <h3>Password: </h3> <b-form-input v-model="profile.password" />
+        <h3>Repeat password: </h3> <b-form-input v-model="profile.repeatPassword" />
+        <b-button @click="editProfile">Save Profile</b-button>
+      </div>
       <div>
-      <h3>Username: {{profile.username}}</h3>
-      <h3>Email: {{profile.email}}</h3>
-      <h3>Level: {{profile.level}}</h3>
+      <h3>{{ranking.avg}}</h3>
       </div>
     </b-modal>
 
     <b-modal id="login-register" title="Login / Register">
-    <div class="form__login">
-    <h2>Login</h2>
-      <input v-model="login.username" placeholder="Username" />
-      <input v-model="login.password" placeholder="Password" />
-      <b-button @click="loginFunction">Login</b-button>
-    </div>
-    <div class="form__register">
-    <h2>Register</h2>
-      <input v-model="register.username" placeholder="Username" />
-      <input v-model="register.email" placeholder="Email" />
-      <input v-model="register.password" placeholder="Password" />
-      <input v-model="register.repeatPassword" placeholder="Confirm password" />
-      <b-button @click="registerFunction">Register</b-button>
-    </div>
+      <div class="form__login">
+        <h2>Login</h2>
+        <input v-model="login.username" placeholder="Username" />
+        <input v-model="login.password" placeholder="Password" />
+        <b-button @click="loginFunction">Login</b-button>
+      </div>
+      <div class="form__register">
+        <h2>Register</h2>
+        <input v-model="register.username" placeholder="Username" />
+        <input v-model="register.email" placeholder="Email" />
+        <input v-model="register.password" placeholder="Password" />
+        <input v-model="register.repeatPassword" placeholder="Confirm password" />
+        <b-button @click="registerFunction">Register</b-button>
+      </div>
     </b-modal>
   </div>`,
   data: function () {
@@ -496,11 +485,43 @@ Vue.component('vue-header', {
         username: '',
         email: '',
         level: '',
+        inProcessToEdit: false,
+        password: '',
+        repeatPassword: '',
+      },
+      ranking: {
+        avg: '',
       },
     };
   },
   methods: {
-    getUser: function () {
+    editProfile: function () {
+      if (!this.profile.inProcessToEdit) {
+        this.profile.inProcessToEdit = true;
+      } else {
+        this.profile.inProcessToEdit = false;
+        const store = userStore();
+        console.log({ store });
+        fetch(
+          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-profile`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization:
+                'Bearer ' + '87|Tq1PU0KtV3DQGVq5z4jDqe7sCvNUeVE87sQcRovx',
+            },
+            method: 'post',
+            body: JSON.stringify({
+              username: this.profile.username,
+              email: this.profile.email,
+              password: this.profile.password,
+              password_confirmation: this.profile.repeatPassword,
+            }),
+          }
+        );
+      }
+    },
+    getUser_getRanking: function () {
       const store = userStore();
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
@@ -514,6 +535,11 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
+          console.log({ data });
+          console.log(
+            data.statistics.averagePointsPerGame[0].AVG(points).values
+          );
+          this.ranking.avg = data.statistics.averagePointsPerGame[0];
           this.profile.username = data.userData.username;
           this.profile.email = data.userData.email;
           this.profile.level = data.userData.level;
@@ -580,11 +606,6 @@ Vue.component('vue-header', {
       }
       return false;
     },
-
-    ranking: function() {
-      this.$root.$refs.game.ranking();  
-    }
-    
   },
 });
 
