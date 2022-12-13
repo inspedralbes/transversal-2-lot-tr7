@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('ranking', [AuthController::class, 'ranking']);
 Route::get('create-daily-game', [GameController::class, 'createDailyGame']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-profile', [AuthController::class, 'userProfile']);
     Route::get('users-list', [AuthController::class, 'usersList']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
-    Route::get('ranking', [AuthController::class, 'ranking']);
     Route::post('create-game', [GameController::class, 'createGame']);
     Route::get('get-game', [GameController::class, 'getGame']);
     Route::get('get-daily-game', [GameController::class, 'getDailyGame']);
