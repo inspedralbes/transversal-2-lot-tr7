@@ -481,10 +481,30 @@ Vue.component('game', {
 });
 
 Vue.component('ranking', {
+  data: function () {
+    return {
+      result: []
+    };
+  },
+
   template: `
   <div>
-      <h2>Ranking</h2>
-  </div>`
+      <h1>Ranking</h1>
+    
+  </div>`,
+
+  mounted(){
+    fetch(
+      `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`
+      )
+
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        this.result = data;
+      });  
+  }
+
 });  
 
 Vue.component('vue-header', {
