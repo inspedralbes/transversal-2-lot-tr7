@@ -44,15 +44,15 @@ Vue.component('chronometer', {
       this.time = '00:00';
     },
     zeroPrefix: function (num, digit) {
-      var zero = '';
-      for (var i = 0; i < digit; i++) {
+      let zero = '';
+      for (let i = 0; i < digit; i++) {
         zero += '0';
       }
       return (zero + num).slice(-digit);
     },
 
     clockRunning: function () {
-      var currentTime = new Date(),
+      let currentTime = new Date(),
         timeElapsed = new Date(
           currentTime - this.timeBegan - this.stoppedDuration
         ),
@@ -226,8 +226,8 @@ Vue.component('game', {
         <b-button @click="handler">Start Game</b-button>
         <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="getCookie()">Daily Game</b-button>
 
-        <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
-        <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
+        <b-alert v-show="checkCategory" show letiant="danger">Select Category</b-alert>
+        <b-alert v-show="checkDifficulty" show letiant="danger">Select Difficulty</b-alert>
       </div>
     </div>
 
@@ -429,26 +429,37 @@ Vue.component('vue-header', {
     <div class="nav">
       <a href="">Ranking</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
-      <a v-b-modal.profile v-show="userIsLogged()" @click="getUser_getRanking()">Profile</a>
+      <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile()">Profile</a>
     </div>
 
     <b-modal id="profile" title="Profile">
-      <img src="img/foto.png" alt="logo" />
-      <div class="editProfile" v-show="!profile.inProcessToEdit">
-        <h3>Username: {{profile.username}}</h3>
-        <h3>Email: {{profile.email}}</h3>
-        <h3>Level: {{profile.level}}</h3>
-        <b-button @click="editProfile">Edit Profile</b-button>
+      <div class="profile__info">
+        <img src="img/foto.png" alt="logo" />
+        <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
+          <h3>Username: {{profile.username}} </h3>
+          <h3>Email: {{profile.email}} </h3>
+          <b-button @click="editProfile">Edit Profile</b-button>
+          <a href=""><b-button>Logout</b-button></a>
+        </div>
+        <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
+          <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
+          <h3>Email: </h3> <b-form-input v-model="profile.email"/>
+          <h3>Password: </h3> <b-form-input v-model="profile.password" />
+          <h3>Repeat password: </h3> <b-form-input v-model="profile.repeatPassword" />
+          <b-button @click="editProfile">Save Profile</b-button>
+        </div>
       </div>
-      <div class="editProfile" v-show="profile.inProcessToEdit">
-        <h3>Username: </h3> <b-form-input v-model="profile.username"/>
-        <h3>Email: </h3> <b-form-input v-model="profile.email"/>
-        <h3>Password: </h3> <b-form-input v-model="profile.password" />
-        <h3>Repeat password: </h3> <b-form-input v-model="profile.repeatPassword" />
-        <b-button @click="editProfile">Save Profile</b-button>
-      </div>
-      <div>
-      <h3>{{ranking.avg}}</h3>
+      <div class="stats">
+      <h3> <span class="stats__title"> Level </span> {{profile.level}}</h3>
+        <h3> <span class="stats__title"> Total Points </span> {{stats.totalPoints}}</h3>
+        <h3> <span class="stats__title"> Time Played </span> {{stats.totalTime}}</h3>
+        <h3> <span class="stats__title"> Games Uncompleted </span> {{stats.gamesUncompleted}} of {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> Max Game Points </span> {{stats.maxGamePoints}}</h3>
+        <h3> <span class="stats__title"> AVG Time Game </span> {{stats.avgTimePerGame}}</h3>
+        <h3> <span class="stats__title"> Total Games </span> {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> AVG Points Game </span> {{stats.avgPointsPerGame}}</h3>
+        <h3> <span class="stats__title"> Last Game Played </span> {{stats.lastGamePlayed}}</h3>
+
       </div>
     </b-modal>
 
@@ -489,8 +500,15 @@ Vue.component('vue-header', {
         password: '',
         repeatPassword: '',
       },
-      ranking: {
-        avg: '',
+      stats: {
+        totalGames: '',
+        gamesUncompleted: '',
+        totalTime: '',
+        avgTimePerGame: '',
+        totalPoints: '',
+        avgPointsPerGame: '',
+        maxGamePoints: '',
+        lastGamePlayed: '',
       },
     };
   },
@@ -501,14 +519,12 @@ Vue.component('vue-header', {
       } else {
         this.profile.inProcessToEdit = false;
         const store = userStore();
-        console.log({ store });
         fetch(
           `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-profile`,
           {
             headers: {
               'Content-Type': 'application/json',
-              Authorization:
-                'Bearer ' + '87|Tq1PU0KtV3DQGVq5z4jDqe7sCvNUeVE87sQcRovx',
+              Authorization: 'Bearer ' + store.loginInfo.token,
             },
             method: 'post',
             body: JSON.stringify({
@@ -521,7 +537,7 @@ Vue.component('vue-header', {
         );
       }
     },
-    getUser_getRanking: function () {
+    getProfile: function () {
       const store = userStore();
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
@@ -535,14 +551,44 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
-          console.log(
-            data.statistics.averagePointsPerGame[0].AVG(points).values
+          this.stats.totalGames = data.statistics[0].totalGames;
+          this.stats.gamesUncompleted = data.statistics[1].gamesUncompleted;
+          this.stats.totalTime = data.statistics[2].totalTime;
+          this.stats.avgTimePerGame = Number(
+            data.statistics[3].averageTimePerGame
           );
-          this.ranking.avg = data.statistics.averagePointsPerGame[0];
+          this.stats.totalPoints = data.statistics[4].totalPoints;
+          this.stats.avgPointsPerGame = Number(
+            data.statistics[5].averagePointsPerGame
+          );
+          this.stats.maxGamePoints = data.statistics[6].maxGamePoints;
+          this.stats.lastGamePlayed = data.statistics[7].lastGamePlayed;
+
           this.profile.username = data.userData.username;
           this.profile.email = data.userData.email;
           this.profile.level = data.userData.level;
+
+          dT = Number(this.stats.totalTime);
+          let hT = Math.floor(dT / 3600);
+          let mT = Math.floor((dT % 3600) / 60);
+          let sT = Math.floor((dT % 3600) % 60);
+
+          let hDisplayT = hT > 0 ? hT + (hT == 1 ? ' hr ' : ' hrs ') : '';
+          let mDisplayT = mT > 0 ? mT + ' min ' : '';
+          let sDisplayT = sT > 0 ? sT + ' sec' : '';
+          this.stats.totalTime = hDisplayT + mDisplayT + sDisplayT;
+
+          dTG = Number(this.stats.avgTimePerGame);
+          let hTG = Math.floor(dTG / 3600);
+          let mTG = Math.floor((dTG % 3600) / 60);
+          let sTG = Math.floor((dTG % 3600) % 60);
+
+          let hDisplayTG = hTG > 0 ? hTG + (hTG == 1 ? ' hr ' : ' hrs ') : '';
+          let mDisplayTG = mTG > 0 ? mTG + ' min ' : '';
+          let sDisplayTG = sTG > 0 ? sTG + ' sec' : '';
+          this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
+
+          this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
         });
     },
     registerFunction: function () {

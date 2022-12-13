@@ -153,3 +153,7 @@ POST: {
 GET: true
 
 ---
+
+### SQL Sentences
+
+SELECT user.id, user.username, score.points FROM user CROSS JOIN score ON user.id = score.idUser WHERE user.id=score.idUser ORDER BY 3 DESC;
