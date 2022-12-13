@@ -1,3 +1,43 @@
+Vue.component('send_challenge', {
+  data: function () {
+    return {
+      result: [],
+    }
+  },
+
+  template: `
+  <div>
+  <label for="users">Choose a user</label>
+  <b-form-select id="users">
+  
+    <option v-for="users in result.usersList" value="users">{{users}}</option>
+  </b-form-select>
+    <b-button>Send challenge</b-button>
+
+  </div>`,
+
+  mounted() {
+    const store = userStore();
+      if (store.logged) {
+        fetch(
+          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/users-list`,
+          {
+            headers: {
+              'Content-Type': 'application/json', 
+              Authorization: 'Bearer ' + store.loginInfo.token,
+            },
+            method: 'get',
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            this.result = data;
+          });  
+
+      }
+  },
+});
+
+
 Vue.component('chronometer', {
   data: function () {
     return {
@@ -242,6 +282,9 @@ Vue.component('game', {
       <div class="game__results" v-if="showResults">
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
+
+        <send_challenge v-if="userIsLogged()"></send_challenge>
+
       </div>
 
       <ranking v-show="showRankigs"></ranking>
