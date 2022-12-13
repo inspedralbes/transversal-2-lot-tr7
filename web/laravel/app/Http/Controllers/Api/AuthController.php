@@ -61,4 +61,24 @@ class AuthController extends Controller
         $usersList = DB::table('user')->pluck('username', 'id');
         return response()->json(["usersList" => $usersList], Response::HTTP_OK);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|unique:user',
+            'email' => 'required|email|unique:user',
+            'password' => 'required|confirmed',
+        ]);
+
+        $user = User::find(auth()->user()->id);
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        if ($user->save()) {
+            return response()->json(true, Response::HTTP_CREATED);
+        } else {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
