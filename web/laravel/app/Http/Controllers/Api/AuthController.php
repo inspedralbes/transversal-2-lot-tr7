@@ -51,9 +51,13 @@ class AuthController extends Controller
         }
     }
 
-    public function userProfile()
+    public function userProfile(Request $request)
     {
-        $userId = auth()->user()->id;
+        if ($request->id) {
+            $userId = $request->id;
+        } else {
+            $userId = auth()->user()->id;
+        }
         $statistics = array();
         array_push($statistics, DB::select(DB::raw('SELECT COUNT(*) as totalGames FROM score WHERE idUser = ' . $userId))[0]);
         array_push($statistics, DB::select(DB::raw('SELECT COUNT(*) as gamesUncompleted FROM score WHERE idUser = ' . $userId . ' AND completed = 0'))[0]);
@@ -94,5 +98,30 @@ class AuthController extends Controller
         } else {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function ranking()
+    {
+        $ranking['dailyGame'] = DB::select(DB::raw('SELECT idUser, points FROM score WHERE completed = 1 AND idGame = (SELECT id FROM game WHERE type = "daily" AND date = "' . date("Y-m-d") . '" ) ORDER BY points DESC LIMIT 10'));
+        for ($i = 0; $i < count($ranking['dailyGame']); $i++) {
+            $ranking['dailyGame'][$i]->username = DB::table('user')->where('id', $ranking['dailyGame'][$i]->idUser)->value('username');
+        }
+
+        $ranking['totalPoints'] = DB::select(DB::raw('SELECT idUser, SUM(points) as pSum FROM score WHERE completed = 1 GROUP BY idUser ORDER BY pSum DESC LIMIT 10'));
+        for ($i = 0; $i < count($ranking['totalPoints']); $i++) {
+            $ranking['totalPoints'][$i]->username = DB::table('user')->where('id', $ranking['totalPoints'][$i]->idUser)->value('username');
+        }
+
+        $ranking['totalGames'] = DB::select(DB::raw('SELECT idUser, COUNT(idUser) as pSum FROM score WHERE completed = 1 GROUP BY idUser ORDER BY pSum DESC LIMIT 10'));
+        for ($i = 0; $i < count($ranking['totalGames']); $i++) {
+            $ranking['totalGames'][$i]->username = DB::table('user')->where('id', $ranking['totalGames'][$i]->idUser)->value('username');
+        }
+
+        $ranking['averagePoints'] = DB::select(DB::raw('SELECT idUser, AVG(points) as pSum FROM score WHERE completed = 1 GROUP BY idUser ORDER BY pSum DESC LIMIT 10'));
+        for ($i = 0; $i < count($ranking['averagePoints']); $i++) {
+            $ranking['averagePoints'][$i]->username = DB::table('user')->where('id', $ranking['averagePoints'][$i]->idUser)->value('username');
+        }
+
+        return response()->json(["ranking" => $ranking], Response::HTTP_OK);
     }
 }
