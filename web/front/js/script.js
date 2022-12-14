@@ -2,14 +2,14 @@ Vue.component('send_challenge', {
   data: function () {
     return {
       result: [],
-    }
+    };
   },
 
   template: `
   <div>
   <label for="users">Choose a user</label>
   <b-form-select id="users">
-  
+
     <option v-for="users in result.usersList" value="users">{{users}}</option>
   </b-form-select>
     <b-button>Send challenge</b-button>
@@ -18,25 +18,24 @@ Vue.component('send_challenge', {
 
   mounted() {
     const store = userStore();
-      if (store.logged) {
-        fetch(
-          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/users-list`,
-          {
-            headers: {
-              'Content-Type': 'application/json', 
-              Authorization: 'Bearer ' + store.loginInfo.token,
-            },
-            method: 'get',
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            this.result = data;
-          });  
-
-      }
+    if (store.logged) {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/users-list`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'get',
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.result = data;
+        });
+    }
   },
 });
-
 
 Vue.component('chronometer', {
   data: function () {
@@ -232,7 +231,7 @@ Vue.component('game', {
       showResults: false,
       showCarousel: false,
       showIndex: true,
-      showRankigs: false,
+      showRankings: false,
       gameId: 0,
       dailyGame: false,
     };
@@ -287,12 +286,12 @@ Vue.component('game', {
 
       </div>
 
-      <ranking v-show="showRankigs"></ranking>
+      <ranking v-show="showRankings"></ranking>
 
     </div>`,
 
-    created() {
-      this.$root.$refs.game = this;
+  created() {
+    this.$root.$refs.game = this;
   },
 
   methods: {
@@ -471,41 +470,35 @@ Vue.component('game', {
       }
       return false;
     },
-    ranking: function() {
-      this.showRankigs = !this.showRankigs;
+    ranking: function () {
+      this.showRankings = !this.showRankings;
       this.showIndex = !this.showIndex;
-  }
-
-  
+    },
   },
 });
 
 Vue.component('ranking', {
   data: function () {
     return {
-      result: []
+      result: [],
     };
   },
 
   template: `
   <div>
       <h1>Ranking</h1>
-    
+
   </div>`,
 
-  mounted(){
-    fetch(
-      `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`
-      )
-
+  mounted() {
+    fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         this.result = data;
-      });  
-  }
-
-});  
+      });
+  },
+});
 
 Vue.component('vue-header', {
   template: `
@@ -518,29 +511,49 @@ Vue.component('vue-header', {
     </div>
 
     <b-modal id="profile" title="Profile">
-      <img src="img/foto.png" alt="logo" />
-      <div>
-      <h3>Username: {{profile.username}}</h3>
-      <h3>Email: {{profile.email}}</h3>
-      <h3>Level: {{profile.level}}</h3>
+      <div class="profile__info">
+        <img src="img/foto.png" alt="logo" />
+        <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
+          <h3>Username: {{profile.username}} </h3>
+          <h3>Email: {{profile.email}} </h3>
+          <b-button @click="editProfile">Edit Profile</b-button>
+          <a href=""><b-button>Logout</b-button></a>
+        </div>
+        <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
+          <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
+          <h3>Email: </h3> <b-form-input v-model="profile.email"/>
+          <h3>Password: </h3> <b-form-input v-model="profile.password" />
+          <h3>Repeat password: </h3> <b-form-input v-model="profile.repeatPassword" />
+          <b-button @click="editProfile">Save Profile</b-button>
+        </div>
+      </div>
+      <div class="stats">
+        <h3> <span class="stats__title"> Level </span> {{profile.level}}</h3>
+        <h3> <span class="stats__title"> Total Points </span> {{stats.totalPoints}}</h3>
+        <h3> <span class="stats__title"> Time Played </span> {{stats.totalTime}}</h3>
+        <h3> <span class="stats__title"> Games Uncompleted </span> {{stats.gamesUncompleted}} of {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> Max Game Points </span> {{stats.maxGamePoints}}</h3>
+        <h3> <span class="stats__title"> AVG Time Game </span> {{stats.avgTimePerGame}}</h3>
+        <h3> <span class="stats__title"> Total Games </span> {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> AVG Points Game </span> {{stats.avgPointsPerGame}}</h3>
+        <h3> <span class="stats__title"> Last Game Played </span> {{stats.lastGamePlayed}}</h3>
       </div>
     </b-modal>
-
     <b-modal id="login-register" title="Login / Register">
-    <div class="form__login">
-    <h2>Login</h2>
-      <input v-model="login.username" placeholder="Username" />
-      <input v-model="login.password" placeholder="Password" />
-      <b-button @click="loginFunction">Login</b-button>
-    </div>
-    <div class="form__register">
-    <h2>Register</h2>
-      <input v-model="register.username" placeholder="Username" />
-      <input v-model="register.email" placeholder="Email" />
-      <input v-model="register.password" placeholder="Password" />
-      <input v-model="register.repeatPassword" placeholder="Confirm password" />
-      <b-button @click="registerFunction">Register</b-button>
-    </div>
+      <div class="form__login">
+      <h2>Login</h2>
+        <input v-model="login.username" placeholder="Username" />
+        <input v-model="login.password" placeholder="Password" />
+        <b-button @click="loginFunction">Login</b-button>
+      </div>
+      <div class="form__register">
+      <h2>Register</h2>
+        <input v-model="register.username" placeholder="Username" />
+        <input v-model="register.email" placeholder="Email" />
+        <input v-model="register.password" placeholder="Password" />
+        <input v-model="register.repeatPassword" placeholder="Confirm password" />
+        <b-button @click="registerFunction">Register</b-button>
+      </div>
     </b-modal>
   </div>`,
   data: function () {
@@ -559,11 +572,24 @@ Vue.component('vue-header', {
         username: '',
         email: '',
         level: '',
+        inProcessToEdit: false,
+        password: '',
+        repeatPassword: '',
+      },
+      stats: {
+        totalGames: '',
+        gamesUncompleted: '',
+        totalTime: '',
+        avgTimePerGame: '',
+        totalPoints: '',
+        avgPointsPerGame: '',
+        maxGamePoints: '',
+        lastGamePlayed: '',
       },
     };
   },
   methods: {
-    getUser: function () {
+    getProfile: function () {
       const store = userStore();
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
@@ -577,10 +603,69 @@ Vue.component('vue-header', {
       )
         .then((response) => response.json())
         .then((data) => {
+          this.stats.totalGames = data.statistics[0].totalGames;
+          this.stats.gamesUncompleted = data.statistics[1].gamesUncompleted;
+          this.stats.totalTime = data.statistics[2].totalTime;
+          this.stats.avgTimePerGame = Number(
+            data.statistics[3].averageTimePerGame
+          );
+          this.stats.totalPoints = data.statistics[4].totalPoints;
+          this.stats.avgPointsPerGame = Number(
+            data.statistics[5].averagePointsPerGame
+          );
+          this.stats.maxGamePoints = data.statistics[6].maxGamePoints;
+          this.stats.lastGamePlayed = data.statistics[7].lastGamePlayed;
+
           this.profile.username = data.userData.username;
           this.profile.email = data.userData.email;
           this.profile.level = data.userData.level;
+
+          dT = Number(this.stats.totalTime);
+          let hT = Math.floor(dT / 3600);
+          let mT = Math.floor((dT % 3600) / 60);
+          let sT = Math.floor((dT % 3600) % 60);
+
+          let hDisplayT = hT > 0 ? hT + (hT == 1 ? ' hr ' : ' hrs ') : '';
+          let mDisplayT = mT > 0 ? mT + ' min ' : '';
+          let sDisplayT = sT > 0 ? sT + ' sec' : '';
+          this.stats.totalTime = hDisplayT + mDisplayT + sDisplayT;
+
+          dTG = Number(this.stats.avgTimePerGame);
+          let hTG = Math.floor(dTG / 3600);
+          let mTG = Math.floor((dTG % 3600) / 60);
+          let sTG = Math.floor((dTG % 3600) % 60);
+
+          let hDisplayTG = hTG > 0 ? hTG + (hTG == 1 ? ' hr ' : ' hrs ') : '';
+          let mDisplayTG = mTG > 0 ? mTG + ' min ' : '';
+          let sDisplayTG = sTG > 0 ? sTG + ' sec' : '';
+          this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
+
+          this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
         });
+    },
+    editProfile: function () {
+      if (!this.profile.inProcessToEdit) {
+        this.profile.inProcessToEdit = true;
+      } else {
+        this.profile.inProcessToEdit = false;
+        const store = userStore();
+        fetch(
+          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-profile`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + store.loginInfo.token,
+            },
+            method: 'post',
+            body: JSON.stringify({
+              username: this.profile.username,
+              email: this.profile.email,
+              password: this.profile.password,
+              password_confirmation: this.profile.repeatPassword,
+            }),
+          }
+        );
+      }
     },
     registerFunction: function () {
       fetch(
@@ -644,10 +729,9 @@ Vue.component('vue-header', {
       return false;
     },
 
-    ranking: function() {
-      this.$root.$refs.game.ranking();  
-    }
-    
+    ranking: function () {
+      this.$root.$refs.game.ranking();
+    },
   },
 });
 
