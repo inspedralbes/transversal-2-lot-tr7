@@ -67,7 +67,7 @@ class AuthController extends Controller
         array_push($statistics, DB::select(DB::raw('SELECT AVG(points) as averagePointsPerGame FROM score WHERE idUser = ' . $userId . ' AND completed = 1'))[0]);
         array_push($statistics, DB::select(DB::raw('SELECT MAX(points) as maxGamePoints FROM score WHERE idUser = ' . $userId))[0]);
         array_push($statistics, DB::select(DB::raw('SELECT MAX(created_at) as lastGamePlayed FROM score WHERE idUser = ' . $userId))[0]);
-        return response()->json(["userData" => auth()->user(), "statistics" => $statistics], Response::HTTP_OK);
+        return response()->json(["userData" => User::find($userId), "statistics" => $statistics], Response::HTTP_OK);
     }
 
     public function usersList()
