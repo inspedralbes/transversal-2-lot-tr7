@@ -45,10 +45,12 @@ class ChallengeController extends Controller
             $winner = $challenge[0]->idReceiver;
         }
 
-        $challenge = Challenge::find($challenge[0]->id);
-        $challenge->idWinner = $winner;
+        if ($winner) {
+            $challenge = Challenge::find($challenge[0]->id);
+            $challenge->idWinner = $winner;
+        }
 
-        if ($challenge->save()) {
+        if ($challenge->save() && $winner) {
             return response()->json(true, Response::HTTP_CREATED);
         } else {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
