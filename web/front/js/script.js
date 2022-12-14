@@ -1,20 +1,43 @@
 Vue.component('send_challenge', {
+  props: ['idGame'],
   data: function () {
     return {
       result: [],
+      idUser: 0,
     };
   },
 
   template: `
   <div>
   <label for="users">Choose a user</label>
-  <b-form-select id="users">
+  <b-form-select id="users" v-model="idUser">
 
-    <option v-for="users in result.usersList" value="users">{{users}}</option>
+    <option v-for="(users, id) in result.usersList" :value=id>{{users}}</option>
   </b-form-select>
-    <b-button>Send challenge</b-button>
+    <b-button @click="sendChallenge()">Send challenge</b-button>
 
   </div>`,
+
+  methods: {
+    sendChallenge: function () {
+      console.log(this.idUser);
+      const store = userStore();
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-challange`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'post',
+          body: JSON.stringify({
+            idReceiver: parseInt(this.idUser),
+            idGame: this.idGame,
+          }),
+        }
+      );
+    },
+  },
 
   mounted() {
     const store = userStore();
@@ -282,7 +305,7 @@ Vue.component('game', {
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
 
-        <send_challenge v-if="userIsLogged()"></send_challenge>
+        <send_challenge v-if="userIsLogged()" v-show="!dailyGame" :idGame=gameId></send_challenge>
 
       </div>
 
@@ -494,7 +517,6 @@ Vue.component('ranking', {
     fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.result = data;
       });
   },
@@ -522,8 +544,8 @@ Vue.component('vue-header', {
         <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
           <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
           <h3>Email: </h3> <b-form-input v-model="profile.email"/>
-          <h3>Password: </h3> <b-form-input v-model="profile.password" />
-          <h3>Repeat password: </h3> <b-form-input v-model="profile.repeatPassword" />
+          <h3>Password: </h3> <b-form-input type="password" v-model="profile.password" />
+          <h3>Repeat password: </h3> <b-form-input type="password" v-model="profile.repeatPassword" />
           <b-button @click="editProfile">Save Profile</b-button>
         </div>
       </div>
@@ -543,15 +565,15 @@ Vue.component('vue-header', {
       <div class="form__login">
       <h2>Login</h2>
         <input v-model="login.username" placeholder="Username" />
-        <input v-model="login.password" placeholder="Password" />
+        <input type="password" v-model="login.password" placeholder="Password" />
         <b-button @click="loginFunction">Login</b-button>
       </div>
       <div class="form__register">
       <h2>Register</h2>
         <input v-model="register.username" placeholder="Username" />
         <input v-model="register.email" placeholder="Email" />
-        <input v-model="register.password" placeholder="Password" />
-        <input v-model="register.repeatPassword" placeholder="Confirm password" />
+        <input type="password" v-model="register.password" placeholder="Password" />
+        <input type="password" v-model="register.repeatPassword" placeholder="Confirm password" />
         <b-button @click="registerFunction">Register</b-button>
       </div>
     </b-modal>
