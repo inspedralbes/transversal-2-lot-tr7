@@ -38,6 +38,8 @@ class ChallengeController extends Controller
             $challenges['completed'][$i]->sender = DB::table('user')->where('id', $challenges['completed'][$i]->idSender)->value('username');
             $challenges['completed'][$i]->receiver = DB::table('user')->where('id', $challenges['completed'][$i]->idReceiver)->value('username');
             $challenges['completed'][$i]->winner = DB::table('user')->where('id', $challenges['completed'][$i]->idWinner)->value('username');
+            $challenges['completed'][$i]->senderPoints = 500;
+            $challenges['completed'][$i]->receiverPoints = 500;
         }
 
         $challenges['pending'] = DB::select(DB::raw('SELECT idSender, idReceiver, idGame, date FROM challange WHERE idWinner IS NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
