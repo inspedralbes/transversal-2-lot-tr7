@@ -30,6 +30,28 @@ class ChallengeController extends Controller
         }
     }
 
+    public function challengeWinner(Request $request)
+    {
+        // $request->validate([
+        //     'idGame' => 'required',
+        //     'idWinner' => 'required',
+        // ]);
+
+        $ids = DB::select(DB::raw('SELECT id FROM challange WHERE (idSender = ' . auth()->user()->id . ' OR idReceiver = ' . auth()->user()->id) . ') AND idWinner IS NULL');
+        for ($i = 0; $i < count($ids); $i++) {
+        }
+        // $score = Challenge::find($id);
+        // $score->idWinner = $request->idWinner;
+
+        // if ($score->save()) {
+        //     return response()->json(true, Response::HTTP_CREATED);
+        // } else {
+        //     return response()->json(false, Response::HTTP_BAD_REQUEST);
+        // }
+
+        echo print_r($ids);
+    }
+
     public function challengesList()
     {
         $userId = auth()->user()->id;

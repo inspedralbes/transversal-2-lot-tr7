@@ -21,5 +21,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('create-score', [ScoreController::class, 'createScore']);
     Route::post('update-score', [ScoreController::class, 'updateScore']);
     Route::post('create-challenge', [ChallengeController::class, 'createChallenge']);
+    Route::post('challenge-winner', [ChallengeController::class, 'challengeWinner']);
     Route::get('challenges-list', [ChallengeController::class, 'challengesList']);
 });

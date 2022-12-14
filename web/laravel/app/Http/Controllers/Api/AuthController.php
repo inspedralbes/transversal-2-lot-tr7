@@ -53,8 +53,8 @@ class AuthController extends Controller
 
     public function userProfile(Request $request)
     {
-        if ($request->id) {
-            $userId = $request->id;
+        if ($request->idUser) {
+            $userId = $request->idUser;
         } else {
             $userId = auth()->user()->id;
         }
