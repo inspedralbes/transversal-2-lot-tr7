@@ -20,6 +20,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('get-daily-game', [GameController::class, 'getDailyGame']);
     Route::post('create-score', [ScoreController::class, 'createScore']);
     Route::post('update-score', [ScoreController::class, 'updateScore']);
-    Route::post('create-challenge', [challengeController::class, 'createchallenge']);
+    Route::post('create-challenge', [challengeController::class, 'createChallenge']);
     Route::get('challenges-list', [challengeController::class, 'challengesList']);
 });

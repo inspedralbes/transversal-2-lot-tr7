@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 
-class challengeController extends Controller
+class ChallengeController extends Controller
 {
-    public function createchallenge(Request $request)
+    public function createChallenge(Request $request)
     {
         $request->validate([
             'idReceiver' => 'required',
