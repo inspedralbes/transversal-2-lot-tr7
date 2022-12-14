@@ -32,14 +32,15 @@ class ChallengeController extends Controller
 
     public function challengeWinner(Request $request)
     {
-        // $request->validate([
-        //     'idGame' => 'required',
-        //     'idWinner' => 'required',
-        // ]);
+        $request->validate([
+            'idGame' => 'required',
+        ]);
 
-        $ids = DB::select(DB::raw('SELECT id FROM challange WHERE (idSender = ' . auth()->user()->id . ' OR idReceiver = ' . auth()->user()->id) . ') AND idWinner IS NULL');
-        for ($i = 0; $i < count($ids); $i++) {
-        }
+        $id = DB::select(DB::raw('SELECT id, idSender, idReceiver, idGame FROM challange WHERE (idSender = ' . auth()->user()->id . ' OR idReceiver = ' . auth()->user()->id) . ') AND idGame = ' . $request->idGame . ' AND idWinner IS NULL');
+        // for ($i = 0; $i < count($ids); $i++) {
+        //     echo $ids[$i]->id;
+        // }
+
         // $score = Challenge::find($id);
         // $score->idWinner = $request->idWinner;
 
@@ -49,7 +50,7 @@ class ChallengeController extends Controller
         //     return response()->json(false, Response::HTTP_BAD_REQUEST);
         // }
 
-        echo print_r($ids);
+        echo print_r($id);
     }
 
     public function challengesList()
@@ -64,7 +65,7 @@ class ChallengeController extends Controller
             $challenges['completed'][$i]->receiverPoints = DB::table('score')->where('id', $challenges['completed'][$i]->idGame)->where('idUser', $challenges['completed'][$i]->idReceiver)->value('points');
         }
 
-        $challenges['pending'] = DB::select(DB::raw('SELECT idSender, idReceiver, idGame, date FROM challange WHERE idWinner IS NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
+        $challenges['pending'] = DB::select(DB::raw('SELECT idSender, idReceiver, idGame, date FROM challange WHERE idWinner IS NULL AND idReceiver = ' . $userId));
         for ($i = 0; $i < count($challenges['pending']); $i++) {
             $challenges['pending'][$i]->sender = DB::table('user')->where('id', $challenges['pending'][$i]->idSender)->value('username');
             $challenges['pending'][$i]->receiver = DB::table('user')->where('id', $challenges['pending'][$i]->idReceiver)->value('username');
