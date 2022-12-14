@@ -34,17 +34,17 @@ class GameController extends Controller
         }
     }
 
-    public function createDailyGame()
-    {
-        $json_data = file_get_contents('https://the-trivia-api.com/api/questions?limit=10&difficulty=medium');
-        $game = new Game();
-        $game->jsonGame = $json_data;
-        $game->date = date("Y-m-d");
-        $game->difficulty = 'medium';
-        $game->category = 'all';
-        $game->type = 'daily';
-        $game->save();
-    }
+    // public function createDailyGame()
+    // {
+    //     $json_data = file_get_contents('https://the-trivia-api.com/api/questions?limit=10&difficulty=medium');
+    //     $game = new Game();
+    //     $game->jsonGame = $json_data;
+    //     $game->date = date("Y-m-d");
+    //     $game->difficulty = 'medium';
+    //     $game->category = 'all';
+    //     $game->type = 'daily';
+    //     $game->save();
+    // }
 
     public function getGame(Request $request)
     {
