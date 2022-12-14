@@ -36,21 +36,23 @@ class ChallengeController extends Controller
             'idGame' => 'required',
         ]);
 
-        $id = DB::select(DB::raw('SELECT id, idSender, idReceiver, idGame FROM challange WHERE (idSender = ' . auth()->user()->id . ' OR idReceiver = ' . auth()->user()->id) . ') AND idGame = ' . $request->idGame . ' AND idWinner IS NULL');
-        // for ($i = 0; $i < count($ids); $i++) {
-        //     echo $ids[$i]->id;
-        // }
+        $challenge = DB::select(DB::raw('SELECT id, idSender, idReceiver, idGame FROM challange WHERE (idSender = ' . auth()->user()->id . ' OR idReceiver = ' . auth()->user()->id) . ') AND idGame = ' . $request->idGame . ' AND idWinner IS NULL');
+        $scoreSender =  DB::table('score')->where('idUser', $challenge[0]->idSender)->where('idGame', $challenge[0]->idGame)->value('points');
+        $scoreReceiver = DB::table('score')->where('idUser', $challenge[0]->idReceiver)->where('idGame', $challenge[0]->idGame)->value('points');
+        if ($scoreSender > $scoreReceiver) {
+            $winner = $challenge[0]->idSender;
+        } else if ($scoreSender < $scoreReceiver) {
+            $winner = $challenge[0]->idReceiver;
+        }
 
-        // $score = Challenge::find($id);
-        // $score->idWinner = $request->idWinner;
+        $challenge = Challenge::find($challenge[0]->id);
+        $challenge->idWinner = $winner;
 
-        // if ($score->save()) {
-        //     return response()->json(true, Response::HTTP_CREATED);
-        // } else {
-        //     return response()->json(false, Response::HTTP_BAD_REQUEST);
-        // }
-
-        echo print_r($id);
+        if ($challenge->save()) {
+            return response()->json(true, Response::HTTP_CREATED);
+        } else {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
     }
 
     public function challengesList()
