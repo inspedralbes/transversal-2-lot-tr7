@@ -507,7 +507,7 @@ Vue.component('vue-header', {
     <div class="nav">
       <a href="#" @click="ranking()">Ranking</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
-      <a v-b-modal.profile v-show="userIsLogged()" @click="getUser()">Profile</a>
+      <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile()">Profile</a>
     </div>
 
     <b-modal id="profile" title="Profile">
