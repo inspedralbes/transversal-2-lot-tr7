@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class Challange extends Model
+class Challenge extends Model
 {
     use HasApiTokens, HasFactory;
 

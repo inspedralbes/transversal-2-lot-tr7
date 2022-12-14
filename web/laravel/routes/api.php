@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GameController;
 use App\Http\Controllers\Api\ScoreController;
-use App\Http\Controllers\Api\ChallangeController;
+use App\Http\Controllers\Api\challengeController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', [AuthController::class, 'register']);
@@ -20,6 +20,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('get-daily-game', [GameController::class, 'getDailyGame']);
     Route::post('create-score', [ScoreController::class, 'createScore']);
     Route::post('update-score', [ScoreController::class, 'updateScore']);
-    Route::post('create-challange', [ChallangeController::class, 'createChallange']);
-    Route::get('challanges-list', [ChallangeController::class, 'challangesList']);
+    Route::post('create-challenge', [challengeController::class, 'createchallenge']);
+    Route::get('challenges-list', [challengeController::class, 'challengesList']);
 });

@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Challenge;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
+
+class challengeController extends Controller
+{
+    public function createchallenge(Request $request)
+    {
+        $request->validate([
+            'idReceiver' => 'required',
+            'idGame' => 'required',
+        ]);
+
+        $challenge = new Challenge();
+        $challenge->idSender = auth()->user()->id;
+        $challenge->idReceiver = $request->idReceiver;
+        $challenge->idGame = $request->idGame;
+        $challenge->date = date("Y-m-d");
+
+        if ($challenge->save()) {
+            return response()->json(true, Response::HTTP_CREATED);
+        } else {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function challengesList()
+    {
+        $userId = auth()->user()->id;
+        $challenges['completed'] = DB::select(DB::raw('SELECT * FROM challange WHERE idSender = ' . $userId . ' OR idReceiver = ' . $userId));
+
+        // $challenges['pending'] = ;
+
+        return response()->json(["challenges" => $challenges], Response::HTTP_OK);
+    }
+}
