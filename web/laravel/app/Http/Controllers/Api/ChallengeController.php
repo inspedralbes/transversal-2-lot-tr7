@@ -33,7 +33,10 @@ class ChallengeController extends Controller
     public function challengesList()
     {
         $userId = auth()->user()->id;
-        $challenges['completed'] = DB::select(DB::raw('SELECT * FROM challange WHERE idSender = ' . $userId . ' OR idReceiver = ' . $userId));
+        $challenges['completed'] = DB::select(DB::raw('SELECT * FROM challange WHERE idWinner IS NOT NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
+        // for ($i = 0; $i < count($ranking['dailyGame']); $i++) {
+        //     $ranking['dailyGame'][$i]->username = DB::table('user')->where('id', $ranking['dailyGame'][$i]->idUser)->value('username');
+        // }
 
         // $challenges['pending'] = ;
 
