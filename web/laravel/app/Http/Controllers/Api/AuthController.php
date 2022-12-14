@@ -72,7 +72,7 @@ class AuthController extends Controller
 
     public function usersList()
     {
-        $usersList = DB::table('user')->pluck('username', 'id');
+        $usersList = DB::table('user')->where('id', '!=', auth()->user()->id)->pluck('username', 'id');
         return response()->json(["usersList" => $usersList], Response::HTTP_OK);
     }
 
