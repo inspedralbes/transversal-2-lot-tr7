@@ -33,12 +33,18 @@ class ChallengeController extends Controller
     public function challengesList()
     {
         $userId = auth()->user()->id;
-        $challenges['completed'] = DB::select(DB::raw('SELECT * FROM challange WHERE idWinner IS NOT NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
-        // for ($i = 0; $i < count($ranking['dailyGame']); $i++) {
-        //     $ranking['dailyGame'][$i]->username = DB::table('user')->where('id', $ranking['dailyGame'][$i]->idUser)->value('username');
-        // }
+        $challenges['completed'] = DB::select(DB::raw('SELECT idSender, idReceiver, idGame, idWinner, date FROM challange WHERE idWinner IS NOT NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
+        for ($i = 0; $i < count($challenges['completed']); $i++) {
+            $challenges['completed'][$i]->sender = DB::table('user')->where('id', $challenges['completed'][$i]->idSender)->value('username');
+            $challenges['completed'][$i]->receiver = DB::table('user')->where('id', $challenges['completed'][$i]->idReceiver)->value('username');
+            $challenges['completed'][$i]->winner = DB::table('user')->where('id', $challenges['completed'][$i]->idWinner)->value('username');
+        }
 
-        // $challenges['pending'] = ;
+        $challenges['pending'] = DB::select(DB::raw('SELECT idSender, idReceiver, idGame, date FROM challange WHERE idWinner IS NULL AND (idSender = ' . $userId . ' OR idReceiver = ' . $userId . ')'));
+        for ($i = 0; $i < count($challenges['pending']); $i++) {
+            $challenges['pending'][$i]->sender = DB::table('user')->where('id', $challenges['pending'][$i]->idSender)->value('username');
+            $challenges['pending'][$i]->receiver = DB::table('user')->where('id', $challenges['pending'][$i]->idReceiver)->value('username');
+        }
 
         return response()->json(["challenges" => $challenges], Response::HTTP_OK);
     }
