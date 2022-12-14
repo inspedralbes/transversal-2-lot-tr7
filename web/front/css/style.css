@@ -240,3 +240,39 @@ footer:not(.modal-footer) {
 .stats__title {
   color: #f4ac45;
 }
+
+.rankings{
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 70px;
+}
+.rankings__ranking  {
+  max-width: 700px;
+  border: 2px solid #f4ac45;
+  background-color: #585858;
+  margin-bottom: 100px;
+
+
+}
+.rankings__list{
+
+   display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+
+}
+
+.rankings__title{
+  color: #f4ac45;
+  background-color: black;
+  border-bottom: white 2px solid;
+  padding: 10px;
+
+}
+
+.rankings__user{
+  text-align: center;
+}
+
+

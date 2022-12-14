@@ -494,8 +494,15 @@ Vue.component('game', {
       return false;
     },
     ranking: function () {
+      if(this.showRankings){
+        this.showIndex = true;
+      }
+      else{
+        this.showIndex = false;
+      }
       this.showRankings = !this.showRankings;
-      this.showIndex = !this.showIndex;
+      
+      this.showResults = false;
     },
   },
 });
@@ -509,17 +516,98 @@ Vue.component('ranking', {
 
   template: `
   <div>
-      <h1>Ranking</h1>
+      <h1>Rankings</h1>
 
+
+      <div class="rankings">
+
+          <div class="rankings__ranking">
+            
+          <div class="rankings__title">
+            <h2>Total Points</h2>
+          </div>
+        
+          <ol>   
+            <div class="rankings__list" v-for="users in result.totalPoints"> 
+            <li>
+              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>  
+            </li>
+              <p class="rankings__user">{{users.pSum}}</p> 
+            </div> 
+          
+          </ol>
+
+
+        </div>
+
+        <div class="rankings__ranking">
+          
+          <div class="rankings__title">
+            <h2>Daily game points</h2>
+          </div>
+
+          <ol>
+
+            <div class="rankings__list" v-for="users in result.dailyGame">  
+            <li>
+              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+            </li>
+              <p class="rankings__user">{{users.points}}</p>
+            </div>  
+          </ol>
+        </div>
+
+
+        <div class="rankings__ranking">
+          
+          <div class="rankings__title">
+            <h2>Games completed</h2>
+          </div>
+        
+          <ol>
+            <div class="rankings__list" v-for="users in result.totalGames">  
+            <li>
+              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+            </li>
+              <p class="rankings__user">{{users.pSum}}</p>
+            </div>  
+          </ol>
+        </div>
+
+        <div class="rankings__ranking">
+          
+          <div class="rankings__title">
+            <h2>Average points</h2>
+          </div>
+        
+          <ol>
+            <div class="rankings__list" v-for="users in result.averagePoints">  
+            <li>
+
+              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+            </li>
+              <p class="rankings__user">{{users.pSum}}</p>
+            </div>
+          </ol>  
+
+        </div>
+      </div>
   </div>`,
 
   mounted() {
     fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
       .then((response) => response.json())
       .then((data) => {
-        this.result = data;
+        console.log(data);
+        this.result = data.ranking;
       });
   },
+
+  methods: {
+    showProfile: function() {
+      console.log("Profile");
+    }
+  }
 });
 
 Vue.component('vue-header', {
