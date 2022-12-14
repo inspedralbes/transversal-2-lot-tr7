@@ -23,7 +23,7 @@ Vue.component('send_challenge', {
       console.log(this.idUser);
       const store = userStore();
       fetch(
-        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-challange`,
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-challenge`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -528,9 +528,40 @@ Vue.component('vue-header', {
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a href="#" @click="ranking()">Ranking</a>
+      <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenge()">Challenge</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
       <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile()">Profile</a>
     </div>
+
+    <b-modal id="challenge" title="Challenges">
+      <div class="profile__info">
+        <img src="img/foto.png" alt="logo" />
+        <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
+          <h3>Username: {{profile.username}} </h3>
+          <h3>Email: {{profile.email}} </h3>
+          <b-button @click="editProfile">Edit Profile</b-button>
+          <a href=""><b-button>Logout</b-button></a>
+        </div>
+        <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
+          <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
+          <h3>Email: </h3> <b-form-input v-model="profile.email"/>
+          <h3>Password: </h3> <b-form-input type="password" v-model="profile.password" />
+          <h3>Repeat password: </h3> <b-form-input type="password" v-model="profile.repeatPassword" />
+          <b-button @click="editProfile">Save Profile</b-button>
+        </div>
+      </div>
+      <div class="stats">
+        <h3> <span class="stats__title"> Level </span> {{profile.level}}</h3>
+        <h3> <span class="stats__title"> Total Points </span> {{stats.totalPoints}}</h3>
+        <h3> <span class="stats__title"> Time Played </span> {{stats.totalTime}}</h3>
+        <h3> <span class="stats__title"> Games Uncompleted </span> {{stats.gamesUncompleted}} of {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> Max Game Points </span> {{stats.maxGamePoints}}</h3>
+        <h3> <span class="stats__title"> AVG Time Game </span> {{stats.avgTimePerGame}}</h3>
+        <h3> <span class="stats__title"> Total Games </span> {{stats.totalGames}}</h3>
+        <h3> <span class="stats__title"> AVG Points Game </span> {{stats.avgPointsPerGame}}</h3>
+        <h3> <span class="stats__title"> Last Game Played </span> {{stats.lastGamePlayed}}</h3>
+      </div>
+    </b-modal>
 
     <b-modal id="profile" title="Profile">
       <div class="profile__info">
@@ -611,6 +642,7 @@ Vue.component('vue-header', {
     };
   },
   methods: {
+    getChallenge: function () {},
     getProfile: function () {
       const store = userStore();
       fetch(
