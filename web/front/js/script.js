@@ -530,7 +530,7 @@ Vue.component('ranking', {
           <ol>   
             <div class="rankings__list" v-for="users in result.totalPoints"> 
             <li>
-              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>  
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>  
             </li>
               <p class="rankings__user">{{users.pSum}}</p> 
             </div> 
@@ -550,7 +550,7 @@ Vue.component('ranking', {
 
             <div class="rankings__list" v-for="users in result.dailyGame">  
             <li>
-              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
             </li>
               <p class="rankings__user">{{users.points}}</p>
             </div>  
@@ -567,7 +567,7 @@ Vue.component('ranking', {
           <ol>
             <div class="rankings__list" v-for="users in result.totalGames">  
             <li>
-              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
             </li>
               <p class="rankings__user">{{users.pSum}}</p>
             </div>  
@@ -584,7 +584,7 @@ Vue.component('ranking', {
             <div class="rankings__list" v-for="users in result.averagePoints">  
             <li>
 
-              <p @click="showProfile()" class="rankings__user">{{users.username}}</p>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
             </li>
               <p class="rankings__user">{{users.pSum}}</p>
             </div>
@@ -598,57 +598,30 @@ Vue.component('ranking', {
     fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         this.result = data.ranking;
       });
   },
 
   methods: {
-    showProfile: function() {
-      console.log("Profile");
+    showProfile: function(id) {
+      this.$root.$refs.vueheader.getProfile('false', id);
     }
   }
 });
 
-Vue.component('vue-header', {
+Vue.component('vueheader', {
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
-      <a href="#" @click="ranking()">Ranking</a>
+      <a @click="ranking()">Ranking</a>
       <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenge()">Challenge</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
-      <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile()">Profile</a>
+      <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile('true', 0)">Profile</a>
     </div>
 
     <b-modal id="challenge" title="Challenges">
-      <div class="profile__info">
-        <img src="img/foto.png" alt="logo" />
-        <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
-          <h3>Username: {{profile.username}} </h3>
-          <h3>Email: {{profile.email}} </h3>
-          <b-button @click="editProfile">Edit Profile</b-button>
-          <a href=""><b-button>Logout</b-button></a>
-        </div>
-        <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
-          <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
-          <h3>Email: </h3> <b-form-input v-model="profile.email"/>
-          <h3>Password: </h3> <b-form-input type="password" v-model="profile.password" />
-          <h3>Repeat password: </h3> <b-form-input type="password" v-model="profile.repeatPassword" />
-          <b-button @click="editProfile">Save Profile</b-button>
-        </div>
-      </div>
-      <div class="stats">
-        <h3> <span class="stats__title"> Level </span> {{profile.level}}</h3>
-        <h3> <span class="stats__title"> Total Points </span> {{stats.totalPoints}}</h3>
-        <h3> <span class="stats__title"> Time Played </span> {{stats.totalTime}}</h3>
-        <h3> <span class="stats__title"> Games Uncompleted </span> {{stats.gamesUncompleted}} of {{stats.totalGames}}</h3>
-        <h3> <span class="stats__title"> Max Game Points </span> {{stats.maxGamePoints}}</h3>
-        <h3> <span class="stats__title"> AVG Time Game </span> {{stats.avgTimePerGame}}</h3>
-        <h3> <span class="stats__title"> Total Games </span> {{stats.totalGames}}</h3>
-        <h3> <span class="stats__title"> AVG Points Game </span> {{stats.avgPointsPerGame}}</h3>
-        <h3> <span class="stats__title"> Last Game Played </span> {{stats.lastGamePlayed}}</h3>
-      </div>
+      
     </b-modal>
 
     <b-modal id="profile" title="Profile">
@@ -657,15 +630,15 @@ Vue.component('vue-header', {
         <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
           <h3>Username: {{profile.username}} </h3>
           <h3>Email: {{profile.email}} </h3>
-          <b-button @click="editProfile">Edit Profile</b-button>
-          <a href=""><b-button>Logout</b-button></a>
+          <b-button v-show="canEditProfile" @click="editProfile">Edit Profile</b-button>
+          <a v-show="canEditProfile" href=""><b-button>Logout</b-button></a>
         </div>
         <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
           <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
           <h3>Email: </h3> <b-form-input v-model="profile.email"/>
           <h3>Password: </h3> <b-form-input type="password" v-model="profile.password" />
           <h3>Repeat password: </h3> <b-form-input type="password" v-model="profile.repeatPassword" />
-          <b-button @click="editProfile">Save Profile</b-button>
+          <b-button v-show="canEditProfile" @click="editProfile">Save Profile</b-button>
         </div>
       </div>
       <div class="stats">
@@ -727,25 +700,62 @@ Vue.component('vue-header', {
         maxGamePoints: '',
         lastGamePlayed: '',
       },
+
+      canEditProfile: false,
     };
   },
+
+  created() {
+    this.$root.$refs.vueheader = this;
+  },
+
   methods: {
     getChallenge: function () {},
-    getProfile: function () {
+    getProfile: function (personal, id) {
       const store = userStore();
-      fetch(
-        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.loginInfo.token,
-          },
-          method: 'get',
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          this.stats.totalGames = data.statistics[0].totalGames;
+
+      if(personal == 'true'){
+        fetch(
+          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/my-profile`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + store.loginInfo.token,
+            },
+            method: 'get',
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.canEditProfile = true;
+            this.loadStats(data);
+          });
+      }
+
+      else{
+        fetch(
+          `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'post',
+            body: JSON.stringify({
+             idUser: id,
+           }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.canEditProfile = false;
+            this.loadStats(data);
+          });
+
+      }
+    },
+
+    loadStats: function (data) {
+      this.stats.totalGames = data.statistics[0].totalGames;
           this.stats.gamesUncompleted = data.statistics[1].gamesUncompleted;
           this.stats.totalTime = data.statistics[2].totalTime;
           this.stats.avgTimePerGame = Number(
@@ -783,8 +793,9 @@ Vue.component('vue-header', {
           this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
 
           this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
-        });
+          this.$bvModal.show('profile');
     },
+
     editProfile: function () {
       if (!this.profile.inProcessToEdit) {
         this.profile.inProcessToEdit = true;
