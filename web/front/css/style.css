@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url('Beaufort.ttf');
+  src: url("Beaufort.ttf");
 }
 body {
   font-family: Beaufort;
@@ -241,38 +241,29 @@ footer:not(.modal-footer) {
   color: #f4ac45;
 }
 
-.rankings{
-
+.rankings {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 60px;
   margin-top: 70px;
 }
-.rankings__ranking  {
-  max-width: 700px;
+.rankings__ranking {
   border: 2px solid #f4ac45;
   background-color: #585858;
-  margin-bottom: 100px;
-
-
 }
-.rankings__list{
-
-   display: grid;
+.rankings__list {
+  display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 5px;
-
 }
 
-.rankings__title{
+.rankings__title {
   color: #f4ac45;
   background-color: black;
   border-bottom: white 2px solid;
   padding: 10px;
-
 }
 
-.rankings__user{
+.rankings__user {
   text-align: center;
 }
-
-
