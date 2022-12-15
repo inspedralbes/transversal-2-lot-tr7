@@ -11,16 +11,13 @@ Vue.component('send_challenge', {
   <div>
   <label for="users">Choose a user</label>
   <b-form-select id="users" v-model="idUser">
-
     <option v-for="(users, id) in result.usersList" :value=id>{{users}}</option>
   </b-form-select>
     <b-button @click="sendChallenge()">Send challenge</b-button>
-
   </div>`,
 
   methods: {
     sendChallenge: function () {
-      console.log(this.idUser);
       const store = userStore();
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-challenge`,
@@ -249,8 +246,6 @@ Vue.component('game', {
         correctAnswers: 0,
         incorrectAnswers: 0,
       },
-      checkDifficulty: false,
-      checkCategory: false,
       showResults: false,
       showCarousel: false,
       showIndex: true,
@@ -289,10 +284,7 @@ Vue.component('game', {
         </div>
         <b-button @click="handler">Start Game</b-button>
         <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="getCookie()">Daily Game</b-button>
-
-        <b-alert v-show="checkCategory" show variant="danger">Select Category</b-alert>
-        <b-alert v-show="checkDifficulty" show variant="danger">Select Difficulty</b-alert>
-      </div>
+       </div>
     </div>
 
       <div class="game__carousel" v-if="showCarousel">
@@ -305,13 +297,9 @@ Vue.component('game', {
       <div class="game__results" v-if="showResults">
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
         <button @click="endDemo" >Return</button>
-
         <send_challenge v-if="userIsLogged()" v-show="!dailyGame" :idGame=gameId></send_challenge>
-
       </div>
-
       <ranking v-show="showRankings"></ranking>
-
     </div>`,
 
   created() {
@@ -409,57 +397,53 @@ Vue.component('game', {
     handler: function () {
       this.buttonsIndex = 0;
       this.dailyGame = false;
-      if (this.options.difficulty == '') {
-        this.checkDifficulty = true;
-        this.checkCategory = false;
-      } else if (this.options.category == '') {
-        this.checkCategory = true;
-        this.checkDifficulty = false;
+      if (this.options.difficulty == '' || this.options.category == '') {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Select Difficulty And Category',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       } else {
         this.quizResults.correctAnswers = 0;
         this.quizResults.incorrectAnswers = 0;
         this.showCarousel = true;
         this.showIndex = false;
-        this.checkCategory = false;
-        this.checkDifficulty = false;
         this.getQuestions();
         setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
       }
     },
 
     checkAnswer: function (isCorrect, arrQuestions) {
-      let buttons = document.getElementsByClassName("question__buttonAnswers");
+      let buttons = document.getElementsByClassName('question__buttonAnswers');
 
       if (isCorrect == 1) {
         this.quizResults.correctAnswers += 1;
-
       } else {
         this.quizResults.incorrectAnswers += 1;
-
       }
 
       let aux = this.buttonsIndex + 4;
 
-        for(let i = this.buttonsIndex; i < aux; i++){
-            let text = buttons[i].textContent;
-            buttons[i].disabled = "true";
+      for (let i = this.buttonsIndex; i < aux; i++) {
+        let text = buttons[i].textContent;
+        buttons[i].disabled = 'true';
 
-        for (j = 0; j < 4; j++){
-
-            if (text == arrQuestions[j].string){
-
-                if(arrQuestions[j].index == 0){
-                    buttons[i].style.backgroundColor = "#FF6961"; 
-                }
-                else{
-                    buttons[i].style.backgroundColor = "#C1E1C1";
-                }  
+        for (j = 0; j < 4; j++) {
+          if (text == arrQuestions[j].string) {
+            if (arrQuestions[j].index == 0) {
+              buttons[i].style.backgroundColor = '#FF6961';
+            } else {
+              buttons[i].style.backgroundColor = '#C1E1C1';
             }
+          }
         }
       }
-        this.buttonsIndex += 4;
-        
-        setTimeout(() => this.nextQuestion(1), 1000);    },
+      this.buttonsIndex += 4;
+
+      setTimeout(() => this.nextQuestion(1), 1000);
+    },
 
     endDemo: function () {
       this.showIndex = true;
@@ -521,14 +505,13 @@ Vue.component('game', {
       return false;
     },
     ranking: function () {
-      if(this.showRankings){
+      if (this.showRankings) {
         this.showIndex = true;
-      }
-      else{
+      } else {
         this.showIndex = false;
       }
       this.showRankings = !this.showRankings;
-      
+
       this.showResults = false;
     },
   },
@@ -543,82 +526,61 @@ Vue.component('ranking', {
 
   template: `
   <div>
-      <h1>Rankings</h1>
-
-
-      <div class="rankings">
-
-          <div class="rankings__ranking">
-            
-          <div class="rankings__title">
-            <h2>Total Points</h2>
-          </div>
-        
-          <ol>   
-            <div class="rankings__list" v-for="users in result.totalPoints"> 
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>  
-            </li>
-              <p class="rankings__user">{{users.pSum}}</p> 
-            </div> 
-          
-          </ol>
-
-
+    <h1>Rankings</h1>
+    <div class="rankings">
+      <div class="rankings__ranking">
+        <div class="rankings__title">
+          <h2>Total Points</h2>
         </div>
-
-        <div class="rankings__ranking">
-          
-          <div class="rankings__title">
-            <h2>Daily game points</h2>
-          </div>
-
-          <ol>
-
-            <div class="rankings__list" v-for="users in result.dailyGame">  
+        <ol>
+          <div class="rankings__list" v-for="users in result.totalPoints">
             <li>
               <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
             </li>
-              <p class="rankings__user">{{users.points}}</p>
-            </div>  
-          </ol>
-        </div>
-
-
-        <div class="rankings__ranking">
-          
-          <div class="rankings__title">
-            <h2>Games completed</h2>
+            <p class="rankings__user">{{users.pSum}}</p>
           </div>
-        
-          <ol>
-            <div class="rankings__list" v-for="users in result.totalGames">  
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-              <p class="rankings__user">{{users.pSum}}</p>
-            </div>  
-          </ol>
-        </div>
-
-        <div class="rankings__ranking">
-          
-          <div class="rankings__title">
-            <h2>Average points</h2>
-          </div>
-        
-          <ol>
-            <div class="rankings__list" v-for="users in result.averagePoints">  
-            <li>
-
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-              <p class="rankings__user">{{users.pSum}}</p>
-            </div>
-          </ol>  
-
-        </div>
+        </ol>
       </div>
+      <div class="rankings__ranking">
+        <div class="rankings__title">
+          <h2>Daily game points</h2>
+        </div>
+        <ol>
+          <div class="rankings__list" v-for="users in result.dailyGame">
+            <li>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
+            </li>
+            <p class="rankings__user">{{users.points}}</p>
+          </div>
+        </ol>
+      </div>
+      <div class="rankings__ranking">
+        <div class="rankings__title">
+          <h2>Games completed</h2>
+        </div>
+        <ol>
+          <div class="rankings__list" v-for="users in result.totalGames">
+            <li>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
+            </li>
+            <p class="rankings__user">{{users.pSum}}</p>
+          </div>
+        </ol>
+      </div>
+      <div class="rankings__ranking">
+        <div class="rankings__title">
+          <h2>Average points</h2>
+        </div>
+        <ol>
+          <div class="rankings__list" v-for="users in result.averagePoints">
+            <li>
+              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
+            </li>
+            <p class="rankings__user">{{users.pSum}}</p>
+          </div>
+        </ol>
+      </div>
+    </div>
   </div>`,
 
   mounted() {
@@ -630,25 +592,99 @@ Vue.component('ranking', {
   },
 
   methods: {
-    showProfile: function(id) {
+    showProfile: function (id) {
       this.$root.$refs.vueheader.getProfile('false', id);
-    }
-  }
+    },
+  },
 });
 
 Vue.component('vueheader', {
+  data: function () {
+    return {
+      register: {
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: '',
+      },
+      login: {
+        username: '',
+        password: '',
+      },
+      profile: {
+        username: '',
+        email: '',
+        level: '',
+        inProcessToEdit: false,
+        password: '',
+        repeatPassword: '',
+      },
+      stats: {
+        totalGames: '',
+        gamesUncompleted: '',
+        totalTime: '',
+        avgTimePerGame: '',
+        totalPoints: '',
+        avgPointsPerGame: '',
+        maxGamePoints: '',
+        lastGamePlayed: '',
+      },
+      challenges: {
+        completed: '',
+        pending: '',
+        idChallengeGame: 0,
+      },
+      canEditProfile: false,
+    };
+  },
+
   template: `
   <div class="header">
     <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a @click="ranking()">Ranking</a>
-      <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenge()">Challenge</a>
+      <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenges()">Challenge</a>
       <a v-b-modal.login-register v-show="!userIsLogged()">Login / Register</a>
       <a v-b-modal.profile v-show="userIsLogged()" @click="getProfile('true', 0)">Profile</a>
     </div>
 
     <b-modal id="challenge" title="Challenges">
-      
+      <div class="challenge__tab">
+        <b-button class="challenge__tab--links" @click="openChallenges($event, 'pending')">Pending</b-button>
+        <b-button class="challenge__tab--links" @click="openChallenges($event, 'completed')">Completed</b-button>
+      </div>
+      <div id="completed" class="challengeContent" style="display: none;">
+        <table>
+          <th>Winner</th>
+          <th>Sender Points</th>
+          <th>Sender</th>
+          <th>Receiver Points</th>
+          <th>Receiver</th>
+          <th>Data</th>
+          <tr v-for="completed in challenges.completed">
+            <td>{{completed.winner}}</td>
+            <td>{{completed.senderPoints}}</td>
+            <td>{{completed.sender}}</td>
+            <td>{{completed.receiverPoints}}</td>
+            <td>{{completed.receiver}}</td>
+            <td>{{completed.date}}</td>
+          </tr>
+        </table>
+      </div>
+      <div id="pending" class="challengeContent" >
+        <table>
+          <th>Sender</th>
+          <th>Receiver</th>
+          <th>Data</th>
+          <th>Play Game</th>
+          <tr v-for="pending in challenges.pending" >
+            <td>{{pending.sender}}</td>
+            <td>{{pending.receiver}}</td>
+            <td>{{pending.date}}</td>
+            <td><b-button @click="getChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
+          </tr>
+        </table>
+      </div>
     </b-modal>
 
     <b-modal id="profile" title="Profile">
@@ -697,51 +733,69 @@ Vue.component('vueheader', {
       </div>
     </b-modal>
   </div>`,
-  data: function () {
-    return {
-      register: {
-        username: '',
-        email: '',
-        password: '',
-        repeatPassword: '',
-      },
-      login: {
-        username: '',
-        password: '',
-      },
-      profile: {
-        username: '',
-        email: '',
-        level: '',
-        inProcessToEdit: false,
-        password: '',
-        repeatPassword: '',
-      },
-      stats: {
-        totalGames: '',
-        gamesUncompleted: '',
-        totalTime: '',
-        avgTimePerGame: '',
-        totalPoints: '',
-        avgPointsPerGame: '',
-        maxGamePoints: '',
-        lastGamePlayed: '',
-      },
-
-      canEditProfile: false,
-    };
-  },
 
   created() {
     this.$root.$refs.vueheader = this;
   },
 
   methods: {
-    getChallenge: function () {},
+    getChallenge: function (idChallenge) {
+      const store = userStore();
+      console.log({ idChallenge });
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-game`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'post',
+          body: JSON.stringify({
+            id: parseInt(idChallenge),
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(JSON.parse(data.game.jsonGame));
+        });
+    },
+    openChallenges: function (evt, challengeName) {
+      let i, challengeContent, tabLinks;
+      challengeContent = document.getElementsByClassName('challengeContent');
+      for (i = 0; i < challengeContent.length; i++) {
+        challengeContent[i].style.display = 'none';
+      }
+      tabLinks = document.getElementsByClassName('challenge__tab--links');
+      for (i = 0; i < tabLinks.length; i++) {
+        tabLinks[i].className = tabLinks[i].className.replace(' active', '');
+      }
+      document.getElementById(challengeName).style.display = 'block';
+      evt.currentTarget.className += ' active';
+    },
+    getChallenges: function () {
+      const store = userStore();
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/challenges-list`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'get',
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({ data });
+          this.challenges.completed = data.challenges.completed;
+          this.challenges.pending = data.challenges.pending;
+        });
+    },
     getProfile: function (personal, id) {
       const store = userStore();
 
-      if(personal == 'true'){
+      if (personal == 'true') {
         fetch(
           `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/my-profile`,
           {
@@ -757,9 +811,7 @@ Vue.component('vueheader', {
             this.canEditProfile = true;
             this.loadStats(data);
           });
-      }
-
-      else{
+      } else {
         fetch(
           `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/user-profile`,
           {
@@ -768,8 +820,8 @@ Vue.component('vueheader', {
             },
             method: 'post',
             body: JSON.stringify({
-             idUser: id,
-           }),
+              idUser: id,
+            }),
           }
         )
           .then((response) => response.json())
@@ -777,50 +829,47 @@ Vue.component('vueheader', {
             this.canEditProfile = false;
             this.loadStats(data);
           });
-
       }
     },
 
     loadStats: function (data) {
       this.stats.totalGames = data.statistics[0].totalGames;
-          this.stats.gamesUncompleted = data.statistics[1].gamesUncompleted;
-          this.stats.totalTime = data.statistics[2].totalTime;
-          this.stats.avgTimePerGame = Number(
-            data.statistics[3].averageTimePerGame
-          );
-          this.stats.totalPoints = data.statistics[4].totalPoints;
-          this.stats.avgPointsPerGame = Number(
-            data.statistics[5].averagePointsPerGame
-          );
-          this.stats.maxGamePoints = data.statistics[6].maxGamePoints;
-          this.stats.lastGamePlayed = data.statistics[7].lastGamePlayed;
+      this.stats.gamesUncompleted = data.statistics[1].gamesUncompleted;
+      this.stats.totalTime = data.statistics[2].totalTime;
+      this.stats.avgTimePerGame = Number(data.statistics[3].averageTimePerGame);
+      this.stats.totalPoints = data.statistics[4].totalPoints;
+      this.stats.avgPointsPerGame = Number(
+        data.statistics[5].averagePointsPerGame
+      );
+      this.stats.maxGamePoints = data.statistics[6].maxGamePoints;
+      this.stats.lastGamePlayed = data.statistics[7].lastGamePlayed;
 
-          this.profile.username = data.userData.username;
-          this.profile.email = data.userData.email;
-          this.profile.level = data.userData.level;
+      this.profile.username = data.userData.username;
+      this.profile.email = data.userData.email;
+      this.profile.level = data.userData.level;
 
-          dT = Number(this.stats.totalTime);
-          let hT = Math.floor(dT / 3600);
-          let mT = Math.floor((dT % 3600) / 60);
-          let sT = Math.floor((dT % 3600) % 60);
+      dT = Number(this.stats.totalTime);
+      let hT = Math.floor(dT / 3600);
+      let mT = Math.floor((dT % 3600) / 60);
+      let sT = Math.floor((dT % 3600) % 60);
 
-          let hDisplayT = hT > 0 ? hT + (hT == 1 ? ' hr ' : ' hrs ') : '';
-          let mDisplayT = mT > 0 ? mT + ' min ' : '';
-          let sDisplayT = sT > 0 ? sT + ' sec' : '';
-          this.stats.totalTime = hDisplayT + mDisplayT + sDisplayT;
+      let hDisplayT = hT > 0 ? hT + (hT == 1 ? ' hr ' : ' hrs ') : '';
+      let mDisplayT = mT > 0 ? mT + ' min ' : '';
+      let sDisplayT = sT > 0 ? sT + ' sec' : '';
+      this.stats.totalTime = hDisplayT + mDisplayT + sDisplayT;
 
-          dTG = Number(this.stats.avgTimePerGame);
-          let hTG = Math.floor(dTG / 3600);
-          let mTG = Math.floor((dTG % 3600) / 60);
-          let sTG = Math.floor((dTG % 3600) % 60);
+      dTG = Number(this.stats.avgTimePerGame);
+      let hTG = Math.floor(dTG / 3600);
+      let mTG = Math.floor((dTG % 3600) / 60);
+      let sTG = Math.floor((dTG % 3600) % 60);
 
-          let hDisplayTG = hTG > 0 ? hTG + (hTG == 1 ? ' hr ' : ' hrs ') : '';
-          let mDisplayTG = mTG > 0 ? mTG + ' min ' : '';
-          let sDisplayTG = sTG > 0 ? sTG + ' sec' : '';
-          this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
+      let hDisplayTG = hTG > 0 ? hTG + (hTG == 1 ? ' hr ' : ' hrs ') : '';
+      let mDisplayTG = mTG > 0 ? mTG + ' min ' : '';
+      let sDisplayTG = sTG > 0 ? sTG + ' sec' : '';
+      this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
 
-          this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
-          this.$bvModal.show('profile');
+      this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
+      this.$bvModal.show('profile');
     },
 
     editProfile: function () {
@@ -844,7 +893,20 @@ Vue.component('vueheader', {
               password_confirmation: this.profile.repeatPassword,
             }),
           }
-        );
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log({ data });
+            if ((data = true)) {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Profile Updated',
+                showConfirmButton: false,
+                timer: 1000,
+              });
+            }
+          });
       }
     },
     registerFunction: function () {
@@ -870,6 +932,21 @@ Vue.component('vueheader', {
             this.register.email = '';
             this.register.password = '';
             this.register.repeatPassword = '';
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Please Login',
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          } else {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Invalid Credentials',
+              showConfirmButton: true,
+              timer: 2000,
+            });
           }
         });
     },
@@ -898,6 +975,20 @@ Vue.component('vueheader', {
             store.loginInfo.id = data.user.id;
             store.loginInfo.token = data.token;
             this.$bvModal.hide('login-register');
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          } else {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'Invalid Credentials',
+              showConfirmButton: true,
+              timer: 2000,
+            });
           }
         });
     },
