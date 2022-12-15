@@ -50,8 +50,8 @@ class ChallengeController extends Controller
             $challenge->idWinner = $winner;
         }
 
-        if ($challenge->save() && $winner) {
-            return response()->json(true, Response::HTTP_CREATED);
+        if ($winner && $challenge->save()) {
+            return response()->json(["winner" => DB::table('user')->where('id', $winner)->value('username')], Response::HTTP_CREATED);
         } else {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
         }
