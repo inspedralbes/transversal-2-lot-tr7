@@ -309,6 +309,36 @@ Vue.component('game', {
   },
 
   methods: {
+    getChallenge: function (idChallenge) {
+      const store = userStore();
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-game`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'post',
+          body: JSON.stringify({
+            id: parseInt(idChallenge),
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.result = JSON.parse(data.game.jsonGame);
+          this.$bvModal.hide('challenge');
+        });
+    },
+    handlerChallenge(id) {
+      this.buttonsIndex = 0;
+      this.quizResults.correctAnswers = 0;
+      this.quizResults.incorrectAnswers = 0;
+      this.showCarousel = true;
+      this.showIndex = false;
+      this.getChallenge(id);
+      setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
+    },
     getCookie: function () {
       let name = 'dailyGame=';
       let decodedCookie = decodeURIComponent(document.cookie);
@@ -489,8 +519,6 @@ Vue.component('game', {
       this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
       this.showIndex = false;
-      this.checkCategory = false;
-      this.checkDifficulty = false;
       let data = new Date();
       data.setUTCHours(23, 59, 59, 999);
       document.cookie = 'dailyGame=true;' + data.toUTCString();
@@ -515,7 +543,6 @@ Vue.component('game', {
 
       this.showResults = false;
       this.$root.$refs.ranking.fetchRanking();
-
     },
   },
 });
@@ -585,10 +612,9 @@ Vue.component('ranking', {
       </div>
     </div>
   </div>`,
-  
-  created(){
-  
-      this.$root.$refs.ranking = this;
+
+  created() {
+    this.$root.$refs.ranking = this;
   },
 
   mounted() {
@@ -600,14 +626,15 @@ Vue.component('ranking', {
       this.$root.$refs.vueheader.getProfile('false', id);
     },
 
-    fetchRanking(){
-      fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.result = data.ranking;
-      });
-
-    }
+    fetchRanking() {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.result = data.ranking;
+        });
+    },
   },
 });
 
@@ -694,7 +721,7 @@ Vue.component('vueheader', {
             <td>{{pending.sender}}</td>
             <td>{{pending.receiver}}</td>
             <td>{{pending.date}}</td>
-            <td><b-button @click="getChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
+            <td><b-button @click="clickChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
           </tr>
         </table>
       </div>
@@ -752,26 +779,10 @@ Vue.component('vueheader', {
   },
 
   methods: {
-    getChallenge: function (idChallenge) {
-      const store = userStore();
-      fetch(
-        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-game`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.loginInfo.token,
-          },
-          method: 'post',
-          body: JSON.stringify({
-            id: parseInt(idChallenge),
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(JSON.parse(data.game.jsonGame));
-        });
+    clickChallenge(id) {
+      this.$root.$refs.game.handlerChallenge(id);
     },
+
     openChallenges: function (evt, challengeName) {
       let i, challengeContent, tabLinks;
       challengeContent = document.getElementsByClassName('challengeContent');
