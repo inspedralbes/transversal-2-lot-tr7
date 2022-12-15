@@ -514,6 +514,8 @@ Vue.component('game', {
       this.showRankings = !this.showRankings;
 
       this.showResults = false;
+      this.$root.$refs.ranking.fetchRanking();
+
     },
   },
 });
@@ -583,19 +585,29 @@ Vue.component('ranking', {
       </div>
     </div>
   </div>`,
+  
+  created(){
+  
+      this.$root.$refs.ranking = this;
+  },
 
   mounted() {
-    fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
-      .then((response) => response.json())
-      .then((data) => {
-        this.result = data.ranking;
-      });
+    this.fetchRanking();
   },
 
   methods: {
     showProfile: function (id) {
       this.$root.$refs.vueheader.getProfile('false', id);
     },
+
+    fetchRanking(){
+      fetch(`http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/ranking`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.result = data.ranking;
+      });
+
+    }
   },
 });
 
@@ -641,7 +653,7 @@ Vue.component('vueheader', {
 
   template: `
   <div class="header">
-    <a href=""><img src="img/logo.png" alt="logo" /></a>
+    <img src="img/logo.png" alt="logo" />
     <div class="nav">
       <a @click="ranking()">Ranking</a>
       <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenges()">Challenge</a>
