@@ -156,7 +156,9 @@ Vue.component('finalResults', {
     this.getTime();
 
     let a = this.currentTime.split(':');
-    let seconds = parseInt(+a[0] * 60 + a[1]);
+    let a0 = parseInt(a[0]);
+    let a1 = parseInt(a[1]);
+    let seconds = a0 * 60 + a1;
 
     this.numAnswers =
       this.results.correctAnswers + this.results.incorrectAnswers;
@@ -351,7 +353,6 @@ Vue.component('game', {
             )
               .then((response) => response.json())
               .then((data) => {
-                console.log({ data });
                 fetch(
                   `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-score`,
                   {
@@ -741,7 +742,6 @@ Vue.component('vueheader', {
   methods: {
     getChallenge: function (idChallenge) {
       const store = userStore();
-      console.log({ idChallenge });
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/get-game`,
         {
@@ -787,7 +787,6 @@ Vue.component('vueheader', {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log({ data });
           this.challenges.completed = data.challenges.completed;
           this.challenges.pending = data.challenges.pending;
         });
@@ -896,7 +895,6 @@ Vue.component('vueheader', {
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log({ data });
             if ((data = true)) {
               Swal.fire({
                 position: 'top-end',
