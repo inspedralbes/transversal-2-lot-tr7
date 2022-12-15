@@ -206,7 +206,7 @@ Vue.component('quiz', {
   <div>
     <h2>{{game.question}}</h2>
     {{shuffle()}}
-      <button v-for="ans in shuffledAnswers" @click="$emit('evtAnswer', ans.index)">{{ ans.string }}</button>
+      <button class="question__buttonAnswers" v-for="ans in shuffledAnswers" @click="$emit('evtAnswer', ans.index, shuffledAnswers)" >{{ ans.string }}</button>
   </div>`,
 
   methods: {
@@ -257,6 +257,7 @@ Vue.component('game', {
       showRankings: false,
       gameId: 0,
       dailyGame: false,
+      buttonsIndex: 0,
     };
   },
   template: `
@@ -406,6 +407,7 @@ Vue.component('game', {
     },
 
     handler: function () {
+      this.buttonsIndex = 0;
       this.dailyGame = false;
       if (this.options.difficulty == '') {
         this.checkDifficulty = true;
@@ -425,15 +427,39 @@ Vue.component('game', {
       }
     },
 
-    checkAnswer: function (isCorrect) {
+    checkAnswer: function (isCorrect, arrQuestions) {
+      let buttons = document.getElementsByClassName("question__buttonAnswers");
+
       if (isCorrect == 1) {
         this.quizResults.correctAnswers += 1;
+
       } else {
         this.quizResults.incorrectAnswers += 1;
+
       }
 
-      this.nextQuestion(1);
-    },
+      let aux = this.buttonsIndex + 4;
+
+        for(let i = this.buttonsIndex; i < aux; i++){
+            let text = buttons[i].textContent;
+            buttons[i].disabled = "true";
+
+        for (j = 0; j < 4; j++){
+
+            if (text == arrQuestions[j].string){
+
+                if(arrQuestions[j].index == 0){
+                    buttons[i].style.backgroundColor = "#FF6961"; 
+                }
+                else{
+                    buttons[i].style.backgroundColor = "#C1E1C1";
+                }  
+            }
+        }
+      }
+        this.buttonsIndex += 4;
+        
+        setTimeout(() => this.nextQuestion(1), 1000);    },
 
     endDemo: function () {
       this.showIndex = true;
@@ -473,6 +499,7 @@ Vue.component('game', {
     },
 
     handlerDay: function () {
+      this.buttonsIndex = 0;
       this.quizResults.correctAnswers = 0;
       this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
