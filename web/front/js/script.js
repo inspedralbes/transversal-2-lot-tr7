@@ -1061,16 +1061,14 @@ Vue.component('vueheader', {
               token: data.token,
             };
             const d = new Date();
-<<<<<<< HEAD
             d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000);
             let expires = 'expires=' + d.toUTCString();
             document.cookie =
-              'sessionToken=' + data.token + ';' + expires + ';path=/';
-=======
-            d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-            let expires = "expires=" + d.toUTCString();
-            document.cookie = "sessionCookie=" + JSON.stringify(sessionCookie) + ";" + expires + ";path=/";
->>>>>>> 23b2b0224c2b7783e1762f30908d75620889aaa4
+              'sessionCookie=' +
+              JSON.stringify(sessionCookie) +
+              ';' +
+              expires +
+              ';path=/';
             this.$bvModal.hide('login-register');
             Swal.fire({
               position: 'top-end',
@@ -1101,7 +1099,8 @@ Vue.component('vueheader', {
       this.$root.$refs.game.ranking();
     },
     logout: function () {
-      document.cookie = 'sessionCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      document.cookie =
+        'sessionCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       location.reload();
     },
   },
