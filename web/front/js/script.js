@@ -567,9 +567,10 @@ Vue.component('game', {
       this.showCarousel = true;
       this.showIndex = false;
       this.isChallenge = false;
-      let data = new Date();
-      data.setUTCHours(23, 59, 59, 999);
-      document.cookie = 'dailyGame=true;' + data.toUTCString();
+      const d = new Date();
+      d.setUTCHours(23, 59, 59, 999);
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = "dailyGame=" + true + ";" + expires + ";path=/";
       this.loadDailyGame();
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
@@ -1043,6 +1044,10 @@ Vue.component('vueheader', {
             store.loginInfo.username = data.user.username;
             store.loginInfo.id = data.user.id;
             store.loginInfo.token = data.token;
+            const d = new Date();
+            d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = "sessionToken=" + data.token + ";" + expires + ";path=/";
             this.$bvModal.hide('login-register');
             Swal.fire({
               position: 'top-end',
