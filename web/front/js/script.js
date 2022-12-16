@@ -364,6 +364,9 @@ Vue.component('game', {
         });
     },
     handlerChallenge(id) {
+      this.$forceUpdate();
+
+      this.result = [];
       this.buttonsIndex = 0;
       this.quizResults.correctAnswers = 0;
       this.quizResults.incorrectAnswers = 0;
@@ -460,6 +463,9 @@ Vue.component('game', {
     },
 
     handler: function () {
+      this.$forceUpdate();
+
+      this.result = [];
       this.buttonsIndex = 0;
       this.dailyGame = false;
       if (this.options.difficulty == '' || this.options.category == '') {
@@ -549,6 +555,9 @@ Vue.component('game', {
     },
 
     handlerDay: function () {
+      this.$forceUpdate();
+
+      this.result = [];
       this.buttonsIndex = 0;
       this.quizResults.correctAnswers = 0;
       this.quizResults.incorrectAnswers = 0;
