@@ -305,6 +305,9 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
+        <br><br>
+        <hr v-show="userIsLogged()">
+        <br>
         <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="Boolean(getCookie('dailyGame='))">Daily Game</b-button>
        </div>
     </div>
