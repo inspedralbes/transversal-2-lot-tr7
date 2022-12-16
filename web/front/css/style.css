@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url("Beaufort.ttf");
+  src: url('Beaufort.ttf');
 }
 body {
   font-family: Beaufort;
@@ -266,4 +266,34 @@ footer:not(.modal-footer) {
 
 .rankings__user {
   text-align: center;
+}
+
+.buttonsDifficulty {
+  background-color: #f4ac45;
+}
+
+.game__selectOptions--difficulty label,
+.game__selectOptions--difficulty input {
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.game__selectOptions--difficulty input[type='radio'] {
+  opacity: 0.01;
+  z-index: 100;
+}
+
+.game__selectOptions--difficulty input[type='radio']:checked + label,
+.Checked + label {
+  opacity: 0.3;
+}
+
+.game__selectOptions--difficulty label {
+  padding: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  z-index: 90;
 }

@@ -281,9 +281,12 @@ Vue.component('game', {
 
       <div class="game__selectOptions">
       <div class="game__selectOptions--difficulty">
-        <b-form-checkbox id="easy" value="easy" v-model="options.difficulty">Easy</b-form-checkbox>
-        <b-form-checkbox id="medium" value="medium" v-model="options.difficulty">Medium</b-form-checkbox>
-        <b-form-checkbox id="hard" value="hard" v-model="options.difficulty">Hard</b-form-checkbox>
+        <input type="radio"  id="easy" value="easy" v-model="options.difficulty">
+        <label class="buttonsDifficulty" for="easy">Easy</label>
+        <input type="radio" id="medium" value="medium" v-model="options.difficulty">
+        <label class="buttonsDifficulty" for="medium">Medium</label>
+        <input type="radio" id="hard" value="hard" v-model="options.difficulty">
+        <label class="buttonsDifficulty" for="hard">Hard</label>
       </div>
 
       <div class="game__selectOptions--categories">
