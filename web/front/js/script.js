@@ -124,7 +124,7 @@ Vue.component('chronometer', {
 });
 
 Vue.component('finalResults', {
-  props: ['results', 'display', 'opt', 'idGame', 'daily'],
+  props: ['results', 'display', 'opt', 'idGame', 'daily', 'challenge'],
 
   data: function () {
     return {
@@ -166,6 +166,7 @@ Vue.component('finalResults', {
 
     const store = userStore();
     if (store.logged) {
+      console.log(this.idGame, this.points, seconds);
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-score`,
         {
@@ -178,6 +179,21 @@ Vue.component('finalResults', {
             idGame: this.idGame,
             points: this.points,
             time: seconds,
+          }),
+        }
+      );
+    }
+    if (this.challenge) {
+      fetch(
+        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/challenge-winner`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + store.loginInfo.token,
+          },
+          method: 'post',
+          body: JSON.stringify({
+            idGame: this.idGame,
           }),
         }
       );
@@ -255,6 +271,7 @@ Vue.component('game', {
       gameId: 0,
       dailyGame: false,
       buttonsIndex: 0,
+      isChallenge: false,
     };
   },
   template: `
@@ -297,7 +314,7 @@ Vue.component('game', {
       </div>
 
       <div class="game__results" v-if="showResults">
-        <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame></finalResults>
+        <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame :challenge=isChallenge></finalResults>
         <button @click="endDemo" >Return</button>
         <send_challenge v-if="userIsLogged()" v-show="!dailyGame" :idGame=gameId></send_challenge>
       </div>
@@ -326,8 +343,24 @@ Vue.component('game', {
       )
         .then((response) => response.json())
         .then((data) => {
+          fetch(
+            `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/create-score`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + store.loginInfo.token,
+              },
+              method: 'post',
+              body: JSON.stringify({
+                idGame: data.game.id,
+              }),
+            }
+          );
+          this.gameId = data.game.id;
           this.result = JSON.parse(data.game.jsonGame);
           this.$bvModal.hide('challenge');
+          this.options.difficulty = data.game.difficulty;
+          this.isChallenge = true;
         });
     },
     handlerChallenge(id) {
@@ -336,6 +369,7 @@ Vue.component('game', {
       this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
       this.showIndex = false;
+
       this.getChallenge(id);
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
@@ -441,6 +475,7 @@ Vue.component('game', {
         this.quizResults.incorrectAnswers = 0;
         this.showCarousel = true;
         this.showIndex = false;
+        this.isChallenge = false;
         this.getQuestions();
         setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
       }
@@ -519,6 +554,7 @@ Vue.component('game', {
       this.quizResults.incorrectAnswers = 0;
       this.showCarousel = true;
       this.showIndex = false;
+      this.isChallenge = false;
       let data = new Date();
       data.setUTCHours(23, 59, 59, 999);
       document.cookie = 'dailyGame=true;' + data.toUTCString();
