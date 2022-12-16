@@ -281,11 +281,11 @@ Vue.component('game', {
 
       <div class="game__selectOptions">
       <div class="game__selectOptions--difficulty">
-        <input type="radio"  id="easy" value="easy" v-model="options.difficulty" hidden>
+        <input type="radio"  id="easy" value="easy" v-model="options.difficulty">
         <label class="buttonsDifficulty" for="easy">Easy</label>
-        <input type="radio" id="medium" value="medium" v-model="options.difficulty" hidden>
+        <input type="radio" id="medium" value="medium" v-model="options.difficulty">
         <label class="buttonsDifficulty" for="medium">Medium</label>
-        <input type="radio" id="hard" value="hard" v-model="options.difficulty" hidden>
+        <input type="radio" id="hard" value="hard" v-model="options.difficulty">
         <label class="buttonsDifficulty" for="hard">Hard</label>
       </div>
 
@@ -568,8 +568,8 @@ Vue.component('game', {
       this.isChallenge = false;
       const d = new Date();
       d.setUTCHours(23, 59, 59, 999);
-      let expires = 'expires=' + d.toUTCString();
-      document.cookie = 'dailyGame=' + true + ';' + expires + ';path=/';
+      let expires = "expires=" + d.toUTCString();
+      document.cookie = "dailyGame=" + true + ";" + expires + ";path=/";
       this.loadDailyGame();
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
@@ -1061,14 +1061,9 @@ Vue.component('vueheader', {
               token: data.token,
             };
             const d = new Date();
-            d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000);
-            let expires = 'expires=' + d.toUTCString();
-            document.cookie =
-              'sessionCookie=' +
-              JSON.stringify(sessionCookie) +
-              ';' +
-              expires +
-              ';path=/';
+            d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = "sessionCookie=" + JSON.stringify(sessionCookie) + ";" + expires + ";path=/";
             this.$bvModal.hide('login-register');
             Swal.fire({
               position: 'top-end',
@@ -1099,8 +1094,7 @@ Vue.component('vueheader', {
       this.$root.$refs.game.ranking();
     },
     logout: function () {
-      document.cookie =
-        'sessionCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      document.cookie = 'sessionCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       location.reload();
     },
   },
