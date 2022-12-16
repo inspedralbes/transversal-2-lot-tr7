@@ -302,7 +302,7 @@ Vue.component('game', {
         </b-form-select>
         </div>
         <b-button @click="handler">Start Game</b-button>
-        <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="getCookie()">Daily Game</b-button>
+        <b-button @click="handlerDay" v-show="userIsLogged()" :disabled="Boolean(getCookie('dailyGame='))">Daily Game</b-button>
        </div>
     </div>
 
@@ -376,8 +376,7 @@ Vue.component('game', {
       this.getChallenge(id);
       setTimeout(() => this.showCurrentQuestion(this.slideIndex), 900);
     },
-    getCookie: function () {
-      let name = 'dailyGame=';
+    getCookie: function (name) {
       let decodedCookie = decodeURIComponent(document.cookie);
       let ca = decodedCookie.split(';');
       for (let i = 0; i < ca.length; i++) {
@@ -386,7 +385,7 @@ Vue.component('game', {
           c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
-          return Boolean(c.substring(name.length, c.length));
+          return c.substring(name.length, c.length);
         }
       }
     },
@@ -726,7 +725,7 @@ Vue.component('vueheader', {
 
   template: `
   <div class="header">
-    <img src="img/logo.png" alt="logo" />
+    <a href=""><img src="img/logo.png" alt="logo" /></a>
     <div class="nav">
       <a @click="ranking()">Ranking</a>
       <a v-b-modal.challenge v-show="userIsLogged()" @click="getChallenges()">Challenge</a>
@@ -780,7 +779,7 @@ Vue.component('vueheader', {
           <h3>Username: {{profile.username}} </h3>
           <h3>Email: {{profile.email}} </h3>
           <b-button v-show="canEditProfile" @click="editProfile">Edit Profile</b-button>
-          <a v-show="canEditProfile" href=""><b-button>Logout</b-button></a>
+          <a v-show="canEditProfile" @click="logout"><b-button>Logout</b-button></a>
         </div>
         <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
           <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
@@ -822,6 +821,18 @@ Vue.component('vueheader', {
 
   created() {
     this.$root.$refs.vueheader = this;
+  },
+
+  mounted() {
+    sessionCookie = this.$root.$refs.game.getCookie('sessionCookie=');
+    if (sessionCookie) {
+      sessionCookie = JSON.parse(sessionCookie);
+      const store = userStore();
+      store.logged = true;
+      store.loginInfo.id = sessionCookie.id;
+      store.loginInfo.username = sessionCookie.username;
+      store.loginInfo.token = sessionCookie.token;
+    }
   },
 
   methods: {
@@ -1041,10 +1052,15 @@ Vue.component('vueheader', {
             store.loginInfo.username = data.user.username;
             store.loginInfo.id = data.user.id;
             store.loginInfo.token = data.token;
+            let sessionCookie = {
+              id: data.user.id,
+              username: data.user.username,
+              token: data.token,
+            };
             const d = new Date();
             d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
             let expires = "expires=" + d.toUTCString();
-            document.cookie = "sessionToken=" + data.token + ";" + expires + ";path=/";
+            document.cookie = "sessionCookie=" + JSON.stringify(sessionCookie) + ";" + expires + ";path=/";
             this.$bvModal.hide('login-register');
             Swal.fire({
               position: 'top-end',
@@ -1073,6 +1089,10 @@ Vue.component('vueheader', {
 
     ranking: function () {
       this.$root.$refs.game.ranking();
+    },
+    logout: function () {
+      document.cookie = 'sessionCookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      location.reload();
     },
   },
 });

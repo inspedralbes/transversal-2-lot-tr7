@@ -44,8 +44,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
-            $cookie = cookie('cookie_token', $token, 60 * 24);
-            return response()->json(["login" => true, "token" => $token, "user" => $user], Response::HTTP_OK)->withoutCookie($cookie);
+            return response()->json(["login" => true, "token" => $token, "user" => $user], Response::HTTP_OK);
         } else {
             return response()->json(["login" => false], Response::HTTP_UNAUTHORIZED);
         }
