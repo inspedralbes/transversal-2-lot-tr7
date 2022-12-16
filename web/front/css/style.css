@@ -269,7 +269,8 @@ footer:not(.modal-footer) {
 }
 
 .buttonsDifficulty {
-  background-color: #f4ac45;
+  background-color: #fff;
+  color: black;
 }
 
 .game__selectOptions--difficulty label,
@@ -281,14 +282,14 @@ footer:not(.modal-footer) {
   bottom: 0;
 }
 
-.game__selectOptions--difficulty input[type='radio'] {
-  opacity: 0.01;
-  z-index: 100;
-}
-
 .game__selectOptions--difficulty input[type='radio']:checked + label,
 .Checked + label {
-  opacity: 0.3;
+  box-shadow: 0 0.5em 0.5em -0.4em;
+  transform: translateY(-0.5em);
+  border-color: 5px solid #f4ac45;
+  background-color: #f4ac45;
+
+  color: black;
 }
 
 .game__selectOptions--difficulty label {
