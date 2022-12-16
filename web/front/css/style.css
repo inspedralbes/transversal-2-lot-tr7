@@ -298,3 +298,22 @@ footer:not(.modal-footer) {
   cursor: pointer;
   z-index: 90;
 }
+
+.question__buttonAnswers{
+  border-radius: 40px;
+  transition: opacity 0.7s;
+  box-shadow: 15px 20px 15px black;
+  margin: 5px;
+  
+}
+
+.question__buttonAnswers:active{
+  transform: translateY(7px);
+  box-shadow: 10px 15px 5px black;
+  
+}
+
+/* https://codepen.io/web-dot-dev/pen/BarmdyM
+  https://web.dev/css-border-animations/
+
+*/

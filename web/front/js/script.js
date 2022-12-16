@@ -507,9 +507,7 @@ Vue.component('game', {
         for (j = 0; j < 4; j++) {
           if (text == arrQuestions[j].string) {
             if (arrQuestions[j].index == 0) {
-              buttons[i].style.backgroundColor = '#FF6961';
-            } else {
-              buttons[i].style.backgroundColor = '#C1E1C1';
+              buttons[i].style.opacity = 0.3;
             }
           }
         }
