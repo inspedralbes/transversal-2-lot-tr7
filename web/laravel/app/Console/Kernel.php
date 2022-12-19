@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
             $game->category = 'all';
             $game->type = 'daily';
             $game->save();
-        })->cron('1 1 * * *');
+        })->cron('1 0 * * *');
     }
 
     /**
