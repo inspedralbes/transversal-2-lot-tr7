@@ -242,12 +242,6 @@ footer:not(.modal-footer) {
   color: #f4ac45;
 }
 
-.rankings {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  margin-top: 70px;
-}
 .rankings__ranking {
   border: 2px solid #f4ac45;
   background-color: #585858;
@@ -301,7 +295,7 @@ footer:not(.modal-footer) {
 }
 
 .question__buttonAnswers {
-  border-radius: 40px;
+  border-radius: 10px;
   transition: opacity 0.7s;
   box-shadow: 15px 20px 15px black;
   margin: 5px;
@@ -338,6 +332,65 @@ thead {
   color: #f4ac45;
 }
 
+.rankings { 
+  max-width: 900px;
+  margin: auto auto;
+}
+
+.rankings__navBar{
+  background-color: black;
+  border-top-left-radius: 20px 20px;
+  border-top-right-radius: 20px 20px;
+  margin: auto auto;
+  border: 2px solid #f4ac45;
+  border-bottom: 2px solid white;
+  text-align: center;
+}
+
+.navBar__item{
+  display: inline-block;
+  padding: 15px 20px;
+  font-size: 20px;
+  border-left: 2px solid #f4ac45;
+  opacity: 0.4;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.navBar__item__first{
+ border-left: none;
+}
+
+.navBar__item__enabled{
+  opacity: 1;
+}
+
+.rankings__list{
+  background-color: #77878b;
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  border-bottom: 1px solid black;
+}
+.rankings__users{
+  border: 2px solid #f4ac45;
+  border-top: none;
+}
+
+.rankings__user{
+  cursor: pointer;
+}
+
+.rankings__user:hover{
+  color: #f4ac45;
+}
+
+div.rankings__list:nth-child(odd) {
+  background-color: #3e484b;
+}
+
+.rankings__daily__incomplete{
+  padding-top: 20px;
+}
 
 /* https://codepen.io/web-dot-dev/pen/BarmdyM
   https://web.dev/css-border-animations/

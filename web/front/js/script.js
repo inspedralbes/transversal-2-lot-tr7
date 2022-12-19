@@ -600,66 +600,42 @@ Vue.component('ranking', {
   data: function () {
     return {
       result: [],
+      otherUsers: [],
+      isDailyCompleted: false,
+      dailyClicked: false,
     };
   },
 
   template: `
   <div>
     <h1>Rankings</h1>
-    <div class="rankings">
-      <div class="rankings__ranking">
-        <div class="rankings__title">
-          <h2>Total Points</h2>
-        </div>
-        <ol>
-          <div class="rankings__list" v-for="users in result.totalPoints">
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-            <p class="rankings__user">{{users.pSum}}</p>
-          </div>
-        </ol>
+
+  <div class="rankings">
+    <div class="">
+      <div class="rankings__navBar">
+        <li class="navBar__item navBar__item__first" @click="loadRanking('points')">Total points</li>
+        <li class="navBar__item" @click="loadRanking('daily')">Daily game points</li>
+        <li class="navBar__item" @click="loadRanking('games')">Games completed</li>
+        <li class="navBar__item" @click="loadRanking('average')">Average points</li>
       </div>
-      <div class="rankings__ranking">
-        <div class="rankings__title">
-          <h2>Daily game points</h2>
+      <div class="rankings__users">
+
+        <p  v-if="dailyClicked & !isDailyCompleted">Be the first to complete the daily game</p>
+        <div class="rankings__list" v-for="(users, index) in otherUsers">
+        
+          <p>{{index+1}}</p>
+          <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
+            
+          <p class="">{{users.pSum}} {{users.points}}</p>
+        
         </div>
-        <ol>
-          <div class="rankings__list" v-for="users in result.dailyGame">
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-            <p class="rankings__user">{{users.points}}</p>
-          </div>
-        </ol>
-      </div>
-      <div class="rankings__ranking">
-        <div class="rankings__title">
-          <h2>Games completed</h2>
-        </div>
-        <ol>
-          <div class="rankings__list" v-for="users in result.totalGames">
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-            <p class="rankings__user">{{users.pSum}}</p>
-          </div>
-        </ol>
-      </div>
-      <div class="rankings__ranking">
-        <div class="rankings__title">
-          <h2>Average points</h2>
-        </div>
-        <ol>
-          <div class="rankings__list" v-for="users in result.averagePoints">
-            <li>
-              <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            </li>
-            <p class="rankings__user">{{users.pSum}}</p>
-          </div>
-        </ol>
+      
+    
       </div>
     </div>
+    
+  </div>
+    
   </div>`,
 
   created() {
@@ -682,9 +658,63 @@ Vue.component('ranking', {
         .then((response) => response.json())
         .then((data) => {
           this.result = data.ranking;
+          this.sliceAveragePoints();
+          this.loadRanking();
         });
     },
+    loadRanking: function(type){
+      let arrNavBAr = document.getElementsByClassName("navBar__item");
+      if (type == 'points' | type== null ){
+        this.dailyClicked = false;
+        this.resetNavBar(arrNavBAr, 1, 2, 3);
+        arrNavBAr[0].classList.add("navBar__item__enabled");
+        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
+      }
+      else if (type == 'daily'){
+        
+        this.dailyClicked = true;
+        if(this.result.dailyGame != null){
+          this.isDailyCompleted = true;
+          this.resetNavBar(arrNavBAr, 0, 2, 3);
+          arrNavBAr[1].classList.add("navBar__item__enabled");
+          this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
+        }
+        else {
+          this.isDailyCompleted = false;
+        }
+        
+      }
+      else if (type == 'games'){
+        this.dailyClicked = false;
+        this.resetNavBar(arrNavBAr, 1, 0, 3);
+        arrNavBAr[2].classList.add("navBar__item__enabled");
+        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
+      }
+      else if (type == 'average'){
+        this.dailyClicked = false;
+        this.resetNavBar(arrNavBAr, 1, 2, 0);
+        arrNavBAr[3].classList.add("navBar__item__enabled");
+        this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
+      }
+    },
+
+    resetNavBar: function(arr, i, j, z){
+      arr[i].classList.remove("navBar__item__enabled");
+      arr[j].classList.remove("navBar__item__enabled");
+      arr[z].classList.remove("navBar__item__enabled");
+
+    },
+
+    sliceAveragePoints: function(){
+      console.log(this.result.averagePoints);
+
+      for(i = 0; i <this.result.averagePoints.length; i++){
+        this.result.averagePoints[i].pSum = this.result.averagePoints[i].pSum.substring(0, 3);
+      }
+    }
   },
+
+  
 });
 
 Vue.component('vueheader', {
