@@ -34,6 +34,7 @@ header:not(.modal-header) {
 .header .nav a {
   margin-left: 30px;
   text-decoration: none;
+  cursor: pointer;
 }
 article {
   margin: 20px auto 80px;
@@ -330,6 +331,7 @@ footer:not(.modal-footer) {
 thead {
   color: #f4ac45;
 }
+
 
 /* https://codepen.io/web-dot-dev/pen/BarmdyM
   https://web.dev/css-border-animations/
