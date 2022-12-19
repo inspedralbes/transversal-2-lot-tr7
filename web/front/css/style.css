@@ -299,18 +299,36 @@ footer:not(.modal-footer) {
   z-index: 90;
 }
 
-.question__buttonAnswers{
+.question__buttonAnswers {
   border-radius: 40px;
   transition: opacity 0.7s;
   box-shadow: 15px 20px 15px black;
   margin: 5px;
-  
 }
 
-.question__buttonAnswers:active{
+.question__buttonAnswers:active {
   transform: translateY(7px);
   box-shadow: 10px 15px 5px black;
-  
+}
+
+.table {
+  color: white;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  color: white;
+}
+
+.nav-link {
+  color: white;
+}
+
+.nav-link:hover {
+  color: #f4ac45;
+}
+
+thead {
+  color: #f4ac45;
 }
 
 /* https://codepen.io/web-dot-dev/pen/BarmdyM

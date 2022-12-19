@@ -738,18 +738,36 @@ Vue.component('vueheader', {
     </div>
 
     <b-modal id="challenge" title="Challenges">
-      <div class="challenge__tab">
-        <b-button class="challenge__tab--links" @click="openChallenges($event, 'pending')">Pending</b-button>
-        <b-button class="challenge__tab--links" @click="openChallenges($event, 'completed')">Completed</b-button>
-      </div>
-      <div id="completed" class="challengeContent" style="display: none;">
-        <table>
+    <b-tabs content-class="mt-3" justified>
+    <b-tab title="Pending" active>
+      <table class="table table-striped text-center">
+        <thead>
+          <th>Sender</th>
+          <th>Receiver</th>
+          <th>Data</th>
+          <th>Play Game</th>
+        </thead>
+        <tbody>
+          <tr v-for="pending in challenges.pending" >
+            <td>{{pending.sender}}</td>
+            <td>{{pending.receiver}}</td>
+            <td>{{pending.date}}</td>
+            <td><b-button @click="clickChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
+          </tr>
+        </tbody>
+      </table>
+    </b-tab>
+    <b-tab title="Completed">
+      <table class="table table-striped text-center">
+        <thead>
           <th>Winner</th>
           <th>Sender Points</th>
           <th>Sender</th>
           <th>Receiver Points</th>
           <th>Receiver</th>
           <th>Data</th>
+        </thead>
+        <tbody>
           <tr v-for="completed in challenges.completed">
             <td>{{completed.winner}}</td>
             <td>{{completed.senderPoints}}</td>
@@ -758,22 +776,10 @@ Vue.component('vueheader', {
             <td>{{completed.receiver}}</td>
             <td>{{completed.date}}</td>
           </tr>
-        </table>
-      </div>
-      <div id="pending" class="challengeContent" >
-        <table>
-          <th>Sender</th>
-          <th>Receiver</th>
-          <th>Data</th>
-          <th>Play Game</th>
-          <tr v-for="pending in challenges.pending" >
-            <td>{{pending.sender}}</td>
-            <td>{{pending.receiver}}</td>
-            <td>{{pending.date}}</td>
-            <td><b-button @click="clickChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
-          </tr>
-        </table>
-      </div>
+        </tbody>
+      </table>
+    </b-tab>
+  </b-tabs>
     </b-modal>
 
     <b-modal id="profile" title="Profile">
@@ -842,20 +848,6 @@ Vue.component('vueheader', {
   methods: {
     clickChallenge(id) {
       this.$root.$refs.game.handlerChallenge(id);
-    },
-
-    openChallenges: function (evt, challengeName) {
-      let i, challengeContent, tabLinks;
-      challengeContent = document.getElementsByClassName('challengeContent');
-      for (i = 0; i < challengeContent.length; i++) {
-        challengeContent[i].style.display = 'none';
-      }
-      tabLinks = document.getElementsByClassName('challenge__tab--links');
-      for (i = 0; i < tabLinks.length; i++) {
-        tabLinks[i].className = tabLinks[i].className.replace(' active', '');
-      }
-      document.getElementById(challengeName).style.display = 'block';
-      evt.currentTarget.className += ' active';
     },
     getChallenges: function () {
       const store = userStore();
