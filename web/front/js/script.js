@@ -8,11 +8,11 @@ Vue.component('send_challenge', {
   },
 
   template: `
-  <div>
-  <label for="users">Choose a user</label>
-  <b-form-select id="users" v-model="idUser">
-    <option v-for="(users, id) in result.usersList" :value=id>{{users}}</option>
-  </b-form-select>
+  <div class="game__results--challenge">
+    <p>Choose a user to send this challenge</p>
+    <b-form-select id="users" v-model="idUser">
+      <option v-for="(users, id) in result.usersList" :value=id>{{users}}</option>
+    </b-form-select>
     <b-button @click="sendChallenge()">Send challenge</b-button>
   </div>`,
 
@@ -32,7 +32,19 @@ Vue.component('send_challenge', {
             idGame: this.idGame,
           }),
         }
-      );
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Challenge Sent',
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }
+        });
     },
   },
 
@@ -131,15 +143,21 @@ Vue.component('finalResults', {
       numAnswers: 0,
       points: 0,
       selectDifficulty: 0,
+      winner: '',
+      isWinner: false,
     };
   },
 
-  template: `<div>
-    Final results: {{results.correctAnswers}}/{{numAnswers}}
-    Points: {{points}}
+  template: `
+  <div class="game__results--finalResults">
+    <h2>Game Stats</h2>
+    <hr>
+    <p>Final results: {{results.correctAnswers}}/{{numAnswers}}</p>
+    <p>Points: {{points}}</p>
     {{getTime()}}
-    Time: {{currentTime}}
+    <p>Time: {{currentTime}}</p>
 
+    <p class="game--winner" v-show="isWinner">🏆 {{winner}} WINS! 🏆</p>
   </div>`,
   mounted() {
     if (!this.daily) {
@@ -166,7 +184,6 @@ Vue.component('finalResults', {
 
     const store = userStore();
     if (store.logged) {
-      console.log(this.idGame, this.points, seconds);
       fetch(
         `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/update-score`,
         {
@@ -181,22 +198,31 @@ Vue.component('finalResults', {
             time: seconds,
           }),
         }
-      );
-    }
-    if (this.challenge) {
-      fetch(
-        `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/challenge-winner`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + store.loginInfo.token,
-          },
-          method: 'post',
-          body: JSON.stringify({
-            idGame: this.idGame,
-          }),
-        }
-      );
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (this.challenge) {
+            fetch(
+              `http://trivial7.alumnes.inspedralbes.cat/laravel/public/api/challenge-winner`,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Bearer ' + store.loginInfo.token,
+                },
+                method: 'post',
+                body: JSON.stringify({
+                  idGame: this.idGame,
+                }),
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                console.log({ data });
+                this.winner = data.winner;
+                this.isWinner = true;
+              });
+          }
+        });
     }
   },
   methods: {
@@ -280,6 +306,7 @@ Vue.component('game', {
       <h1 class="index_title">League of Trivial</h1>
 
       <div class="game__selectOptions">
+      <h3 class="titleMenu">Choose a difficulty</h3>
       <div class="game__selectOptions--difficulty">
         <input type="radio"  id="easy" value="easy" v-model="options.difficulty" hidden>
         <label class="buttonsDifficulty" for="easy">Easy</label>
@@ -289,8 +316,8 @@ Vue.component('game', {
         <label class="buttonsDifficulty" for="hard">Hard</label>
       </div>
 
+      <h3 class="titleMenu">Choose a category</h3>
       <div class="game__selectOptions--categories">
-        <label for="category">Choose a category</label>
         <b-form-select id="category" v-model="options.category">
           <option value="arts_and_literature">Arts & Literature</option>
           <option value="film_and_tv">Film & TV</option>
@@ -321,8 +348,8 @@ Vue.component('game', {
 
       <div class="game__results" v-if="showResults">
         <finalResults :opt=options :results=quizResults :display=showResults :idGame=gameId :daily=dailyGame :challenge=isChallenge></finalResults>
-        <button @click="endDemo" >Return</button>
-        <send_challenge v-if="userIsLogged()" v-show="!dailyGame" :idGame=gameId></send_challenge>
+        <b-button class="game__results--buttonReturn" @click="endDemo">Return</b-button>
+        <send_challenge v-if="userIsLogged() && !isChallenge" v-show="!dailyGame" :idGame=gameId></send_challenge>
       </div>
       <ranking v-show="showRankings"></ranking>
     </div>`,
@@ -510,7 +537,7 @@ Vue.component('game', {
         for (j = 0; j < 4; j++) {
           if (text == arrQuestions[j].string) {
             if (arrQuestions[j].index == 0) {
-              buttons[i].classList.add("question__buttonAnswers__disabled");
+              buttons[i].classList.add('question__buttonAnswers__disabled');
             }
           }
         }
@@ -622,20 +649,20 @@ Vue.component('ranking', {
 
         <p  v-if="dailyClicked & !isDailyCompleted">Be the first to complete the daily game</p>
         <div class="rankings__list" v-for="(users, index) in otherUsers">
-        
+
           <p>{{index+1}}</p>
           <p @click="showProfile(users.idUser)" class="rankings__user">{{users.username}}</p>
-            
+
           <p class="">{{users.pSum}} {{users.points}}</p>
-        
+
         </div>
-      
-    
+
+
       </div>
     </div>
-    
+
   </div>
-    
+
   </div>`,
 
   created() {
@@ -662,61 +689,53 @@ Vue.component('ranking', {
           this.loadRanking();
         });
     },
-    loadRanking: function(type){
-      let arrNavBAr = document.getElementsByClassName("navBar__item");
-      if (type == 'points' | type== null ){
+    loadRanking: function (type) {
+      let arrNavBAr = document.getElementsByClassName('navBar__item');
+      if ((type == 'points') | (type == null)) {
         this.dailyClicked = false;
         this.resetNavBar(arrNavBAr, 1, 2, 3);
-        arrNavBAr[0].classList.add("navBar__item__enabled");
+        arrNavBAr[0].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
-      }
-      else if (type == 'daily'){
-        
+      } else if (type == 'daily') {
         this.dailyClicked = true;
-        if(this.result.dailyGame != null){
+        if (this.result.dailyGame != null) {
           this.isDailyCompleted = true;
           this.resetNavBar(arrNavBAr, 0, 2, 3);
-          arrNavBAr[1].classList.add("navBar__item__enabled");
+          arrNavBAr[1].classList.add('navBar__item__enabled');
           this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
-        }
-        else {
+        } else {
           this.isDailyCompleted = false;
         }
-        
-      }
-      else if (type == 'games'){
+      } else if (type == 'games') {
         this.dailyClicked = false;
         this.resetNavBar(arrNavBAr, 1, 0, 3);
-        arrNavBAr[2].classList.add("navBar__item__enabled");
+        arrNavBAr[2].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
-      }
-      else if (type == 'average'){
+      } else if (type == 'average') {
         this.dailyClicked = false;
         this.resetNavBar(arrNavBAr, 1, 2, 0);
-        arrNavBAr[3].classList.add("navBar__item__enabled");
+        arrNavBAr[3].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
       }
     },
 
-    resetNavBar: function(arr, i, j, z){
-      arr[i].classList.remove("navBar__item__enabled");
-      arr[j].classList.remove("navBar__item__enabled");
-      arr[z].classList.remove("navBar__item__enabled");
-
+    resetNavBar: function (arr, i, j, z) {
+      arr[i].classList.remove('navBar__item__enabled');
+      arr[j].classList.remove('navBar__item__enabled');
+      arr[z].classList.remove('navBar__item__enabled');
     },
 
-    sliceAveragePoints: function(){
+    sliceAveragePoints: function () {
       console.log(this.result.averagePoints);
 
-      for(i = 0; i <this.result.averagePoints.length; i++){
-        this.result.averagePoints[i].pSum = this.result.averagePoints[i].pSum.substring(0, 3);
+      for (i = 0; i < this.result.averagePoints.length; i++) {
+        this.result.averagePoints[i].pSum = this.result.averagePoints[
+          i
+        ].pSum.substring(0, 3);
       }
-    }
+    },
   },
-
-  
 });
-
 Vue.component('vueheader', {
   data: function () {
     return {
@@ -822,10 +841,10 @@ Vue.component('vueheader', {
           <a v-show="canEditProfile" @click="logout"><b-button>Logout</b-button></a>
         </div>
         <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
-          <h3>Username:  </h3> <b-form-input v-model="profile.username"/>
-          <h3>Email: </h3> <b-form-input v-model="profile.email"/>
-          <h3>Password: </h3> <b-form-input type="password" v-model="profile.password" />
-          <h3>Repeat password: </h3> <b-form-input type="password" v-model="profile.repeatPassword" />
+          <h3>Username:  </h3> <input v-model="profile.username"/>
+          <h3>Email: </h3> <input v-model="profile.email"/>
+          <h3>Password: </h3> <input type="password" v-model="profile.password" />
+          <h3>Repeat password: </h3> <input type="password" v-model="profile.repeatPassword" />
           <b-button v-show="canEditProfile" @click="editProfile">Save Profile</b-button>
         </div>
       </div>
@@ -844,7 +863,7 @@ Vue.component('vueheader', {
     <b-modal id="login-register" title="Login / Register">
       <div class="form__login">
       <h2>Login</h2>
-        <input v-model="login.username" placeholder="Username" />
+        <input type="text" v-model="login.username" placeholder="Username" />
         <input type="password" v-model="login.password" placeholder="Password" />
         <b-button @click="loginFunction">Login</b-button>
       </div>
