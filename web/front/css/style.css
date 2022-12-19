@@ -312,6 +312,12 @@ footer:not(.modal-footer) {
   box-shadow: 10px 15px 5px black;
 }
 
+.question__buttonAnswers__disabled{
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+
 .table {
   color: white;
 }
