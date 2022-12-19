@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Score;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +43,11 @@ class ScoreController extends Controller
         $score->time = $request->time;
         $score->completed = true;
 
-        if ($score->save()) {
+        $user = User::find(auth()->user()->id);
+        $totalPoints = DB::table('score')->where('idUser', $user->id)->sum('points');
+        $user->level = round($totalPoints / 2000, 0);
+
+        if ($score->save() && $user->save()) {
             return response()->json(true, Response::HTTP_CREATED);
         } else {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
