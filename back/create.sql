@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 29-11-2022 a las 11:42:58
+-- Tiempo de generación: 20-12-2022 a las 12:48:56
 -- Versión del servidor: 10.6.10-MariaDB-1:10.6.10+maria~ubu2004
 -- Versión de PHP: 7.4.30
 
@@ -32,8 +32,8 @@ CREATE TABLE `challange` (
   `idSender` bigint(20) UNSIGNED NOT NULL,
   `idReceiver` bigint(20) UNSIGNED NOT NULL,
   `idGame` bigint(20) UNSIGNED NOT NULL,
-  `idWinner` bigint(20) UNSIGNED NOT NULL,
-  `data` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `idWinner` bigint(20) UNSIGNED DEFAULT NULL,
+  `date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -62,11 +62,11 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `game` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `jsonGame` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`jsonGame`)),
+  `jsonGame` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `difficulty` enum('easy','medium','hard') COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` enum('demo','daily','standard') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('daily','standard') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -93,7 +93,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '2022_11_29_080713_create_game_table', 1),
 (4, '2022_11_29_080726_create_user_table', 1),
 (5, '2022_11_29_080741_create_challange_table', 1),
-(6, '2022_11_29_080812_create_score_table', 1);
+(7, '2022_11_29_080812_create_score_table', 2);
 
 -- --------------------------------------------------------
 
@@ -124,9 +124,9 @@ CREATE TABLE `score` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `idUser` bigint(20) UNSIGNED NOT NULL,
   `idGame` bigint(20) UNSIGNED NOT NULL,
-  `points` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
-  `completed` tinyint(1) NOT NULL,
+  `points` int(11) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  `completed` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -142,10 +142,18 @@ CREATE TABLE `user` (
   `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nivell` int(11) NOT NULL,
+  `level` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `email`, `password`, `level`, `created_at`, `updated_at`) VALUES
+(1, 'pedra', 'pedra@inspedralbes.cat', '$2y$10$slyBHFA.b8BFYiq3SmTYxORKdsvdzxuCJ6xpFibn5H7mmiONeRvSe', 0, '2022-12-20 10:13:18', '2022-12-20 10:13:18'),
+(2, 'ausias', 'ausias@inspedralbes.cat', '$2y$10$fQlaovE0BLkQRNQpmdZBUOT16XHWK/3n4VON9zlQb8Ths/3oqVFni', 0, '2022-12-20 10:13:32', '2022-12-20 10:13:32');
 
 --
 -- Índices para tablas volcadas
@@ -212,7 +220,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `challange`
 --
 ALTER TABLE `challange`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -224,31 +232,31 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT de la tabla `game`
 --
 ALTER TABLE `game`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `score`
 --
 ALTER TABLE `score`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
