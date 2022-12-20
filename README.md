@@ -14,4 +14,4 @@
 
 ### Estat
 
-- Fase final
+- Acabat
