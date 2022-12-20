@@ -666,4 +666,14 @@ div.rankings__list:nth-child(odd) {
     position: initial;
     transform: none !important;
   }
+  #login-register .modal-body {
+    grid-template-columns: 100%;
+    padding: 20px;
+  }
+  #login-register .modal-body .form__login {
+    margin-bottom: 40px;
+  }
+  #login-register .modal-body div {
+    width: 100%;
+  }
 }
