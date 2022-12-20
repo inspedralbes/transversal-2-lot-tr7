@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url('Beaufort.ttf');
+  src: url("Beaufort.ttf");
 }
 body {
   font-family: Beaufort;
@@ -367,7 +367,7 @@ footer:not(.modal-footer) {
   bottom: 0;
 }
 
-.game__selectOptions--difficulty input[type='radio']:checked + label,
+.game__selectOptions--difficulty input[type="radio"]:checked + label,
 .Checked + label {
   transform: scale(1.2);
   border: 2px solid #f4ac45;
@@ -397,7 +397,7 @@ footer:not(.modal-footer) {
   opacity: 0.3;
 }
 
-.question__buttonAnswers__correct{
+.question__buttonAnswers__correct {
   pointer-events: none;
 }
 
@@ -487,4 +487,53 @@ div.rankings__list:nth-child(odd) {
 
 .rankings__daily__incomplete {
   padding-top: 20px;
+}
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 600px) {
+  .header .nav a {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  article {
+    margin: 20px auto;
+  }
+  footer:not(.modal-footer) {
+    position: initial;
+  }
+  .game__selectOptions--difficulty {
+    font-size: 20px;
+  }
+  .game__selectOptions--difficulty label {
+    margin: 0 10px;
+  }
+  .game__selectOptions--categories select {
+    width: auto;
+  }
+  .titleMenu {
+    margin: 20px 0 0;
+  }
+  .game__carousel--mySlides div {
+    width: 90%;
+    display: block;
+  }
+  .game__carousel--mySlides h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  .game button {
+    display: block;
+    margin: 25px auto 0;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px 20px;
+  }
+  .footer__container {
+    flex-direction: column;
+  }
+  .footer__container p {
+    margin-bottom: 10px;
+  }
 }
