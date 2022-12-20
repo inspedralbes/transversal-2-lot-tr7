@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url('Beaufort.ttf');
+  src: url("Beaufort.ttf");
 }
 body {
   font-family: Beaufort;
@@ -113,6 +113,10 @@ footer:not(.modal-footer) {
   width: 100%;
   height: 100%;
   animation: fadeInAnimation ease 1s;
+  -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 .game__carousel--mySlides div {
   position: absolute;
@@ -367,7 +371,7 @@ footer:not(.modal-footer) {
   bottom: 0;
 }
 
-.game__selectOptions--difficulty input[type='radio']:checked + label,
+.game__selectOptions--difficulty input[type="radio"]:checked + label,
 .Checked + label {
   transform: scale(1.2);
   border: 2px solid #f4ac45;
