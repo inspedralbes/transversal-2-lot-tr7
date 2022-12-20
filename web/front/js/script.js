@@ -45,9 +45,9 @@ Vue.component('send_challenge', {
             });
           }
         });
-       
-        delete this.result.usersList[this.idUser];
-        this.$forceUpdate();
+
+      delete this.result.usersList[this.idUser];
+      this.$forceUpdate();
     },
   },
 
@@ -540,8 +540,7 @@ Vue.component('game', {
           if (text == arrQuestions[j].string) {
             if (arrQuestions[j].index == 0) {
               buttons[i].classList.add('question__buttonAnswers__disabled');
-            }
-            else{
+            } else {
               buttons[i].classList.add('question__buttonAnswers__correct');
             }
           }
@@ -695,30 +694,23 @@ Vue.component('ranking', {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
 
       if ((type == 'points') | (type == null)) {
-
         this.resetNavBar(arrNavBAr, 1, 2, 3);
         arrNavBAr[0].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
-
       } else if (type == 'daily') {
-        
         this.dailyClicked = true;
-        
+
         if (this.result.dailyGame != null) {
           this.isDailyCompleted = true;
           this.resetNavBar(arrNavBAr, 0, 2, 3);
           arrNavBAr[1].classList.add('navBar__item__enabled');
           this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
-        } 
-
+        }
       } else if (type == 'games') {
-
         this.resetNavBar(arrNavBAr, 1, 0, 3);
         arrNavBAr[2].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
-
       } else if (type == 'average') {
-
         this.resetNavBar(arrNavBAr, 1, 2, 0);
         arrNavBAr[3].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
@@ -732,7 +724,6 @@ Vue.component('ranking', {
     },
 
     sliceAveragePoints: function () {
-
       for (i = 0; i < this.result.averagePoints.length; i++) {
         this.result.averagePoints[i].pSum = this.result.averagePoints[
           i
@@ -794,44 +785,48 @@ Vue.component('vueheader', {
     <b-modal id="challenge" title="Challenges">
     <b-tabs content-class="mt-3" justified>
     <b-tab title="Pending" active>
-      <table class="table table-striped text-center">
-        <thead>
-          <th>Sender</th>
-          <th>Receiver</th>
-          <th>Data</th>
-          <th>Play Game</th>
-        </thead>
-        <tbody>
-          <tr v-for="pending in challenges.pending" >
-            <td>{{pending.sender}}</td>
-            <td>{{pending.receiver}}</td>
-            <td>{{pending.date}}</td>
-            <td><b-button @click="clickChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="pendingTable">
+        <table class="table table-striped text-center">
+          <thead>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Data</th>
+            <th>Play Game</th>
+          </thead>
+          <tbody>
+            <tr v-for="pending in challenges.pending" >
+              <td>{{pending.sender}}</td>
+              <td>{{pending.receiver}}</td>
+              <td>{{pending.date}}</td>
+              <td><b-button @click="clickChallenge(pending.idGame)" :value=pending.idGame>Play Challenge</b-button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </b-tab>
     <b-tab title="Completed">
-      <table class="table table-striped text-center">
-        <thead>
-          <th>Winner</th>
-          <th>Sender Points</th>
-          <th>Sender</th>
-          <th>Receiver Points</th>
-          <th>Receiver</th>
-          <th>Data</th>
-        </thead>
-        <tbody>
-          <tr v-for="completed in challenges.completed">
-            <td>{{completed.winner}}</td>
-            <td>{{completed.senderPoints}}</td>
-            <td>{{completed.sender}}</td>
-            <td>{{completed.receiverPoints}}</td>
-            <td>{{completed.receiver}}</td>
-            <td>{{completed.date}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="completedTable">
+        <table class="table table-striped text-center">
+          <thead>
+            <th>Winner</th>
+            <th>Sender</th>
+            <th>Sender Points</th>
+            <th>Receiver</th>
+            <th>Receiver Points</th>
+            <th>Data</th>
+          </thead>
+          <tbody>
+            <tr v-for="completed in challenges.completed">
+              <td>{{completed.winner}}</td>
+              <td>{{completed.sender}}</td>
+              <td>{{completed.senderPoints}}</td>
+              <td>{{completed.receiver}}</td>
+              <td>{{completed.receiverPoints}}</td>
+              <td>{{completed.date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </b-tab>
   </b-tabs>
     </b-modal>
@@ -840,20 +835,20 @@ Vue.component('vueheader', {
       <div class="profile__info">
         <img src="img/foto.png" alt="logo" />
         <div class="profile__info--editProfile" v-show="!profile.inProcessToEdit">
-          <h3>Username: {{profile.username}} </h3>
-          <h3>Email: {{profile.email}} </h3>
+          <h3> <span class="profile__title"> Username: </span> {{profile.username}} </h3>
+          <h3> <span class="profile__title"> Email: </span> {{profile.email}} </h3>
           <b-button v-show="canEditProfile" @click="editProfile">Edit Profile</b-button>
-          <a v-show="canEditProfile" @click="logout"><b-button>Logout</b-button></a>
+          <b-button v-show="canEditProfile" @click="logout">Logout</b-button>
         </div>
         <div class="profile__info--editProfile" v-show="profile.inProcessToEdit">
           <h3>Username:  </h3> <input v-model="profile.username"/>
           <h3>Email: </h3> <input v-model="profile.email"/>
           <h3>Password: </h3> <input type="password" v-model="profile.password" />
           <h3>Repeat password: </h3> <input type="password" v-model="profile.repeatPassword" />
-          <b-button v-show="canEditProfile" @click="editProfile">Save Profile</b-button>
+          <b-button class="editButton" v-show="canEditProfile" @click="editProfile">Save Profile</b-button>
         </div>
       </div>
-      <div class="stats">
+      <div class="stats" v-show="!profile.inProcessToEdit">
         <h3> <span class="stats__title"> Level </span> {{profile.level}}</h3>
         <h3> <span class="stats__title"> Total Points </span> {{stats.totalPoints}}</h3>
         <h3> <span class="stats__title"> Time Played </span> {{stats.totalTime}}</h3>
@@ -998,6 +993,8 @@ Vue.component('vueheader', {
       this.stats.avgTimePerGame = hDisplayTG + mDisplayTG + sDisplayTG;
 
       this.stats.lastGamePlayed = this.stats.lastGamePlayed.split(' ')[0];
+      this.stats.avgPointsPerGame = Math.trunc(this.stats.avgPointsPerGame);
+
       this.$bvModal.show('profile');
     },
 
