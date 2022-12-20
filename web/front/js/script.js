@@ -47,7 +47,7 @@ Vue.component('send_challenge', {
         });
        
         delete this.result.usersList[this.idUser];
-        console.log(this.result);
+        this.$forceUpdate();
     },
   },
 
@@ -220,7 +220,6 @@ Vue.component('finalResults', {
             )
               .then((response) => response.json())
               .then((data) => {
-                console.log({ data });
                 this.winner = data.winner;
                 this.isWinner = true;
               });
