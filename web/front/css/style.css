@@ -1,6 +1,6 @@
 @font-face {
   font-family: Beaufort;
-  src: url("Beaufort.ttf");
+  src: url('Beaufort.ttf');
 }
 body {
   font-family: Beaufort;
@@ -367,7 +367,7 @@ footer:not(.modal-footer) {
   bottom: 0;
 }
 
-.game__selectOptions--difficulty input[type="radio"]:checked + label,
+.game__selectOptions--difficulty input[type='radio']:checked + label,
 .Checked + label {
   transform: scale(1.2);
   border: 2px solid #f4ac45;
@@ -675,5 +675,12 @@ div.rankings__list:nth-child(odd) {
   }
   #login-register .modal-body div {
     width: 100%;
+  }
+
+  .pendingTable td,
+  .completedTable td,
+  .pendingTable th,
+  .completedTable th {
+    white-space: nowrap;
   }
 }
