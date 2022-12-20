@@ -700,9 +700,8 @@ Vue.component('ranking', {
         .then((response) => response.json())
         .then((data) => {
           this.result = data.ranking;
-          this.sliceAveragePoints();
-          this.loadRanking();
         });
+      this.loadRanking();
     },
     loadRanking: function (type) {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
@@ -744,6 +743,11 @@ Vue.component('ranking', {
         this.rankingTitle = 'Average points';
         arrNavBAr[3].classList.add('navBar__item__enabled');
         arrNavMobile[3].classList.add('rankings__type__enabled');
+        for (i = 0; i < this.result.averagePoints.length; i++) {
+          this.result.averagePoints[i].pSum = Math.trunc(
+            this.result.averagePoints[i].pSum
+          );
+        }
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
       }
     },
