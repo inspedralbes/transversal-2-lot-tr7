@@ -539,6 +539,9 @@ Vue.component('game', {
             if (arrQuestions[j].index == 0) {
               buttons[i].classList.add('question__buttonAnswers__disabled');
             }
+            else{
+              buttons[i].classList.add('question__buttonAnswers__correct');
+            }
           }
         }
       }
@@ -688,7 +691,7 @@ Vue.component('ranking', {
     },
     loadRanking: function (type) {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
-      
+
       if ((type == 'points') | (type == null)) {
 
         this.resetNavBar(arrNavBAr, 1, 2, 3);

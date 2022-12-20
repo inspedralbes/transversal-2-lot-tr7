@@ -397,6 +397,10 @@ footer:not(.modal-footer) {
   opacity: 0.3;
 }
 
+.question__buttonAnswers__correct{
+  pointer-events: none;
+}
+
 .table {
   color: white;
 }
