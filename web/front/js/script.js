@@ -632,6 +632,7 @@ Vue.component('ranking', {
     return {
       result: [],
       otherUsers: [],
+      rankingTitle: '',
     };
   },
 
@@ -640,6 +641,14 @@ Vue.component('ranking', {
     <h1>Rankings</h1>
 
   <div class="rankings">
+
+  <div class="rankings__type__mobile">
+        <p class="rankings__type__buttons" @click="loadRanking('points')">Points</p>
+        <p class="rankings__type__buttons" @click="loadRanking('daily')">Daily</p>
+        <p class="rankings__type__buttons" @click="loadRanking('games')">Games</p>
+        <p class="rankings__type__buttons" @click="loadRanking('average')">Average</p>
+      </div>
+
     <div class="">
       <div class="rankings__navBar">
         <li class="navBar__item navBar__item__first" @click="loadRanking('points')">Total points</li>
@@ -647,6 +656,11 @@ Vue.component('ranking', {
         <li class="navBar__item" @click="loadRanking('games')">Games completed</li>
         <li class="navBar__item" @click="loadRanking('average')">Average points</li>
       </div>
+
+      <div class="rankings__title__mobile">
+        <p class="navBar__title__mobile">{{ rankingTitle }}</p>
+      </div>
+      
       <div class="rankings__users">
 
         <div class="rankings__list" v-for="(users, index) in otherUsers">
@@ -692,38 +706,62 @@ Vue.component('ranking', {
     },
     loadRanking: function (type) {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
+      let arrNavMobile = document.getElementsByClassName('rankings__type__buttons');
 
       if ((type == 'points') | (type == null)) {
-        this.resetNavBar(arrNavBAr, 1, 2, 3);
-        arrNavBAr[0].classList.add('navBar__item__enabled');
-        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
-      } else if (type == 'daily') {
-        this.dailyClicked = true;
 
+        this.resetNavBar(arrNavBAr, 1, 2, 3, 'navBar__item__enabled');
+        this.resetNavBar(arrNavMobile, 1, 2, 3, 'rankings__type__enabled');
+        this.rankingTitle = "Total points";
+        arrNavBAr[0].classList.add('navBar__item__enabled');
+        arrNavMobile[0].classList.add('rankings__type__enabled');
+        
+        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
+
+      } else if (type == 'daily') {
+        
+        this.dailyClicked = true;
+        
         if (this.result.dailyGame != null) {
           this.isDailyCompleted = true;
-          this.resetNavBar(arrNavBAr, 0, 2, 3);
+          this.rankingTitle = "Daily game points";
+          this.resetNavBar(arrNavBAr, 0, 2, 3, 'navBar__item__enabled');
+          this.resetNavBar(arrNavMobile, 0, 2, 3, 'rankings__type__enabled');
+
           arrNavBAr[1].classList.add('navBar__item__enabled');
+          arrNavMobile[1].classList.add('rankings__type__enabled');
           this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
-        }
+        } 
+
       } else if (type == 'games') {
-        this.resetNavBar(arrNavBAr, 1, 0, 3);
+
+        this.resetNavBar(arrNavBAr, 1, 0, 3, 'navBar__item__enabled');
+        this.resetNavBar(arrNavMobile, 1, 0, 3, 'rankings__type__enabled');
+        this.rankingTitle = "Games completed";
         arrNavBAr[2].classList.add('navBar__item__enabled');
+        arrNavMobile[2].classList.add('rankings__type__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
+
       } else if (type == 'average') {
-        this.resetNavBar(arrNavBAr, 1, 2, 0);
+
+        this.resetNavBar(arrNavBAr, 1, 2, 0, 'navBar__item__enabled');
+        this.resetNavBar(arrNavMobile, 1, 2, 0, 'rankings__type__enabled');
+        this.rankingTitle = "Average points";
         arrNavBAr[3].classList.add('navBar__item__enabled');
+        arrNavMobile[3].classList.add('rankings__type__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
       }
     },
 
-    resetNavBar: function (arr, i, j, z) {
-      arr[i].classList.remove('navBar__item__enabled');
-      arr[j].classList.remove('navBar__item__enabled');
-      arr[z].classList.remove('navBar__item__enabled');
+    resetNavBar: function (arr, i, j, z, text) {
+      arr[i].classList.remove(text);
+      arr[j].classList.remove(text);
+      arr[z].classList.remove(text);
+      
     },
 
     sliceAveragePoints: function () {
+
       for (i = 0; i < this.result.averagePoints.length; i++) {
         this.result.averagePoints[i].pSum = this.result.averagePoints[
           i
