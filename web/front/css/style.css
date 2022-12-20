@@ -489,14 +489,14 @@ div.rankings__list:nth-child(odd) {
   padding-top: 20px;
 }
 
-.rankings__navBar__mobile{
+.rankings__navBar__mobile {
   display: none;
 }
 
-.rankings__type__mobile{
+.rankings__type__mobile {
   display: none;
 }
-.rankings__title__mobile{
+.rankings__title__mobile {
   display: none;
 }
 
@@ -507,10 +507,6 @@ div.rankings__list:nth-child(odd) {
 .modal-body {
   max-height: 700px;
   overflow-y: scroll;
-}
-
-@media (max-width: 600px) {
-
 }
 
 @media (max-width: 600px) {
@@ -601,22 +597,22 @@ div.rankings__list:nth-child(odd) {
     margin-bottom: 10px;
   }
 
-  .rankings{
+  .rankings {
     max-width: 300px;
   }
-  .rankings__navBar__mobile{
-    display: block  ;
+  .rankings__navBar__mobile {
+    display: block;
     border-left: 2px solid #f4ac45;
   }
-  .navBar__item{
+  .navBar__item {
     display: none;
   }
 
-  .rankings__navBar{
+  .rankings__navBar {
     display: none;
   }
 
-  .rankings__title__mobile{
+  .rankings__title__mobile {
     background-color: black;
     border-top-left-radius: 20px 20px;
     border-top-right-radius: 20px 20px;
@@ -628,18 +624,18 @@ div.rankings__list:nth-child(odd) {
     display: block;
   }
 
-  .navBar__title__mobile{
+  .navBar__title__mobile {
     font-size: 25px;
   }
 
-  .rankings__type__buttons{
+  .rankings__type__buttons {
     background-color: transparent;
     border: 2px solid #77878b;
     color: white;
     border-radius: 0.375rem;
     text-transform: uppercase;
     padding: 10px 20px !important;
-    margin: 15px; 
+    margin: 15px;
     max-width: 150px;
   }
 
@@ -649,7 +645,7 @@ div.rankings__list:nth-child(odd) {
     justify-content: space-evenly;
     width: 50%;
     margin: 0 auto 20px;
-    font-size: 22px;  
+    font-size: 22px;
   }
 
   .rankings__type__mobile li {
@@ -658,10 +654,9 @@ div.rankings__list:nth-child(odd) {
     z-index: 90;
   }
 
-  .rankings__type__enabled{
+  .rankings__type__enabled {
     transform: scale(1.2);
     border: 2px solid #f4ac45;
     color: white;
   }
-
 }
