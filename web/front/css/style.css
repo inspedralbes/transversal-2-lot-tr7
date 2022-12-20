@@ -397,7 +397,7 @@ footer:not(.modal-footer) {
   opacity: 0.3;
 }
 
-.question__buttonAnswers__correct{
+.question__buttonAnswers__correct {
   pointer-events: none;
 }
 
@@ -487,4 +487,55 @@ div.rankings__list:nth-child(odd) {
 
 .rankings__daily__incomplete {
   padding-top: 20px;
+}
+
+.modal-body {
+  max-height: 700px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 600px) {
+  .completedTable,
+  .pendingTable {
+    overflow-x: scroll;
+  }
+
+  #challenge .modal-body,
+  #profile .modal-body {
+    max-height: 650px;
+    overflow-y: scroll;
+  }
+
+  .modal-header .close {
+    border: none;
+  }
+
+  .profile__info img {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 10px !important;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  .profile__info--editProfile button:nth-child(2n) {
+    float: right;
+  }
+  .profile__info--editProfile h3 {
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editButton {
+    display: flex;
+  }
+  .profile__info {
+    display: block;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
 }
