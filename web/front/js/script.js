@@ -628,8 +628,6 @@ Vue.component('ranking', {
     return {
       result: [],
       otherUsers: [],
-      isDailyCompleted: false,
-      dailyClicked: false,
     };
   },
 
@@ -647,7 +645,6 @@ Vue.component('ranking', {
       </div>
       <div class="rankings__users">
 
-        <p  v-if="dailyClicked & !isDailyCompleted">Be the first to complete the daily game</p>
         <div class="rankings__list" v-for="(users, index) in otherUsers">
 
           <p>{{index+1}}</p>
@@ -691,28 +688,32 @@ Vue.component('ranking', {
     },
     loadRanking: function (type) {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
+      
       if ((type == 'points') | (type == null)) {
-        this.dailyClicked = false;
+
         this.resetNavBar(arrNavBAr, 1, 2, 3);
         arrNavBAr[0].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
+
       } else if (type == 'daily') {
+        
         this.dailyClicked = true;
+        
         if (this.result.dailyGame != null) {
           this.isDailyCompleted = true;
           this.resetNavBar(arrNavBAr, 0, 2, 3);
           arrNavBAr[1].classList.add('navBar__item__enabled');
           this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
-        } else {
-          this.isDailyCompleted = false;
-        }
+        } 
+
       } else if (type == 'games') {
-        this.dailyClicked = false;
+
         this.resetNavBar(arrNavBAr, 1, 0, 3);
         arrNavBAr[2].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
+
       } else if (type == 'average') {
-        this.dailyClicked = false;
+
         this.resetNavBar(arrNavBAr, 1, 2, 0);
         arrNavBAr[3].classList.add('navBar__item__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
@@ -726,7 +727,6 @@ Vue.component('ranking', {
     },
 
     sliceAveragePoints: function () {
-      console.log(this.result.averagePoints);
 
       for (i = 0; i < this.result.averagePoints.length; i++) {
         this.result.averagePoints[i].pSum = this.result.averagePoints[
