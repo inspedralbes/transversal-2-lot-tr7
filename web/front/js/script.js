@@ -660,7 +660,7 @@ Vue.component('ranking', {
       <div class="rankings__title__mobile">
         <p class="navBar__title__mobile">{{ rankingTitle }}</p>
       </div>
-      
+
       <div class="rankings__users">
 
         <div class="rankings__list" v-for="(users, index) in otherUsers">
@@ -706,47 +706,42 @@ Vue.component('ranking', {
     },
     loadRanking: function (type) {
       let arrNavBAr = document.getElementsByClassName('navBar__item');
-      let arrNavMobile = document.getElementsByClassName('rankings__type__buttons');
+      let arrNavMobile = document.getElementsByClassName(
+        'rankings__type__buttons'
+      );
 
       if ((type == 'points') | (type == null)) {
-
         this.resetNavBar(arrNavBAr, 1, 2, 3, 'navBar__item__enabled');
         this.resetNavBar(arrNavMobile, 1, 2, 3, 'rankings__type__enabled');
-        this.rankingTitle = "Total points";
+        this.rankingTitle = 'Total points';
         arrNavBAr[0].classList.add('navBar__item__enabled');
         arrNavMobile[0].classList.add('rankings__type__enabled');
-        
-        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
 
+        this.otherUsers = JSON.parse(JSON.stringify(this.result.totalPoints));
       } else if (type == 'daily') {
-        
         this.dailyClicked = true;
-        
+
         if (this.result.dailyGame != null) {
           this.isDailyCompleted = true;
-          this.rankingTitle = "Daily game points";
+          this.rankingTitle = 'Daily game points';
           this.resetNavBar(arrNavBAr, 0, 2, 3, 'navBar__item__enabled');
           this.resetNavBar(arrNavMobile, 0, 2, 3, 'rankings__type__enabled');
 
           arrNavBAr[1].classList.add('navBar__item__enabled');
           arrNavMobile[1].classList.add('rankings__type__enabled');
           this.otherUsers = JSON.parse(JSON.stringify(this.result.dailyGame));
-        } 
-
+        }
       } else if (type == 'games') {
-
         this.resetNavBar(arrNavBAr, 1, 0, 3, 'navBar__item__enabled');
         this.resetNavBar(arrNavMobile, 1, 0, 3, 'rankings__type__enabled');
-        this.rankingTitle = "Games completed";
+        this.rankingTitle = 'Games completed';
         arrNavBAr[2].classList.add('navBar__item__enabled');
         arrNavMobile[2].classList.add('rankings__type__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.totalGames));
-
       } else if (type == 'average') {
-
         this.resetNavBar(arrNavBAr, 1, 2, 0, 'navBar__item__enabled');
         this.resetNavBar(arrNavMobile, 1, 2, 0, 'rankings__type__enabled');
-        this.rankingTitle = "Average points";
+        this.rankingTitle = 'Average points';
         arrNavBAr[3].classList.add('navBar__item__enabled');
         arrNavMobile[3].classList.add('rankings__type__enabled');
         this.otherUsers = JSON.parse(JSON.stringify(this.result.averagePoints));
@@ -757,15 +752,11 @@ Vue.component('ranking', {
       arr[i].classList.remove(text);
       arr[j].classList.remove(text);
       arr[z].classList.remove(text);
-      
     },
 
     sliceAveragePoints: function () {
-
       for (i = 0; i < this.result.averagePoints.length; i++) {
-        this.result.averagePoints[i].pSum = this.result.averagePoints[
-          i
-        ].pSum.substring(0, 3);
+        this.result.averagePoints[i] = Math.trunc(this.result.averagePoints[i]);
       }
     },
   },
