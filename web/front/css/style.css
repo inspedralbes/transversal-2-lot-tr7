@@ -492,52 +492,6 @@ div.rankings__list:nth-child(odd) {
   display: flex;
   justify-content: space-between;
 }
-@media (max-width: 600px) {
-  .header .nav a {
-    margin-left: 10px;
-    font-size: 20px;
-  }
-  article {
-    margin: 20px auto;
-  }
-  footer:not(.modal-footer) {
-    position: initial;
-  }
-  .game__selectOptions--difficulty {
-    font-size: 20px;
-  }
-  .game__selectOptions--difficulty label {
-    margin: 0 10px;
-  }
-  .game__selectOptions--categories select {
-    width: auto;
-  }
-  .titleMenu {
-    margin: 20px 0 0;
-  }
-  .game__carousel--mySlides div {
-    width: 90%;
-    display: block;
-  }
-  .game__carousel--mySlides h2 {
-    font-size: 36px;
-    margin-bottom: 40px;
-  }
-  .game button {
-    display: block;
-    margin: 25px auto 0;
-    width: 100%;
-    font-size: 20px;
-    padding: 10px 20px;
-  }
-  .footer__container {
-    flex-direction: column;
-  }
-  .footer__container p {
-    margin-bottom: 10px;
-  }
-}
-
 .modal-body {
   max-height: 700px;
   overflow-y: scroll;
@@ -586,5 +540,48 @@ div.rankings__list:nth-child(odd) {
 
   .stats {
     grid-template-columns: 1fr;
+  }
+  .header .nav a {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  article {
+    margin: 20px auto;
+  }
+  footer:not(.modal-footer) {
+    position: initial;
+  }
+  .game__selectOptions--difficulty {
+    font-size: 20px;
+  }
+  .game__selectOptions--difficulty label {
+    margin: 0 10px;
+  }
+  .game__selectOptions--categories select {
+    width: auto;
+  }
+  .titleMenu {
+    margin: 20px 0 0;
+  }
+  .game__carousel--mySlides div {
+    width: 90%;
+    display: block;
+  }
+  .game__carousel--mySlides h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  .game button {
+    display: block;
+    margin: 25px auto 0;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px 20px;
+  }
+  .footer__container {
+    flex-direction: column;
+  }
+  .footer__container p {
+    margin-bottom: 10px;
   }
 }
