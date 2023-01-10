@@ -1,16 +1,18 @@
-# transversals
-Esquema mínim de carpetes pels projectes transversals
+# League of Trivial Grup 7
 
-És obligatori seguir aquesta estructura tot i que la podeu ampliar.
+### Nom dels integrants
 
-## Atenció
-Un cop comenceu heu de canviar aquesta explicació amb la corresponent al vostre projecte (utilitzant markdown)
+- Arnau Drets Llimona
+- Albert de la Orza
+- Arnau Català Sanchez
 
+### URL de producció
 
-# Aquest fitxer ha de contenir com a mínim:
- * Nom dels integrants
- * Nom del projecte
- * Petita descripció
- * Adreça del prototip del Penpot
- * URL de producció (quan la tingueu)
- * Estat: (explicació de en quin punt està)
+- WEB: http://trivial7.alumnes.inspedralbes.cat/
+- PENPOT: https://design.penpot.app/#/view/39eb6d3d-9932-80bd-8001-aaa5cdecd91a?page-id=39eb6d3d-9932-80bd-8001-aaa5cdecd91b&section=interactions&index=0&share-id=9c5ceddf-c68c-8036-8001-c5cbdc48aa24
+- ENDPOINTS: https://app.swaggerhub.com/apis/a22arncatsan/TrivialGrup7/0.1
+- DOCS: https://github.com/inspedralbes/transversal-2-lot-tr7/blob/main/docs/README.md
+
+### Estat
+
+- Acabat

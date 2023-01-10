@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./img/logo.png" />
+  <title>League of Trivial</title>
+
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+  <!-- Load polyfills to support older browsers -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+    crossorigin="anonymous"></script>
+
+  <!-- Load Vue followed by BootstrapVue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+  <!-- Pinia -->
+  <script src="https://unpkg.com/vue-demi"></script>
+  <script src="https://unpkg.com/pinia"></script>
+
+  <!--Sweet Alert-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <link type="text/css" rel="stylesheet" href="css/normalize.css" />
+  <link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <vueheader></vueheader>
+    </header>
+    <article>
+      <game></game>
+      <!-- <carrousel></carrousel> -->
+    </article>
+    <footer>
+      <div class="footer">
+        <div class="footer__container">
+          <p>© 2022 League of Trivial</p>
+          <p>Created by: Albert de la Orza, Arnau Drets i Arnau Català</p>
+          <p>
+            Powered by
+            <a style="text-decoration: none; font-weight: bold; color: white" href="https://the-trivia-api.com/">The
+              Trivia Api</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>

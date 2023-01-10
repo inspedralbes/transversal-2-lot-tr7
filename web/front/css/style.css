@@ -1,0 +1,690 @@
+@font-face {
+  font-family: Beaufort;
+  src: url("Beaufort.ttf");
+}
+body {
+  font-family: Beaufort;
+  background-color: #2a2a2a;
+  color: white;
+  font-size: 18px;
+}
+header:not(.modal-header) {
+  background-color: black;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 20px 0;
+  width: 80%;
+  max-width: 1920px;
+}
+.header img {
+  width: 80px;
+}
+.header a {
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+}
+.header .nav {
+  justify-content: flex-end;
+}
+.header .nav a {
+  margin-left: 30px;
+  text-decoration: none;
+  cursor: pointer;
+}
+article {
+  margin: 20px auto 80px;
+  padding: 10px 0;
+  width: 80%;
+  max-width: 1920px;
+}
+footer:not(.modal-footer) {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  background-color: black;
+  text-align: center;
+}
+.footer {
+  margin: 0 auto;
+  padding: 10px 0;
+  width: 80%;
+  max-width: 1920px;
+}
+.footer p {
+  margin: 0;
+}
+.game {
+  text-align: center;
+}
+.game h1 {
+  margin: 0 0 30px;
+  font-size: 80px;
+  font-weight: bold;
+}
+.game button {
+  background-color: #f4ac45;
+  border: 0;
+  color: black;
+  font-size: 24px;
+  padding: 20px;
+  font-weight: bold;
+}
+.game button:hover {
+  background-color: #77878b;
+  color: white;
+}
+.game__selectOptions--difficulty {
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+  margin: 0 auto 20px;
+  font-size: 22px;
+}
+.game__selectOptions--difficulty label {
+  margin-left: 10px;
+}
+.game__selectOptions--categories select {
+  display: grid;
+  width: 30%;
+  margin: 0 auto 30px;
+  font-size: 22px;
+  border-radius: 0.375rem;
+  outline: 0;
+  border: 2px solid #77878b;
+  box-shadow: none;
+  flex: 1;
+  color: #fff;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px !important;
+}
+.game__carousel {
+  position: absolute;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  background-color: #2a2a2a;
+  width: 100%;
+  height: 100%;
+  animation: fadeInAnimation ease 1s;
+  -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+.game__carousel--mySlides div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
+}
+.game__carousel--mySlides h2 {
+  margin: 0 0 20px;
+  font-size: 60px;
+  font-weight: bold;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.game__carousel--mySlides {
+  display: none;
+}
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.game__results {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  border: 2px solid #77878b;
+  width: 30%;
+  padding: 15px 0 20px;
+}
+
+.game__results--buttonReturn {
+  margin: 5px 0;
+}
+.game__results--finalResults h2 {
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.game__results--finalResults p {
+  font-size: 22px;
+  margin: 0 0 2px;
+}
+
+.game--winner {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 10px 0;
+  text-decoration: underline;
+}
+.game__results--challenge {
+  font-size: 22px !important;
+  margin-top: 30px;
+}
+.game__results--challenge select {
+  display: grid;
+  width: 50%;
+  margin: 0 auto 20px;
+  font-size: 22px;
+  border-radius: 0.375rem;
+  outline: 0;
+  border: 2px solid #77878b;
+  box-shadow: none;
+  flex: 1;
+  color: #fff;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px !important;
+}
+#clock {
+  font-size: 24px;
+  background-color: black;
+  padding: 20px 40px;
+  display: block;
+}
+
+.titleMenu {
+  padding-bottom: 20px;
+}
+.modal-footer {
+  display: none !important;
+}
+.modal-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  width: 80%;
+  height: fit-content;
+  margin: 0 !important;
+  max-width: none;
+}
+.modal-content {
+  border: 0 !important;
+  border-radius: 0;
+  background: none;
+}
+.modal-header {
+  background-color: black;
+}
+.modal-body {
+  background-color: #3c3c3c;
+}
+.modal-header .modal-title {
+  font-size: 24px;
+}
+.modal-header .close {
+  background-color: black;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+}
+.form__login input {
+  width: 100%;
+  font-size: 22px;
+  border-radius: 0.375rem;
+  outline: 0;
+  border: 2px solid #77878b;
+  color: #fff;
+  background-color: #2a2a2a;
+  text-align: center;
+}
+
+.form__register input {
+  width: 100%;
+  font-size: 22px;
+  border-radius: 0.375rem;
+  outline: 0;
+  border: 2px solid #77878b;
+  color: #fff;
+  background-color: #2a2a2a;
+  text-align: center;
+}
+#login-register .modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  padding: 30px;
+  align-items: center;
+}
+#login-register .modal-body div {
+  display: grid;
+  grid-gap: 15px;
+  height: fit-content;
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+#login-register .modal-body button {
+  background-color: #f4ac45;
+  border: 0;
+  color: black;
+  font-size: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+#login-register .modal-body input {
+  padding: 5px 10px;
+}
+.profile__info {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  align-items: center;
+}
+
+.profile__info img {
+  height: 200px;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.profile__info--editProfile button {
+  background-color: #f4ac45;
+  border: 0;
+  color: black;
+  font-size: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  margin: 10px auto;
+}
+
+.profile__info--editProfile input {
+  width: 100%;
+  font-size: 22px;
+  border-radius: 0.375rem;
+  outline: 0;
+  border: 2px solid #77878b;
+  color: #fff;
+  background-color: #2a2a2a;
+  padding: 5px 5px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  padding-top: 15px;
+}
+
+.stats h3 {
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats__title {
+  color: #f4ac45;
+}
+
+.rankings__ranking {
+  border: 2px solid #f4ac45;
+  background-color: #585858;
+}
+
+.rankings__title {
+  color: #f4ac45;
+  background-color: black;
+  border-bottom: white 2px solid;
+  padding: 10px;
+}
+
+.rankings__user {
+  text-align: center;
+}
+
+.buttonsDifficulty {
+  background-color: transparent;
+  border: 2px solid #77878b;
+  color: white;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+  padding: 10px 20px !important;
+}
+
+.game__selectOptions--difficulty label,
+.game__selectOptions--difficulty input {
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.game__selectOptions--difficulty input[type="radio"]:checked + label,
+.Checked + label {
+  transform: scale(1.2);
+  border: 2px solid #f4ac45;
+  color: white;
+}
+
+.game__selectOptions--difficulty label {
+  padding: 5px;
+  cursor: pointer;
+  z-index: 90;
+}
+
+.question__buttonAnswers {
+  border-radius: 0.375rem;
+  transition: opacity 0.7s;
+  box-shadow: 15px 20px 15px black;
+  margin: 5px;
+}
+
+.question__buttonAnswers:active {
+  transform: translateY(7px);
+  box-shadow: 10px 15px 5px black;
+}
+
+.question__buttonAnswers__disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.question__buttonAnswers__correct {
+  pointer-events: none;
+}
+
+.table {
+  color: white;
+}
+
+.table button {
+  background-color: #f4ac45;
+  color: black;
+  border: 0;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  color: white;
+}
+
+.nav-link {
+  color: white;
+}
+
+.nav-link:hover {
+  color: #f4ac45;
+}
+
+thead {
+  color: #f4ac45;
+}
+
+.rankings {
+  max-width: 700px;
+  margin: auto auto;
+}
+
+.rankings__navBar {
+  background-color: black;
+  border-top-left-radius: 20px 20px;
+  border-top-right-radius: 20px 20px;
+  margin: auto auto;
+  border: 2px solid #f4ac45;
+  border-bottom: 2px solid white;
+  text-align: center;
+}
+
+.navBar__item {
+  display: inline-block;
+  padding: 15px 20px;
+  font-size: 20px;
+  border-left: 2px solid #f4ac45;
+  opacity: 0.4;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.navBar__item__first {
+  border-left: none;
+}
+
+.navBar__item__enabled {
+  opacity: 1;
+}
+
+.rankings__list {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  border-bottom: 1px solid black;
+}
+.rankings__list p {
+  margin: 10px;
+}
+.rankings__users {
+  border: 2px solid #f4ac45;
+  border-top: none;
+}
+
+.rankings__user {
+  cursor: pointer;
+}
+
+.rankings__user:hover {
+  color: #f4ac45;
+}
+
+div.rankings__list:nth-child(odd) {
+  background-color: #3e484b;
+}
+
+.rankings__daily__incomplete {
+  padding-top: 20px;
+}
+
+.rankings__navBar__mobile {
+  display: none;
+}
+
+.rankings__type__mobile {
+  display: none;
+}
+.rankings__title__mobile {
+  display: none;
+}
+
+.footer__container {
+  display: flex;
+  justify-content: space-between;
+}
+.modal-body {
+  max-height: 700px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 600px) {
+  .completedTable,
+  .pendingTable {
+    overflow-x: scroll;
+  }
+
+  #challenge .modal-body,
+  #profile .modal-body {
+    max-height: 650px;
+    overflow-y: scroll;
+  }
+
+  .modal-header .close {
+    border: none;
+  }
+
+  .profile__info img {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 10px !important;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  .profile__info--editProfile button:nth-child(2n) {
+    float: right;
+  }
+  .profile__info--editProfile h3 {
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editButton {
+    display: flex;
+  }
+  .profile__info {
+    display: block;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  .header .nav a {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  article {
+    margin: 20px auto;
+  }
+  footer:not(.modal-footer) {
+    position: initial;
+  }
+  .game__selectOptions--difficulty {
+    font-size: 20px;
+  }
+  .game__selectOptions--difficulty label {
+    margin: 0 10px;
+  }
+  .game__selectOptions--categories select {
+    width: auto;
+  }
+  .titleMenu {
+    margin: 20px 0 0;
+  }
+  .game__carousel--mySlides div {
+    width: 90%;
+    display: block;
+  }
+  .game__carousel--mySlides h2 {
+    font-size: 30px;
+    margin-bottom: 40px;
+  }
+  .game button {
+    display: block;
+    margin: 25px auto 0;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px 20px;
+  }
+  .footer__container {
+    flex-direction: column;
+  }
+  .footer__container p {
+    margin-bottom: 10px;
+  }
+
+  .rankings {
+    max-width: 300px;
+  }
+  .rankings__navBar__mobile {
+    display: block;
+    border-left: 2px solid #f4ac45;
+  }
+  .navBar__item {
+    display: none;
+  }
+
+  .rankings__navBar {
+    display: none;
+  }
+
+  .rankings__title__mobile {
+    background-color: black;
+    border-top-left-radius: 20px 20px;
+    border-top-right-radius: 20px 20px;
+    margin: auto auto;
+    border: 2px solid #f4ac45;
+    border-bottom: 2px solid white;
+    text-align: center;
+    font-size: 15px;
+    display: block;
+  }
+
+  .navBar__title__mobile {
+    font-size: 25px;
+  }
+
+  .rankings__type__buttons {
+    background-color: transparent;
+    border: 2px solid #77878b;
+    color: white;
+    border-radius: 0.375rem;
+    text-transform: uppercase;
+    padding: 10px 20px !important;
+    margin: 15px;
+    max-width: 150px;
+  }
+
+  .rankings__type__mobile {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-evenly;
+    width: 50%;
+    margin: 0 auto 20px;
+    font-size: 22px;
+  }
+
+  .rankings__type__mobile li {
+    padding: 5px;
+    cursor: pointer;
+    z-index: 90;
+  }
+
+  .rankings__type__enabled {
+    transform: scale(1.2);
+    border: 2px solid #f4ac45;
+    color: white;
+  }
+
+  .game__results {
+    border: none;
+    width: 100%;
+    position: initial;
+    transform: none !important;
+  }
+  #login-register .modal-body {
+    grid-template-columns: 100%;
+    padding: 20px;
+  }
+  #login-register .modal-body .form__login {
+    margin-bottom: 40px;
+  }
+  #login-register .modal-body div {
+    width: 100%;
+  }
+
+  .pendingTable td,
+  .completedTable td,
+  .pendingTable th,
+  .completedTable th {
+    white-space: nowrap;
+  }
+}
